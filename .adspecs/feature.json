@@ -1,0 +1,54 @@
+{
+  "active": "docs/30-system-design",
+  "requirement": [
+    {
+      "id": "REQ-001",
+      "directory": "docs/00-customer-requirements",
+      "filename": "gut-garden_业务需求分析.md",
+      "name": "肠道花园（Gut Garden）",
+      "phase": "requirement",
+      "status": "completed",
+      "created": "2026-07-27"
+    },
+    {
+      "id": "REQ-002",
+      "directory": "docs/00-customer-requirements",
+      "filename": "daily-check-in_业务需求分析.md",
+      "name": "每日打卡",
+      "phase": "requirement",
+      "status": "completed",
+      "created": "2026-07-27"
+    },
+    {
+      "id": "REQ-003",
+      "directory": "docs/00-customer-requirements",
+      "filename": "growth-badges_业务需求分析.md",
+      "name": "成长徽章",
+      "phase": "requirement",
+      "status": "completed",
+      "created": "2026-07-27"
+    }
+  ],
+  "prd": [
+    {
+      "id": "PRD-001",
+      "directory": "docs/20-prd",
+      "filename": "gut-garden_产品需求说明书.md",
+      "name": "肠道花园（Gut Garden）",
+      "phase": "prd",
+      "status": "drafting",
+      "created": "2026-07-27"
+    }
+  ],
+  "endDesigns": [
+    {
+      "id": "DESIGN-001",
+      "directory": "docs/30-system-design",
+      "filename": "gut-garden_系统设计.md",
+      "name": "肠道花园（Gut Garden）",
+      "phase": "design",
+      "status": "completed",
+      "created": "2026-07-27"
+    }
+  ]
+}

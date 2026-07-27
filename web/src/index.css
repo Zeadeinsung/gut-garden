@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+  --color-garden-blue: #b8d4e3;
+  --color-garden-pink: #f2c9c9;
+  --color-garden-green: #c1d5a4;
+  --color-garden-cream: #fefae0;
+  --color-garden-brown: #8b7355;
+  --color-garden-water: #7ec8e3;
+}
+
+body {
+  margin: 0;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, var(--color-garden-blue), var(--color-garden-pink));
+  min-height: 100vh;
+  overflow: hidden;
+}
