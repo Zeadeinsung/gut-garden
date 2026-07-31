@@ -847,7 +847,7 @@ interface AuthState { token: string | null; parent: Parent | null; activeChild: 
     - 分析结果展示：Bristol 类型 + 诊断 + 动态任务文案
   - 底部说明文字："数据仅存本地 · 不构成医疗建议"
 - `StoolIconSelector` 组件：
-  - `stool_type_1_rabbit.png` ~ `stool_type_7_water.png`
+  - `stool_type1_rabbit.png` ~ `stool_type7_water.png`（7 种，Type 1-7）
   - 选中态：森林绿边框 + 轻微放大
 - `StoolUpload` 组件：
   - 拖拽区域 + 文件选择
