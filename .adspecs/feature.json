@@ -1,11 +1,14 @@
 {
   "active": "docs/30-system-design",
+  "version": "2.0",
+  "updated": "2026-07-31",
+
   "requirement": [
     {
       "id": "REQ-001",
       "directory": "docs/00-customer-requirements",
       "filename": "gut-garden_业务需求分析.md",
-      "name": "肠道花园（Gut Garden）",
+      "name": "肠道花园（Gut Garden）— 业务需求分析",
       "phase": "requirement",
       "status": "completed",
       "created": "2026-07-27"
@@ -14,7 +17,7 @@
       "id": "REQ-002",
       "directory": "docs/00-customer-requirements",
       "filename": "daily-check-in_业务需求分析.md",
-      "name": "每日打卡",
+      "name": "每日打卡 — 业务需求分析",
       "phase": "requirement",
       "status": "completed",
       "created": "2026-07-27"
@@ -23,32 +26,160 @@
       "id": "REQ-003",
       "directory": "docs/00-customer-requirements",
       "filename": "growth-badges_业务需求分析.md",
-      "name": "成长徽章",
+      "name": "成长徽章 — 业务需求分析",
       "phase": "requirement",
       "status": "completed",
       "created": "2026-07-27"
+    },
+    {
+      "id": "REQ-004",
+      "directory": "docs/00-customer-requirements",
+      "filename": "外部参考_网页内容规划.md",
+      "name": "外部参考 — 网页内容规划（AI角色设定、引导文案、知识模块体系）",
+      "phase": "requirement",
+      "status": "completed",
+      "created": "2026-07-31"
     }
   ],
+
   "prd": [
     {
       "id": "PRD-001",
       "directory": "docs/20-prd",
       "filename": "gut-garden_产品需求说明书.md",
-      "name": "肠道花园（Gut Garden）",
+      "name": "肠道花园（Gut Garden）— 产品需求说明书 v1.0",
       "phase": "prd",
-      "status": "drafting",
+      "status": "completed",
+      "notes": "含10项澄清记录、完整功能规格、双阅读层级、3主项+附加项打卡结构（注意：打卡结构已在2026-07-31更新为5主项独立卡片，见系统设计）",
+      "created": "2026-07-27",
+      "updated": "2026-07-31"
+    },
+    {
+      "id": "PRD-002",
+      "directory": "docs/20-prd/checklists",
+      "filename": "prd_checklist.md",
+      "name": "PRD 审查清单",
+      "phase": "prd",
+      "status": "completed",
       "created": "2026-07-27"
     }
   ],
-  "endDesigns": [
+
+  "design": [
     {
       "id": "DESIGN-001",
       "directory": "docs/30-system-design",
       "filename": "gut-garden_系统设计.md",
-      "name": "肠道花园（Gut Garden）",
+      "name": "肠道花园（Gut Garden）— 系统设计 v2.0",
+      "phase": "design",
+      "status": "completed",
+      "notes": "技术栈(React18+TS+Tailwind v4+Framer Motion+Zustand+Fastify+PostgreSQL)、数据模型(DDL)、API设计、状态机、花园6阶段成长体系",
+      "created": "2026-07-27",
+      "updated": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-002",
+      "directory": "docs/30-system-design",
+      "filename": "gut-garden_前端架构设计.md",
+      "name": "肠道花园（Gut Garden）— 前端架构设计",
+      "phase": "design",
+      "status": "completed",
+      "notes": "组件树、路由设计、3层CSS视差、装饰密度梯度(4级)、状态管理(Zustand stores)、@dnd-kit拖拽、SSE流式AI对话",
+      "created": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-003",
+      "directory": "docs/30-system-design",
+      "filename": "gut-garden_视觉设计审查报告.md",
+      "name": "肠道花园（Gut Garden）— 视觉设计审查报告",
+      "phase": "design",
+      "status": "completed",
+      "notes": "装饰密度、无障碍、角色设计、颜色对比度审查",
+      "created": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-004",
+      "directory": "docs/30-system-design",
+      "filename": "美术素材清单与交付规范.md",
+      "name": "美术素材清单与交付规范 v3.0 — 121项资产",
+      "phase": "design",
+      "status": "completed",
+      "notes": "场景背景图(9张/含状态变体)、角色素材(16项)、知识卡片(5张)、食物道具(7项)、便便图标(5种)、徽章图标+边框(24张)、UI图标(47个)、Lottie动效(4个)、其他素材(7项)。含Sprint交付表+页面-素材对照矩阵+UI避让区示意图",
+      "created": "2026-07-31",
+      "updated": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-005",
+      "directory": "docs/30-system-design",
+      "filename": "gut-garden_tasks.md",
+      "name": "肠道花园（Gut Garden）— 开发任务拆解",
+      "phase": "design",
+      "status": "drafting",
+      "created": "2026-07-27",
+      "updated": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-006",
+      "directory": "docs/30-system-design",
+      "filename": "gut-garden_schema.sql",
+      "name": "肠道花园（Gut Garden）— 数据库Schema DDL",
+      "phase": "design",
+      "status": "drafting",
+      "format": "sql",
+      "created": "2026-07-27",
+      "updated": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-007",
+      "directory": "docs",
+      "filename": "各页面布局.txt",
+      "name": "各页面布局说明（文本参考）",
       "phase": "design",
       "status": "completed",
       "created": "2026-07-27"
+    },
+    {
+      "id": "DESIGN-008",
+      "directory": "scratch",
+      "filename": "gut-garden_layout_all_pages.json",
+      "name": "全页面布局定义 v2.0 — 11页面块级坐标+网格系统",
+      "phase": "design",
+      "status": "completed",
+      "format": "json",
+      "notes": "1280×800画布、固定Header四槽位(左232/中752/用户90/控制130)、底部Dock 3+1+3对称、RightPanel(AI面板) x=1032 w=248常驻、5主项打卡卡片结构。含home/garden/classroom/checkin/badges/profile/report/settings/login/stoolModal/onboarding共11页",
+      "created": "2026-07-31",
+      "updated": "2026-07-31"
+    },
+    {
+      "id": "DESIGN-009",
+      "directory": "docs",
+      "filename": "协作开发指南.md",
+      "name": "协作开发指南 — Git规范、代码风格、PR流程",
+      "phase": "design",
+      "status": "completed",
+      "created": "2026-07-31"
     }
-  ]
+  ],
+
+  "_summary": {
+    "project": "肠道花园 Gut Garden",
+    "tagline": "每一口食物，都在浇灌你的微观生态",
+    "platform": "Phase 1 — Web桌面端（浏览器），1280×800视口",
+    "target_users": "3-10岁儿童 + 家长",
+    "style": "2D手绘童话风，森林绿#4E6A3E + 奶油米#FFF9EF + 珊瑚粉#F38D83",
+    "current_phase": "design",
+    "next_phase": "development",
+    "key_decisions": [
+      "双模式便便记录: 图标选择(local-first,默认) + 拍照分析(需注册)",
+      "2D为主+3D点缀: CSS视差+轻量Three.js角色",
+      "5主项每日打卡: 探索花园(复合关卡)/健康饮食/优质睡眠/补充水分/活力运动",
+      "便便报告→清单联动: 3层机制(横幅/卡片文案/确认提醒)",
+      "徽章两层分离: 21中央图标+3通用边框(CSS叠加合成)",
+      "游客友好+渐进注册: localStorage→后端迁移",
+      "6阶段花园成长主线 + 4类支线徽章×铜/银/金三级",
+      "双阅读层级: 儿童≥18px / 家长14-15px"
+    ],
+    "total_art_assets": 121,
+    "total_pages": 11
+  }
 }

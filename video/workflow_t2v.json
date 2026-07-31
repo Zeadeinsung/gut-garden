@@ -1,0 +1,203 @@
+{
+  "last_node_id": 9,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "WanVideoModelLoader",
+      "pos": [-400, 0],
+      "size": [315, 110],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "MODEL", "type": "MODEL", "links": [1], "slot_index": 0},
+        {"name": "CLIP", "type": "CLIP", "links": [2, 3], "slot_index": 1},
+        {"name": "VAE", "type": "VAE", "links": [10], "slot_index": 2}
+      ],
+      "properties": {"Node name for S&R": "WanVideo Model Loader (选模型)"},
+      "widgets_values": ["wan2.7-t2v-2026-06-12", "fp8_e4m3fn"]
+    },
+    {
+      "id": 2,
+      "type": "CLIPTextEncode",
+      "pos": [-100, -120],
+      "size": [450, 200],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "clip", "type": "CLIP", "link": 2}
+      ],
+      "outputs": [
+        {"name": "CONDITIONING", "type": "CONDITIONING", "links": [4], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "正向提示词 (Positive Prompt)"},
+      "widgets_values": [
+        "(claymation style:1.3), (polymer clay texture:1.2), (stop motion aesthetic:1.1), soft felt fabric texture, cute cartoon, children's book illustration, warm soft lighting, pastel colors, pink blue green palette, 3D rendered, adorable character design, shallow depth of field, macro photography. A magnificent cute garden inside an intestine, pink folded walls like rolling hills, a winding blue stream flowing through, mushroom houses with tiny windmills, soft felt trees, fluffy clouds in pastel sky, warm golden sunlight, polymer clay buildings and landscape, miniature world, childlike wonder, cinematic wide shot."
+      ]
+    },
+    {
+      "id": 3,
+      "type": "CLIPTextEncode",
+      "pos": [-100, 120],
+      "size": [450, 200],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "clip", "type": "CLIP", "link": 3}
+      ],
+      "outputs": [
+        {"name": "CONDITIONING", "type": "CONDITIONING", "links": [5], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "负向提示词 (Negative Prompt)"},
+      "widgets_values": [
+        "photorealistic, hyper-realistic, dark, horror, scary, sharp edges, metallic, glossy, cold lighting, neon, adult, complex background, text, watermark, signature, low quality, blurry, distorted, distorted faces, bad anatomy, extra limbs, mutation, deformed"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "EmptyLatentVideo",
+      "pos": [-100, 400],
+      "size": [315, 150],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "LATENT", "type": "LATENT", "links": [6], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "视频参数 (分辨率/时长/帧率)"},
+      "widgets_values": [1920, 1080, 72, 24]
+    },
+    {
+      "id": 5,
+      "type": "KSampler",
+      "pos": [250, 100],
+      "size": [315, 320],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 1},
+        {"name": "positive", "type": "CONDITIONING", "link": 4},
+        {"name": "negative", "type": "CONDITIONING", "link": 5},
+        {"name": "latent_image", "type": "LATENT", "link": 6}
+      ],
+      "outputs": [
+        {"name": "LATENT", "type": "LATENT", "links": [7], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "KSampler (采样器)"},
+      "widgets_values": [1234567890, "fixed", 30, 7, "dpmpp_2m", "karras", 1.0]
+    },
+    {
+      "id": 6,
+      "type": "VAEDecode",
+      "pos": [600, 100],
+      "size": [210, 60],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {"name": "samples", "type": "LATENT", "link": 7},
+        {"name": "vae", "type": "VAE", "link": 10}
+      ],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [8], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "VAE解码"},
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "VHS_VideoCombine",
+      "pos": [850, 0],
+      "size": [380, 280],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 8}
+      ],
+      "outputs": [
+        {"name": "FILENAME", "type": "STRING", "links": [9], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "合成视频并保存"},
+      "widgets_values": [
+        24, 1,
+        "D:/GutGardenBeta/video/output",
+        "scene_01", "h264",
+        null, null, null, null, null,
+        true, true, false, false, false, false, false
+      ]
+    },
+    {
+      "id": 8,
+      "type": "PreviewVideo",
+      "pos": [850, 350],
+      "size": [315, 260],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 8}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "预览视频"},
+      "widgets_values": []
+    },
+    {
+      "id": 9,
+      "type": "Note",
+      "pos": [-400, -200],
+      "size": [650, 180],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "WanVideo T2V (文生视频) 工作流\n\n使用说明:\n1. 在 WanVideo Model Loader 中选择 wan2.7-t2v 模型\n2. 在正向提示词框中输入场景描述 (每次改这个)\n3. 在 EmptyLatentVideo 中设置: 宽/高/总帧数/帧率 (72帧=3秒@24fps)\n4. 在 VHS_VideoCombine 中修改输出文件名\n5. 点击 Queue Prompt 生成\n\n建议: 先生成3秒片段测试效果,再批量生成"
+      ]
+    }
+  ],
+  "links": [
+    {"id": 1,  "origin_id": 1, "origin_slot": 0, "target_id": 5, "target_slot": 0, "type": "MODEL"},
+    {"id": 2,  "origin_id": 1, "origin_slot": 1, "target_id": 2, "target_slot": 0, "type": "CLIP"},
+    {"id": 3,  "origin_id": 1, "origin_slot": 1, "target_id": 3, "target_slot": 0, "type": "CLIP"},
+    {"id": 4,  "origin_id": 2, "origin_slot": 0, "target_id": 5, "target_slot": 1, "type": "CONDITIONING"},
+    {"id": 5,  "origin_id": 3, "origin_slot": 0, "target_id": 5, "target_slot": 2, "type": "CONDITIONING"},
+    {"id": 6,  "origin_id": 4, "origin_slot": 0, "target_id": 5, "target_slot": 3, "type": "LATENT"},
+    {"id": 7,  "origin_id": 5, "origin_slot": 0, "target_id": 6, "target_slot": 0, "type": "LATENT"},
+    {"id": 8,  "origin_id": 6, "origin_slot": 0, "target_id": 7, "target_slot": 0, "type": "IMAGE"},
+    {"id": 10, "origin_id": 1, "origin_slot": 2, "target_id": 6, "target_slot": 1, "type": "VAE"},
+    {"id": 11, "origin_id": 6, "origin_slot": 0, "target_id": 8, "target_slot": 0, "type": "IMAGE"}
+  ],
+  "groups": [
+    {
+      "title": "1. 模型加载",
+      "bounding": [-420, -50, 335, 180],
+      "color": "#3f789e"
+    },
+    {
+      "title": "2. 提示词",
+      "bounding": [-120, -180, 490, 490],
+      "color": "#8A8"
+    },
+    {
+      "title": "3. 生成",
+      "bounding": [230, 20, 355, 430],
+      "color": "#A88"
+    },
+    {
+      "title": "4. 输出",
+      "bounding": [830, -60, 420, 700],
+      "color": "#88A"
+    }
+  ],
+  "config": {},
+  "extra": {}
+}

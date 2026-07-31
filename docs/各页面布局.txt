@@ -1,0 +1,464 @@
+基于先前做的分析和部分微小改动，现做如下部署：
+
+导航栏部署在所有页面的屏幕底部：
+这块底部导航栏在 UI/UX 设计中属于非常经典的“中央凸起式底部导航栏”（Notched Bottom Navigation Bar with Central Hero CTA）**。整体采用了**游戏化（Gamification）与拟物柔化（Soft UI）的设计语言。
+
+以下是从专业 UI/UX 设计角度对其进行的拆解描述：
+
+---
+
+## 1. 结构布局：7-Tab 对称式 Dock 架构 (Symmetrical Dock Architecture)
+
+* **“3 + 1 + 3” 布局模式：** 左右两侧各放置 3 个次级导航（苗页、探索花园、每日打卡 | 探索课堂、成长徽章、我的主页），中间融合 1 个最核心的高频功能（拍便便分析）。
+* **信息层级分明：** 这种设计既保证了常用入口的丰富度，又通过对称性维持了界面的视觉平衡（Visual Balance）。
+
+---
+
+## 2. 核心视觉锚点：凸起式 Hero CTA 按钮 (Raised Central Hero CTA)
+
+* **打破水平边界 (Notched / Bulging Effect)：** 中央按钮采用了弧形拱顶（Curved Bulge）突破常规 TabBar 的顶部水平切线，强制引导视觉焦点。
+* **高对比异色策略 (Visual Affordance & Contrast)：**
+* 导航栏底色为低饱和度的柔和米白/浅绿。
+* 中央按钮独占**高饱和度粉紫渐变色**，配合大尺寸的相机 Icon，形成了极强的视觉锚点（Visual Anchor）。
+
+
+* **业务导向：** 显著提升核心业务功能（AI/拍照分析功能）的点击权重与转化率。
+
+---
+
+## 3. 状态反馈机制 (State Management & Feedback)
+
+* **选中态 (Active State)：** 如图中的“探索课堂”，采用了**胶囊型高亮容器（Pill Container/Highlight Area）**，叠加主题紫色与图标高亮，给用户带来极高识别度的沉浸式位置反馈。
+* **未选中态 (Inactive State)：** 采用低亮度的自然暗色系图文，形成收敛的视觉次序，不抢夺当前页面的焦点。
+
+---
+
+## 4. 图标与控件规范 (Iconography & Touch Target)
+
+* **标准的“上图下文”结构 (Icon Top, Label Bottom)：** 符合移动端单手操作的触控习惯（Touch Target Standard），文字字号与图标比例适中，保证了可读性。
+* **拟物轻量化图标 (Soft-Skeuomorphic Style)：** 图标带有圆润的质感与立体色彩，与游戏/绘本风格的背景保持高度一致。
+
+---
+
+## 5. 视觉调性与风格整合 (Design System Matching)
+
+* **柔和有机圆角 (Organic Rounding & Soft Shadow)：** 导航栏整体边缘均做了大圆角与微阴影处理，浮于地图场景之上，打造出类似“口袋游戏 UI”或“悬浮控制台”的轻量质感。
+
+
+
+
+
+
+
+首页：一、 整体架构与背景层 (Base & Background)
+沉浸式背景 (Immersive Background): 采用2.5D/3D等距视角的风景插画，带有景深效果（背景略微模糊），作为整个界面的环境上下文（Context），增强了“花园”的主题感。
+
+布局逻辑: 经典的“左-中-右-底”分栏布局，信息密度适中，视觉引导线清晰地指向中心的核心操作区。
+
+二、 顶部区域 (Header Area)
+左上角 - 品牌标识 (Brand Logo): 包含图标与文字（“Gut Garden 肠道花园”），用于品牌露出。
+
+左上角 - 用户档案卡片 (User Profile Card): 悬浮于背景之上。包含用户头像（Avatar）、昵称（“小明”）以及带有图标的等级徽章（Level Badge）标签（“Lv.3 幼苗阶段”）。
+
+中上部 - 欢迎语 (Greeting/Headline): 作为页面的H1标题（“欢迎回来，小主人！👋”）和副标题（“你的肠道花园正在茁壮成长”），提供情感化交互。
+
+右上角 - 全局控制项 (Global Controls): 两个悬浮的圆形图标按钮（FAB），推测为“设置”和“音效/音乐”开关。
+
+三、 左侧侧边栏 (Left Sidebar - Data Widgets)
+采用卡片式UI（Card UI）展示关键状态，卡片带有毛玻璃效果（Glassmorphism）和圆角，以融入背景。
+
+状态仪表盘卡片 (Status Dashboard Card - "今日任务"):
+
+模块标题: 带有信息提示图标（Tooltip icon）。
+
+核心数据可视化: 未完成的任务栏卡片式摆放列出。
+
+
+状态标签组 (Status Chips/Tags): 底部并排三个带有Icon的彩色状态标签（水分充足、菌群活跃、屏障稳固）。
+
+提示信息卡片 (Tip/Notification Card - "今日小贴士"):
+
+展示一条纯文本的健康建议，起到教育和引导作用。
+
+四、 视觉中心与核心操作区 (Center Stage & Primary Action)
+虚拟形象/吉祥物 (Mascot/Avatar): 屏幕中央悬浮一个3D卡通角色，是视觉的绝对焦点。它带有一个气泡提示框 (Speech Bubble/Callout)（“今天一起照顾小居民吧！”），增强交互感。
+
+核心CTA按钮 (Primary Call-to-Action): 角色下方是一个发光的、占据主要面积的圆形交互台。
+
+包含相机Icon，主标题“今日肠道扫描”，以及解释性副标题。
+
+右侧附带一个微小的气泡标签 (Badge/Tooltip)（“推荐每日一次”），用于引导用户行为。
+
+五、 中下部 - 模块导航区 (Bottom Center - Navigation Grid)
+位于核心CTA下方，由四个并排的入口卡片 (Navigation Cards) 组成，构成一个横向卡片列表。
+
+卡片结构: 每个卡片顶部是一张3D场景插图，中部是模块主标题（H3），下部是描述性副标题。
+
+交互元素: 卡片右下角均配备一个指向右侧的圆形跳转按钮 (Forward Arrow Button)，明确指示该区域可点击进入下一级页面。
+
+四个模块分别为: 探索花园、每日打卡、知识课堂、成长徽章。
+
+六、 右侧悬浮面板 (Right Panel - Conversational UI)
+右侧是一个浮动对话窗口 (Floating Window/Panel)，集成了AI助手和简报功能。
+
+窗口控制 (Window Controls): 顶部栏包含标题“菌小园助手”以及“最小化”和“关闭”图标。
+
+AI虚拟形象: 机器化/植物化的AI头像。
+
+对话气泡 (Dialogue Bubble): AI的开场白。
+
+快捷指令列表 (Quick Prompt List): 提供三个带Icon和向右箭头（Chevron right）的列表项 (List Items)，作为预设的提问快捷键（例如：今天吃了什么？等）。
+
+主操作按钮 (Solid Button): 绿色的“和我聊天”按钮。
+
+数据简报模块 (Data Summary - "今日观察"):
+
+列表视图: 展示三条带Icon的用户行为观察记录，使用颜色或Icon传达正向（水滴、笑脸）或需要改进（小树、黄色文字）的反馈。
+
+幽灵按钮/文字链接 (Ghost Button/Text Link): 底部右对齐的“查看完整报告 >”，用于展开详细数据。
+
+七、 底部栏 - 进度追踪器 (Bottom Bar - Progress Tracker)
+横跨页面底部的一个长条形模块，用于展示用户的长期目标进度。
+
+数据统计 (Stat Display): 左侧显示“花园成长进度”及“已成长 12 天”。
+
+节点进度条 (Stepped Progress Bar/Timeline): 贯穿中央的一条带节点的进度条。当前节点（“幼苗阶段”）被点亮，后续节点带有“锁定（Padlock）”图标，利用游戏化机制激发探索欲。
+
+奖励预告 (Reward Indicator): 最右侧展示“下一阶段奖励”，并配有具体奖励对象的微缩图标（“神秘菌屋”）。
+
+
+
+探索课堂页面：
+整体界面设计采用了非常典型的游戏化学习面板（Gamified Learning Dashboard）架构，结合了 **2.5D 轴测地图画布（Isometric Map Canvas）**与**卡片化布局（Card-Based Architecture）**。
+
+整体设计语言偏向 **Soft UI / 绘本拟物风**，旨在降低用户的心理门槛，创造沉浸式的探索体验。
+
+---
+
+## 1. 顶部状态与全局导航区 (Header & Player Status Bar)
+
+位于页面顶端，负责承载**用户身份、页面上下文与游戏化大盘进度**：
+
+* **左侧：个人信息浮卡 (User Profile Widget)**
+* 采用悬浮微卡片结构，展示用户头像、昵称（小明）及游戏化等级标签（`Lv.3 知识探索者`），建立角色认同感。
+
+
+* **中央：页面标题与挂牌 (Page Title & Navigation Header)**
+* 采用质感悬挂木牌/木质视觉造型，强化场景拟物感。主标题“探索课堂”配有副标题（探索肠道生命的秘密），明确当前页面功能域。
+
+
+* **右侧：总进度与设置 (Gamification Tracker & Settings)**
+* **视觉化成长值：** 通过排布的“知识树”图标序列直观展示累积成果。
+* **数据化反馈：** 明确标出 `已探索 12 个知识点` 与下一个阶段奖励提示，形成长线目标驱动（Goal-Gradient Effect）。
+
+
+
+---
+
+## 2. 中央核心区：关卡地图画布 (Interactive Map Canvas)
+
+作为页面的主视觉焦点，采用“路线漫游 (Path-based Level System)”的形式进行知识解构：
+
+* **S 型探索路径 (Winding Path System)：** 利用一条水流/小路形成天然的视线引导，引导用户按逻辑顺序（1至5）从左上向右下推进。
+* **节点地图 (Map Waypoints / Nodes)：**
+* 每一个知识区域（如 *膳食纤维广场*、*发酵工坊* 等）都是一个具象化的建筑或场景，增强辨识度。
+* **收集度反馈：** 每个节点底部配有星级/进度组件（如 `0/6`），提供明确的区域完成度提示。
+
+
+* **顶部引导浮条 (Prompt Banner)：** 采用轻量悬浮气泡，“今天想探索哪个知识区域呢？”，提供情境化引导（Contextual Nudge）。
+
+---
+
+## 3. 右侧卡片：AI 助手与内容推荐区 (Floating Companion Panel)
+
+采用垂直堆叠卡片，充当用户的**辅助交互与内容发现中心**：
+
+* **上方：智能伴学助手 (AI Companion Widget)**
+* **形象与对话框：** 3D 机器人IP（菌小园老师）配合气泡对话，提供陪伴感。
+* **快捷 FAQ/主题列表：** 树状高频问题列表（如 *食物的秘密*、*健康好习惯* 等），带右箭头点按指示，便于一键调起对话。
+* **高亮行动按钮 (Primary CTA)：** 绿色胶囊状按钮 `随机探索`，为迷茫用户提供“低决策成本”的入口。
+
+
+* **下方：个性化推荐列表 (Content Feed / Recommendation)**
+* 采用标准列表卡片，支持 `换一换` 换刷操作。
+* 包含缩略图、标题、描述、奖励标签（如 `能量 +10`）及收藏/星号控件，提升内容的转化率。
+
+
+
+---
+
+## 4. 底部激励与任务面板 (Milestone & Task Dashboard)
+
+横跨地图下方，属于典型的**短期行为激励模块（Short-term Reward Loop）**：
+
+* **左侧：今日任务卡片 (Daily Task Card)**
+* IP 形象结合极简文案，告知用户单日目标，并提供 `查看任务` 入口。
+
+
+* **右侧：线性里程碑进度条 (Linear Milestone Reward Track)**
+* 将总体探索点数（1, 3, 5, 8, 12）转化为**开宝箱的里程碑**。
+* **状态分级 (State System)：**
+* 已完成：绿色对勾标记。
+* 未达成：普通宝箱图标。
+* 当前待领取/满级：外发光高亮宝箱（如第 12 个知识点），触发用户的视觉点击欲望。
+
+
+
+
+
+---
+
+## 5. 底部全局导航栏 (Dock System)
+
+*  Central Hero CTA 的 7-Tab 结构：
+* 采用对称式 Dock 架构，中央以**弧形突起 (Notched)** 和高对比度粉紫渐变色突出核心功能 `拍便便分析`。
+* 当前选中的 `探索课堂` 使用紫色胶囊型高亮块进行**选中态高亮 (Active Pill Container)**。
+
+
+
+---
+
+### 💡 总结设计亮点
+
+1. **高完成度的游戏化闭环 (Gamification Loop)：** 个人等级 $\to$ 地图打卡 $\to$ 收集度（星级） $\to$ 任务宝箱 $\to$ 成长树，全方位提供即时反馈（Immediate Feedback）。
+2. **清晰的层次收纳 (Visual Hierarchy)：** 地图作为背景与核心交互区，侧边栏与底部面板以卡片悬浮（Elevation/Shadow）形式覆盖其上，分工明确而不显杂乱。
+
+
+
+
+
+
+探索花园页面：
+
+这是一张采用游戏化设计（Gamification Design）**的健康管理/科普类应用界面的截图。该页面基于**2.5D等距视角（Isometric）**的插画作为底层交互画布，并在其上叠加了采用**毛玻璃（Glassmorphism）视觉风格的UI组件。
+
+以下是用专业UI/UX术语对该页面布局和元素的详细拆解：
+
+### 1. 整体视觉与布局架构 (Overall Visual & Layout Architecture)
+
+* **视觉风格 (Visual Style):** UI面板采用了半透明的白底、圆角（Border-radius）、轻微投影（Drop Shadow）和背景模糊（Background Blur）的毛玻璃效果，使其在不遮挡底层丰富插图的同时，保证了信息的可读性。
+* **布局模式 (Layout Pattern):** 经典的“HUD（平视显示器）+ 左右侧面板 + 底部操作栏”的沉浸式沙盒/仪表盘布局。
+
+### 2. 顶部状态栏与导航区 (Top HUD & Navigation Bar)
+
+位于页面顶部，主要用于全局导航和核心数据展示。
+
+* **全局导航 (Global Navigation):** 左上角包含返回图标（Back Icon）、主标题文字（“探索花园”）、副标题（“我的肠道生态世界”）以及一个用于查看规则或帮助的问号提示图标（Tooltip/Help Icon）。
+* **核心指标区 (Key Metrics/HUD):** 中间及右侧横向排列了四个状态指示器（Status Indicators），展示用户当前的核心资产/等级数据：
+* **生态等级:** 带Icon和文字。
+* **生态繁荣度:** 包含具体数值以及一个**环形进度条（Circular Progress Bar）**。
+* **菌居民数量:** 纯数值展示。
+* **连续照顾:** 记录打卡天数的数值。
+
+
+* **全局操作 (Global Control):** 最右侧悬浮着一个音乐开关的图标按钮（Toggle Button）。
+
+### 3. 左侧信息面板 (Left Information Panel - Status Dashboard)
+
+采用**卡片式布局（Card-based Layout）**，纵向排列，展示当前生态的健康状态和影响因素。
+
+* **花园状态卡片 (Status Card):**
+* 顶部带有可点击折叠/进入的标题栏（带右侧Chevron箭头）。
+* 核心是一个大型的圆形状态图标（Status Icon），辅以正向的文案反馈（“生态平衡良好”）。
+* 底部包含一个高优先级的**主按钮（Primary CTA Button）**——“查看详情”。
+
+
+* **今日影响因素卡片 (Impact Factors List):**
+* 内部使用**列表视图（List View）**。
+* 每个列表项（List Item）包含：前置图标（Leading Icon）、标签文案、以及右侧带颜色的**增减量数值（Delta Values**，如绿色的+10，红色的-8），直观展示不同行为对状态的影响。
+* 底部提供“查看全部影响”的文本链接按钮（Text Link）。
+
+
+
+### 4. 右侧助手与通知面板 (Right Assistant & Notification Panel)
+
+同样采用卡片式布局，侧重于系统互动、消息通知和引导。
+
+* **虚拟助手区 (Mascot/Virtual Assistant):**
+* 展示一个3D拟人化IP形象（菌小园助手），右上角有语音播报图标。
+* 下方带有一个**对话气泡（Speech Bubble）**，用于展示动态问候语或提示。
+
+
+* **通知列表 (Notifications/Insights List - "我观察到"):**
+* 条目化的信息提示区，每条提示带有前置图标和右侧的跳转箭头（Chevron），暗示这些项是**可交互的列表项（Clickable List Tiles）**。
+
+
+* **建议与互动区 (Recommendations & Interaction):**
+* 提供“今日小建议”的文本信息。
+* 底部设有一个**次级按钮（Secondary Button）**——“和我聊天”，用于唤起对话流（Conversational UI）。
+
+
+
+### 5. 中间核心交互画布 (Central Interactive Canvas & POIs)
+
+界面的底层是一个2.5D的插画地图，地图上分布着多个**兴趣点（POI - Point of Interest）**。
+
+* **悬浮标签/信息气泡 (Floating Tooltips/Tags):**
+* 锚定在特定的建筑或区域上（如“生命之树”、“菌居民之家”、“发酵实验室”等）。
+* UI元素包含了：当前等级（Lv.x Badge）、标题、简短描述文字，以及一个指向右上方的小箭头，表明点击该悬浮卡片（Floating Card）可以进入对应的子页面或弹窗（Modal/Sheet）。
+
+
+
+### 6. 底部操作栏与任务面板 (Bottom Action Bar & Task Panel)
+
+分为左侧的全局地图入口、中部的工具栏和右侧的任务看板。
+
+* **悬浮操作按钮 (FAB - Floating Action Button):** 左下角的“花园地图”图标，独立于主底栏，用于切换视角或大地图浏览。
+* **快捷工具栏 (Quick Action Toolbar):**
+* 包含“浇水、清理垃圾、种植”等5个**图标按钮（Icon Buttons）**。
+* 部分图标右上角带有红色的**数字徽标（Badge）**（如清理垃圾的3，收获的2），属于典型的未读/待办事件提示设计，用于吸引用户点击交互。
+
+
+* **今日任务看板 (Task Checklist & Rewards):**
+* 右侧为一个融合的任务模块，左半边是**复选框列表（Checklist）**，展示任务进度（如 1/1, 0/1），并用不同的图标（绿勾代表完成状态 Checked State，相机代表去完成的动作）。
+* 右半边是“完成奖励”展示区，强调行为的即时反馈（反馈机制）。
+
+
+
+
+每日打卡页面：
+按照你的需求，移除“今日肠道扫描”模块，并让“今日照顾清单”向下延伸填满该空缺后，整个页面的前端布局结构和 UI 元素描述如下。
+
+这是一份符合 UI/UX 设计师与前端工程师交接标准的专业页面结构描述：
+
+总体架构 (Macro Layout)
+页面采用卡片式设计（Card-based Design）和非对称双栏布局（Asymmetrical Two-Column Layout），整体风格为轻拟物化与游戏化 UI（Gamified UI）。背景为全屏沉浸式手绘风景插画。UI 元素通过带有大圆角（Border Radius）和柔和投影（Soft Drop Shadow）的半透明/纯色面板悬浮于背景之上。
+
+页面可视区（Viewport）主要划分为四大区域：顶部状态栏、左侧主内容区、左侧底部看板，以及右侧固定侧边栏。
+
+1. 顶部状态与导航容器 (Top Header & Status Bar)
+该区域横跨页面顶部，采用 Flexbox 水平布局（flex-direction: row），两侧对齐（justify-content: space-between），包含三个核心子组件：
+
+左侧导航与信息 (Left Nav & Profile)：
+
+一个圆形的“返回”图标按钮（Icon Button）。
+
+主标题文本 “每日打卡” 及副标题。
+
+下方悬浮一个“生态等级”徽章组件（Badge Component），显示 Level 4 及动效图标。
+
+中部核心数据 (Center Status)：
+
+“今日花园能量” 面板。包含大字号的动态数值呈现（85/100）和一个胶囊形的水平进度条组件（Progress Bar），进度条有明显的填充态。
+
+右侧快捷入口 (Right Access)：
+
+一个小型的“花园预览”缩略图卡片，带有箭头指示可点击跳转（Routing）。右上角屏幕边缘有一个设置（Settings）悬浮按钮。
+
+2. 左侧主内容区：今日照顾清单 (Main Content: Daily Care List) —— 【核心修改区】
+由于下方模块被移除，该容器的纵向空间被释放。它现在占据了主内容区中部的绝大部分视觉焦点（通过设置 flex-grow: 1 或增加固定 height）。
+
+容器属性： 带有浅黄色背景、白色内描边、大圆角的卡片容器，顶部中心有“今日照顾清单”的标题标签（Tab/Label）。
+
+内部布局： 采用 CSS Grid 或 Flexbox 横向排布（flex-direction: row, justify-content: space-between）的 4 个子任务卡片。
+
+元素放大适配 (Scaling & Adaptation)：
+
+由于父容器纵向拉伸，4 个子卡片（补充水分、健康饮食、优质睡眠、活力运动）等比例放大或纵向拉伸。
+
+卡片内的 3D IP 角色插画（Illustrations）展示面积显著增大，视觉冲击力更强。
+
+底部的状态按钮（Button/Tag，显示“已完成”及打勾 Icon）和奖励数值（Badge，如“能量 +5”）的触控区域（Hit Area）变大，交互体验更佳。
+
+3. 左侧底部数据看板 (Bottom Dashboard)
+紧贴在“今日照顾清单”正下方，由左右两个等高的卡片组件构成横向 Flex 布局（约 6:4 的比例）：
+
+连续打卡日历 (Check-in Calendar - 左侧)：
+
+顶部包含标题和月份筛选。
+
+中间是一周日期流（Date Stream），使用单选按钮（Radio-like indicator）或勾选图标展示状态。
+
+底部包含连续打卡天数统计和进度奖励提示语及礼盒 Icon。
+
+今日奖励 (Today's Rewards - 右侧)：
+
+网格布局（Grid），横向排列 4 个资源掉落物图标（水滴、树叶、星星、太阳）及其对应的数值增量（如 +5, +10）。
+
+4. 右侧侧边栏 (Right Sidebar)
+固定在页面右侧的垂直容器（Vertical Flex Column），采用 flex-direction: column 和一致的 gap 间距。包含 4 个堆叠的卡片模块，作为游戏化助手与信息流：
+
+助手模块 (Virtual Assistant Card)： 包含 3D 机器人模型插画、静音控制 Icon、以及底部带有圆角的对话气泡（Speech Bubble），展示问候语和昨日总结。
+
+今日小建议 (Tips Card)： 纯文本信息面板，带有右上角跳转箭头。
+
+今日小知识 (Knowledge Card)： 文本介绍下方附带一个高亮的主操作按钮（Primary CTA Button）“去知识课堂看看”。
+
+快捷入口 (Quick Links)： 包含两个并排的图标按钮（知识课堂、成长徽章），用于快速导航。
+
+
+
+成长徽章页面：
+采用了拟物化（Skeuomorphism）与2.5D/3D渲染结合的视觉风格（如木纹材质、植物藤蔓、立体徽章）。页面核心功能是“成就/徽章系统展示”。
+
+界面的整体布局采用了非对称分栏布局（Asymmetric Split Layout）：左侧为主内容区（占主导），右侧为辅助信息悬浮组件区（Widgets）。
+
+以下是使用专业 UI/UX 术语对页面元素和布局的详细拆解：
+
+1. 顶部导航区 (Top App Bar / Header)
+左侧 (Leading): 返回按钮 (Back Button)，置于圆形半透明背板中。
+
+中间 (Title): 页面标题 (Page Title) “成长徽章馆”，带有奖杯Icon；下方配有副标题 (Subtitle/Slogan) “每一枚徽章，都是你照顾花园的证明”。
+
+右侧 (Trailing): 文字图标按钮 (Text & Icon Button) “徽章说明”，作为帮助/规则的入口。
+
+2. 用户状态卡片 (User Profile / Status Card)
+位于页面上部，采用卡片式设计 (Card UI)，展示用户的核心成就数据：
+
+左侧: 用户的 3D虚拟形象 (Avatar/Mascot)。
+
+中栏:
+
+等级与头衔 (Level & Title): “Lv.4 肠道小园丁”。
+
+进度条 (Progress Bar): 线性进度条，展示当前“成长值”（720/1000）。
+
+提示文本 (Helper Text): 提示升级距离（距离下一等级还差 280 成长值）。
+
+右侧:
+
+数据展示 (Stat Display): 突出显示已获得徽章数量“18 / 60”。
+
+CTA按钮 (Call to Action): “徽章总览”，次级操作按钮。
+
+3. 主内容区：徽章陈列架 (Main Content: Badge Gallery)
+占据左侧主要空间，采用了拟物化的“木质层架”设计：
+
+分类标签 (Category Tabs/Labels): 采用药丸形标签（Pill-shape tag）搭配序号，如“1 健康习惯徽章”。
+
+内容布局 (Content Layout): 每个层架采用横向排布，默认展示3个徽章。
+
+徽章元素 (Badge Item UI):
+
+状态标签 (Status Tag): 徽章下方带有带色块的状态标签（绿色“已获得”，灰色“未解锁”）。
+
+主标题与副标题 (Title & Subtitle): 如“水滴守护者”及达成条件“连续喝水7天”。
+
+锁定状态 (Locked State): 第4分类中的未解锁徽章采用了去色（灰度）处理，并叠加了锁型Icon。
+
+横向滑动指示器 (Carousel/Scroll Indicator): 层架右侧有 > 图标，暗示该行支持横向滑动 (Horizontal Scroll / Swipe) 以查看更多。
+
+4. 右侧悬浮组件区 (Right Sidebar Widgets)
+页面右侧垂直排列了三个卡片式小组件 (Widgets)，提供辅助信息与交互：
+
+Widget 1: 助手提示 (Assistant Dialog): 包含一个机器人NPC形象和气泡提示 (Speech Bubble/Tooltip)，提供动态的反馈和鼓励文案。
+
+Widget 2: 成长路径 (Progression Timeline / Stepper): 采用垂直时间轴/步进器组件。已完成等级（Lv.1-3）显示绿色对勾（Checkmark），当前等级（Lv.4）高亮显示，未解锁等级（Lv.5）置灰并带有锁型图标。
+
+Widget 3: 解锁预告 (Unlock Teaser):
+
+展示即将解锁的奖励（带有 ? 占位符）。
+
+包含一个微型进度条（“还差 2 枚徽章”）。
+
+底部包含一个高亮的主行动呼唤按钮 (Primary CTA Button) “去探索”。
+
+5. 底部动态展示卡片 (Recent Highlight Board)
+位于徽章架下方，是一块横跨左侧主视觉区的横向卡片：
+
+区块标题 (Section Header): “最近获得”。
+
+左侧元素: 重点展示最新获得的徽章，左上角带有红色的 “NEW” 角标 (Badge/Banner)。包含徽章名称、描述、奖励数值及获取时间戳（Timestamp）。
+
+右侧元素: 拟物化的“收集册”。右上角显示收集进度 (18/60)，右下角有一个悬挂式的社交分享按钮 (Share Button/Tag) “分享我的徽章墙”。
+

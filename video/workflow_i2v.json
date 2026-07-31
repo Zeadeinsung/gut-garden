@@ -1,0 +1,256 @@
+{
+  "last_node_id": 12,
+  "last_link_id": 16,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "WanVideoModelLoader",
+      "pos": [-400, 0],
+      "size": [315, 110],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "MODEL", "type": "MODEL", "links": [1], "slot_index": 0},
+        {"name": "CLIP", "type": "CLIP", "links": [2, 3], "slot_index": 1},
+        {"name": "VAE", "type": "VAE", "links": [10], "slot_index": 2}
+      ],
+      "properties": {"Node name for S&R": "WanVideo Model Loader (选模型)"},
+      "widgets_values": ["wan2.7-i2v-2026-04-25", "fp8_e4m3fn"]
+    },
+    {
+      "id": 2,
+      "type": "CLIPTextEncode",
+      "pos": [-100, -200],
+      "size": [450, 200],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "clip", "type": "CLIP", "link": 2}
+      ],
+      "outputs": [
+        {"name": "CONDITIONING", "type": "CONDITIONING", "links": [4], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "正向提示词 (描述动态变化)"},
+      "widgets_values": [
+        "(claymation style:1.3), (polymer clay texture:1.2), slow gentle camera push in, parallax scrolling, soft felt fabric, cute cartoon garden, pastel pink blue green, warm lighting, smooth animation. [SCENE_DESCRIPTION]"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "CLIPTextEncode",
+      "pos": [-100, 50],
+      "size": [450, 200],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "clip", "type": "CLIP", "link": 3}
+      ],
+      "outputs": [
+        {"name": "CONDITIONING", "type": "CONDITIONING", "links": [5], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "负向提示词 (Negative Prompt)"},
+      "widgets_values": [
+        "photorealistic, hyper-realistic, dark, horror, scary, fast motion, jerky movement, distorted, blurry, bad quality, text, watermark, morphing, warping, flickering, flashing"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [-400, 300],
+      "size": [315, 330],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [12], "slot_index": 0},
+        {"name": "MASK", "type": "MASK", "links": [], "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "加载关键帧图片 (首帧)"},
+      "widgets_values": ["D:/GutGardenBeta/video/keyframes/scene_01_keyframe.png", "image"]
+    },
+    {
+      "id": 5,
+      "type": "VAEEncode",
+      "pos": [-50, 370],
+      "size": [210, 50],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "pixels", "type": "IMAGE", "link": 12},
+        {"name": "vae", "type": "VAE", "link": 10}
+      ],
+      "outputs": [
+        {"name": "LATENT", "type": "LATENT", "links": [13], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "VAE编码 (图→潜空间)"},
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "EmptyLatentVideo",
+      "pos": [-100, 460],
+      "size": [315, 150],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "LATENT", "type": "LATENT", "links": [], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "视频参数 (分辨率/时长)"},
+      "widgets_values": [1920, 1080, 72, 24]
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [250, 100],
+      "size": [315, 320],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {"name": "model", "type": "MODEL", "link": 1},
+        {"name": "positive", "type": "CONDITIONING", "link": 4},
+        {"name": "negative", "type": "CONDITIONING", "link": 5},
+        {"name": "latent_image", "type": "LATENT", "link": 13}
+      ],
+      "outputs": [
+        {"name": "LATENT", "type": "LATENT", "links": [7], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "KSampler (生成视频潜空间)"},
+      "widgets_values": [987654321, "fixed", 25, 6.5, "dpmpp_2m", "karras", 1.0]
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [600, 100],
+      "size": [210, 60],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {"name": "samples", "type": "LATENT", "link": 7},
+        {"name": "vae", "type": "VAE", "link": 10}
+      ],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [8], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "VAE解码 (潜空间→帧)"},
+      "widgets_values": []
+    },
+    {
+      "id": 9,
+      "type": "VHS_VideoCombine",
+      "pos": [850, 0],
+      "size": [380, 280],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 8}
+      ],
+      "outputs": [
+        {"name": "FILENAME", "type": "STRING", "links": [9], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "合成视频并保存"},
+      "widgets_values": [
+        24, 1,
+        "D:/GutGardenBeta/video/output",
+        "scene_01_i2v", "h264",
+        null, null, null, null, null,
+        true, true, false, false, false, false, false
+      ]
+    },
+    {
+      "id": 10,
+      "type": "PreviewVideo",
+      "pos": [850, 350],
+      "size": [315, 260],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 8}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "预览视频"},
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "ImageScale",
+      "pos": [-50, 330],
+      "size": [210, 50],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 12}
+      ],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "缩放图片到1920x1080"},
+      "widgets_values": ["1920x1080", "lanczos"]
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [-400, -200],
+      "size": [750, 200],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "WanVideo I2V (图生视频) 工作流 - 用于关键帧动画化\n\n使用说明:\n1. 先用工作流1 (t2v) 或手动生成关键帧图片,保存到 video/keyframes/\n2. 在 WanVideo Model Loader 中选择 wan2.7-i2v 模型\n3. 在 LoadImage 中加载关键帧图片\n4. 在正向提示词中描述你想要的动态变化 (如: slow zoom in, gentle pan right)\n5. 在 VHS_VideoCombine 中修改输出文件名\n6. 点击 Queue Prompt 生成\n\n适用场景: 镜头1.1餐桌推镜 / 镜头2.1花园全景平移 / 镜头6.2花园拉远"
+      ]
+    }
+  ],
+  "links": [
+    {"id": 1,  "origin_id": 1, "origin_slot": 0, "target_id": 7, "target_slot": 0, "type": "MODEL"},
+    {"id": 2,  "origin_id": 1, "origin_slot": 1, "target_id": 2, "target_slot": 0, "type": "CLIP"},
+    {"id": 3,  "origin_id": 1, "origin_slot": 1, "target_id": 3, "target_slot": 0, "type": "CLIP"},
+    {"id": 4,  "origin_id": 2, "origin_slot": 0, "target_id": 7, "target_slot": 1, "type": "CONDITIONING"},
+    {"id": 5,  "origin_id": 3, "origin_slot": 0, "target_id": 7, "target_slot": 2, "type": "CONDITIONING"},
+    {"id": 7,  "origin_id": 7, "origin_slot": 0, "target_id": 8, "target_slot": 0, "type": "LATENT"},
+    {"id": 8,  "origin_id": 8, "origin_slot": 0, "target_id": 9, "target_slot": 0, "type": "IMAGE"},
+    {"id": 10, "origin_id": 1, "origin_slot": 2, "target_id": 5, "target_slot": 1, "type": "VAE"},
+    {"id": 12, "origin_id": 4, "origin_slot": 0, "target_id": 5, "target_slot": 0, "type": "IMAGE"},
+    {"id": 13, "origin_id": 5, "origin_slot": 0, "target_id": 7, "target_slot": 3, "type": "LATENT"},
+    {"id": 15, "origin_id": 8, "origin_slot": 0, "target_id": 10, "target_slot": 0, "type": "IMAGE"},
+    {"id": 16, "origin_id": 4, "origin_slot": 0, "target_id": 11, "target_slot": 0, "type": "IMAGE"}
+  ],
+  "groups": [
+    {
+      "title": "1. 模型加载",
+      "bounding": [-420, -50, 335, 180],
+      "color": "#3f789e"
+    },
+    {
+      "title": "2. 提示词 + 关键帧输入",
+      "bounding": [-420, 250, 625, 400],
+      "color": "#8A8"
+    },
+    {
+      "title": "3. 生成",
+      "bounding": [230, 20, 355, 430],
+      "color": "#A88"
+    },
+    {
+      "title": "4. 输出",
+      "bounding": [830, -60, 420, 700],
+      "color": "#88A"
+    }
+  ],
+  "config": {},
+  "extra": {}
+}

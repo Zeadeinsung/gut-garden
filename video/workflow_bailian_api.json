@@ -1,0 +1,173 @@
+{
+  "last_node_id": 9,
+  "last_link_id": 13,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "BailianPromptPreset",
+      "pos": [50, 100],
+      "size": [400, 180],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "prompt", "type": "STRING", "links": [1], "slot_index": 0},
+        {"name": "negative_prompt", "type": "STRING", "links": [2], "slot_index": 1},
+        {"name": "duration_sec", "type": "INT", "links": [3], "slot_index": 2}
+      ],
+      "properties": {"Node name for S&R": "场景预设 (选镜号)"},
+      "widgets_values": ["[Act3] 镜头3.1 — 纤纤种子流入发酵工坊", ""]
+    },
+    {
+      "id": 2,
+      "type": "BailianWanT2V",
+      "pos": [520, 50],
+      "size": [420, 320],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "prompt", "type": "STRING", "link": 1},
+        {"name": "negative_prompt", "type": "STRING", "link": 2}
+      ],
+      "outputs": [
+        {"name": "video_path", "type": "STRING", "links": [5], "slot_index": 0},
+        {"name": "preview", "type": "IMAGE", "links": [6], "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "文生视频 (Bailian Wan2.7)"},
+      "widgets_values": ["wan2.7-t2v-2026-06-12", 5, "1080p:1920x1080", 0, "", ""]
+    },
+    {
+      "id": 3,
+      "type": "Note",
+      "pos": [50, 320],
+      "size": [400, 160],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "Bailian Prompt Preset 使用说明\n\n1. 下拉选择镜头编号\n2. 提示词自动从 scene_prompts.json 加载\n3. 风格前缀 + 负向词自动拼接\n4. 如果需要手动调整提示词, 选 'custom' 并手动输入"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "SaveVideo",
+      "pos": [1000, 50],
+      "size": [315, 260],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "filename", "type": "STRING", "link": 5}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "保存视频到 output/"},
+      "widgets_values": ["D:/GutGardenBeta/video/output"]
+    },
+    {
+      "id": 5,
+      "type": "Note",
+      "pos": [520, 400],
+      "size": [420, 120],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "BailianWanT2V 参数说明\n\n模型: wan2.7-t2v (推荐, 1080P有声)\n时长: 3-15秒 (越长越贵)\n分辨率: 1080p = 1920x1080\n种子: 相同seed保持风格一致性, 0=随机\nAPI Key: 留空则使用环境变量 DASHSCOPE_API_KEY"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [50, 520],
+      "size": [900, 80],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "⚠️ 重要: 使用前必须 (1) pip install dashscope  (2) 设置环境变量 DASHSCOPE_API_KEY=你的百炼Key  (3) 将 ComfyUI_BailianWan 文件夹复制到 ComfyUI/custom_nodes/"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [50, 650],
+      "size": [400, 150],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "CONDITIONING", "type": "CONDITIONING", "links": [], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "备用: 手动提示词 (可选)"},
+      "widgets_values": [""]
+    },
+    {
+      "id": 8,
+      "type": "PreviewImage",
+      "pos": [1000, 350],
+      "size": [315, 260],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 6}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "预览关键帧"},
+      "widgets_values": []
+    },
+    {
+      "id": 9,
+      "type": "PrimitiveNode",
+      "pos": [520, 500],
+      "size": [200, 80],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "INT", "type": "INT", "links": [3], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "时长透传"},
+      "widgets_values": [5]
+    }
+  ],
+  "links": [
+    {"id": 1,  "origin_id": 1, "origin_slot": 0, "target_id": 2, "target_slot": 0, "type": "STRING"},
+    {"id": 2,  "origin_id": 1, "origin_slot": 1, "target_id": 2, "target_slot": 1, "type": "STRING"},
+    {"id": 5,  "origin_id": 2, "origin_slot": 0, "target_id": 4, "target_slot": 0, "type": "STRING"},
+    {"id": 6,  "origin_id": 2, "origin_slot": 1, "target_id": 8, "target_slot": 0, "type": "IMAGE"},
+    {"id": 3,  "origin_id": 1, "origin_slot": 2, "target_id": 9, "target_slot": 0, "type": "INT"}
+  ],
+  "groups": [
+    {
+      "title": "1. 加载提示词 (选镜号)",
+      "bounding": [30, 50, 440, 250],
+      "color": "#3f789e"
+    },
+    {
+      "title": "2. 百炼 API 生成视频",
+      "bounding": [500, 20, 460, 480],
+      "color": "#8A8"
+    },
+    {
+      "title": "3. 保存 & 预览",
+      "bounding": [980, 20, 355, 620],
+      "color": "#A88"
+    }
+  ],
+  "config": {},
+  "extra": {}
+}

@@ -1,0 +1,222 @@
+{
+  "project": "肠道花园 Gut Garden 宣传视频",
+  "duration": "90秒 / 24fps",
+  "resolution": "1920x1080",
+  "output_dir": "D:/GutGardenBeta/video/output",
+  "common_prefix": "(claymation style:1.3), (polymer clay texture:1.2), (stop motion aesthetic:1.1), soft felt fabric texture, cute cartoon, children illustration, warm soft lighting, pastel pink blue green palette, 3D rendered, adorable, shallow depth of field, macro photography",
+  "common_negative": "photorealistic, hyper-realistic, dark, horror, scary, sharp edges, metallic, glossy, cold lighting, neon, adult, complex background, text, watermark, low quality, blurry, distorted, bad anatomy, extra limbs, mutation, deformed",
+
+  "scenes": [
+    {
+      "act": 1,
+      "act_title": "看不见的世界 (0-10秒)",
+      "shots": [
+        {
+          "id": "scene_01_table",
+          "duration_sec": 4,
+          "frames": 96,
+          "type": "t2v",
+          "description": "镜头1.1 — 餐桌俯拍，吃燕麦/豆类/水果",
+          "prompt": "A cute claymation top-down view of a breakfast table with a bowl of oatmeal, fresh berries, sliced banana, and a glass of water. Warm morning sunlight from window. Soft felt placemat texture. Polymer clay food items with rounded edges. Pastel color palette. Cozy kitchen atmosphere. Still shot, smooth slow zoom in.",
+          "motion_hint": "slow zoom in 1.1x over 4 seconds"
+        },
+        {
+          "id": "scene_02_tunnel",
+          "duration_sec": 6,
+          "frames": 144,
+          "type": "t2v",
+          "description": "镜头1.2 — 镜头推进人体内部，穿过粉色通道",
+          "prompt": "First person perspective traveling through a magical tunnel made of soft pink folded fabric walls, warm glowing light at the end, fiber particles floating like tiny stars, cotton candy texture walls, gentle wave patterns, journey inward feeling, transition from mouth to stomach, cute cartoon anatomy style, no scary details, soft rounded shapes.",
+          "motion_hint": "continuous forward motion through tunnel"
+        }
+      ]
+    },
+    {
+      "act": 2,
+      "act_title": "进入肠道花园 (10-25秒)",
+      "shots": [
+        {
+          "id": "scene_03_garden_panorama",
+          "duration_sec": 6,
+          "frames": 144,
+          "type": "t2v",
+          "description": "镜头2.1 — 穿过通道，肠道花园全景展现",
+          "prompt": "A magnificent cute garden inside an intestine revealed as camera emerges from tunnel, pink folded walls like rolling hills, a winding blue stream flowing through, mushroom houses with tiny windmills on top, soft felt trees, fluffy pastel clouds, warm golden sunlight, polymer clay buildings and landscape details, miniature magical world, childlike wonder, cinematic wide establishing shot, camera slowly panning right revealing more of the garden.",
+          "motion_hint": "reveal from tunnel then slow pan right"
+        },
+        {
+          "id": "scene_04_seeds_fall",
+          "duration_sec": 3,
+          "frames": 72,
+          "type": "t2v",
+          "description": "镜头2.2 — 食物种子飘落至花园广场",
+          "prompt": "Tiny cute seed characters with soft green leaf hair, round felt bodies, small sparkly eyes, floating downward gently like parachutes into a central garden plaza, the plaza is made of soft cobblestone texture, mushroom houses around the edges, warm morning light, magical sparkles in the air, seeds landing softly on the ground, polymer clay style.",
+          "motion_hint": "seeds floating downward, gentle landing"
+        },
+        {
+          "id": "scene_05_jun_xiaoyuan",
+          "duration_sec": 3,
+          "frames": 72,
+          "type": "t2v",
+          "description": "镜头2.3 — 菌小园出场挥手",
+          "prompt": "A cute chubby mushroom fairy guide character, round body, wearing a tiny soft lab coat made of felt fabric, holding a glowing science lamp on a wand that emits warm golden light, pink and cream colors, friendly big smile, waving excitedly at the camera, jumping out from behind a mushroom house, polymer clay stop motion style, welcoming gesture.",
+          "motion_hint": "character jumps out and waves"
+        },
+        {
+          "id": "scene_06_map_lightup",
+          "duration_sec": 3,
+          "frames": 72,
+          "type": "t2v",
+          "description": "镜头2.4 — 花园地图各区逐一亮起",
+          "prompt": "A cute treasure map of a garden inside intestines, top-down view, illustrated with soft watercolor-like colors, marked zones: hot spring area at top in pink, fuzzy plains in middle in light green, workshop area in golden, recycling camp at bottom in brown, a dotted path connecting all zones, cartoon map markers shaped like tiny flags, felt fabric border decoration, storybook illustration style, zones lighting up one by one with a warm glow.",
+          "motion_hint": "sequential glowing of zones from top to bottom"
+        }
+      ]
+    },
+    {
+      "act": 3,
+      "act_title": "一粒纤维的旅程 (25-45秒)",
+      "shots": [
+        {
+          "id": "scene_07_workshop_entrance",
+          "duration_sec": 5,
+          "frames": 120,
+          "type": "t2v",
+          "description": "镜头3.1 — 纤纤种子流入发酵工坊",
+          "prompt": "A cute claymation fermentation workshop inside a garden, mushroom houses with spinning windmills on top, connected by soft tube pipes like play-doh, a blue stream flows through carrying a tiny green seed character with leaf hair, warm amber lighting inside the workshop, steam puffs from chimneys like cotton balls, busy microbe worker characters made of felt with tiny hard hats, cozy industrial fantasy atmosphere, the seed floating along the stream toward the workshop entrance.",
+          "motion_hint": "follow seed floating along stream into workshop"
+        },
+        {
+          "id": "scene_08_bubbles",
+          "duration_sec": 5,
+          "frames": 120,
+          "type": "t2v",
+          "description": "镜头3.2 — 发酵工匠工作，泡泡产生",
+          "prompt": "Cute microbe worker characters in a busy workshop interior, round chubby felt bodies with tiny hard hats and goggles, stirring a big copper cauldron that bubbles actively, colorful foam bubbles floating upward - golden, orange, purple, and pink, soft bioluminescent glow from the cauldron contents, warm magical atmosphere inside the workshop, macro close-up on the bubbling cauldron surface, steam wisps, the workers smiling and working happily.",
+          "motion_hint": "bubbles rising, workers stirring, cauldron bubbling"
+        },
+        {
+          "id": "scene_09_dingding_spring",
+          "duration_sec": 5,
+          "frames": 120,
+          "type": "t2v",
+          "description": "镜头3.3 — 丁丁泉灵出现，泉水喷涌",
+          "prompt": "A magical spring of glowing golden, orange and purple liquid flowing from a mushroom-shaped pipe into a crystal clear stream, a cute water sprite character made of translucent blue felt material with sparkles twinkling inside its body, jumping joyfully out of the water surface, water droplets catching light like tiny diamonds, golden particles floating in the stream, magical whimsical atmosphere, the sprite dancing above the water, ripples spreading outward.",
+          "motion_hint": "water sprite jumping out, streams flowing, golden particles"
+        },
+        {
+          "id": "scene_10_castle_wall",
+          "duration_sec": 5,
+          "frames": 120,
+          "type": "t2v",
+          "description": "镜头3.4 — 泉水流向肠道城墙",
+          "prompt": "A winding golden stream flowing toward a castle wall made of pink building blocks like soft bricks, cute guard characters standing on top of the wall holding shields that emit a warm golden protective glow, the wall has a gate where the stream passes through, soft felt castle architecture with rounded turrets, protective warm feeling, landscape shot showing the journey of the stream, the guards waving at the approaching golden water, safe and welcoming atmosphere.",
+          "motion_hint": "camera follows stream flowing toward wall, guards waving"
+        }
+      ]
+    },
+    {
+      "act": 4,
+      "act_title": "花园也会变化 (45-58秒)",
+      "shots": [
+        {
+          "id": "scene_11_poor_diet",
+          "duration_sec": 3,
+          "frames": 72,
+          "type": "t2v",
+          "description": "镜头4.1 — 饮食单一，植物减少",
+          "prompt": "The same cute intestine garden but now looking less vibrant, fewer plants and flowers visible, wilting flowers drooping sadly, some empty patches in the garden where plants used to be, muted colors starting to turn slightly gray, the blue stream looking a bit dull, some mushroom houses looking neglected, overall atmosphere of gentle decline, still claymation polymer clay style but with less saturation, soft dreary lighting.",
+          "motion_hint": "gradual desaturation and plant wilting"
+        },
+        {
+          "id": "scene_12_stress",
+          "duration_sec": 3,
+          "frames": 72,
+          "type": "t2v",
+          "description": "镜头4.2 — 熬夜压力，乌云出现",
+          "prompt": "The cute intestine garden under stress, dark clouds gathering in the sky replacing the warm sun, tired drooping plants and flowers, dim blue-gray lighting casting shadows, the crescent moon visible where the sun used to be, sleepy atmosphere, some mushroom house lights flickering, the stream flowing slower, overall tired and drained feeling but still maintaining the claymation polymer clay cute style, soft moody lighting.",
+          "motion_hint": "clouds rolling in, lighting dimming"
+        },
+        {
+          "id": "scene_13_antibiotics",
+          "duration_sec": 3,
+          "frames": 72,
+          "type": "t2v",
+          "description": "镜头4.3 — 抗生素短期风暴",
+          "prompt": "The cute intestine garden experiencing a small localized rainstorm in one corner, gentle rain falling on part of the garden, some cute microbe characters hiding under mushroom umbrellas for shelter, the storm is contained and manageable, most of garden still intact, temporary weather passing through, raindrops like soft blue beads, the affected area getting a gentle wash, polymer clay style with rain effects, not scary but showing temporary change.",
+          "motion_hint": "localized rain in corner, microbes sheltering"
+        },
+        {
+          "id": "scene_14_recovery",
+          "duration_sec": 4,
+          "frames": 96,
+          "type": "t2v",
+          "description": "镜头4.4 — 多样饮食，阳光回归，花园复苏",
+          "prompt": "The cute intestine garden recovering beautifully, rainbow appearing after the rain, flowers blooming everywhere more vibrant than before, extra vibrant colors across the entire garden, warm golden sunshine returning brighter, garden at its most beautiful state, butterflies made of felt fluttering around, sparkles and magical particles in the air, all mushroom houses looking bright and cheerful, the stream flowing crystal clear and sparkling, celebration atmosphere, heartwarming recovery scene, polymer clay paradise.",
+          "motion_hint": "rainbow appears, flowers bloom, colors intensify"
+        }
+      ]
+    },
+    {
+      "act": 5,
+      "act_title": "AI导览与互动网页 (58-75秒)",
+      "shots": [
+        {
+          "id": "scene_15_web_recording",
+          "duration_sec": 17,
+          "frames": 408,
+          "type": "screen_record",
+          "description": "镜头5 — 真实网页录屏 (此镜头不需要AI生成,使用OBS录制Gut Garden Web实际操作)",
+          "prompt": null,
+          "record_actions": [
+            "点击花园地图各区域高亮",
+            "拖拽食物到花园中",
+            "花园状态实时变化 (植物增减/水流变化)",
+            "打开AI导览助手对话",
+            "弹出科学依据卡片",
+            "展示科普内容卡片翻转"
+          ]
+        }
+      ]
+    },
+    {
+      "act": 6,
+      "act_title": "结尾 (75-90秒)",
+      "shots": [
+        {
+          "id": "scene_16_group_photo",
+          "duration_sec": 7,
+          "frames": 168,
+          "type": "t2v",
+          "description": "镜头6.1 — 花园全景，所有角色看向镜头",
+          "prompt": "All cute characters gathered together in the intestine garden for a group photo moment, the mushroom fairy guide in center holding the glowing science lamp, green seed character on left side, translucent blue water sprite floating on right, worker microbe characters in front row with tiny hard hats, guard characters standing in back with glowing shields, all characters waving and smiling warmly at the camera, warm golden hour lighting, soft clay and felt textures on all characters, pastel colors, heartwarming and celebratory scene, cinematic wide shot, the entire garden visible behind them in its most beautiful state.",
+          "motion_hint": "characters gathering, waving, slow pull back"
+        },
+        {
+          "id": "scene_17_pull_back",
+          "duration_sec": 8,
+          "frames": 192,
+          "type": "t2v",
+          "description": "镜头6.2 — 镜头拉远回餐桌",
+          "prompt": "Camera slowly pulling back from the intestine garden, zooming out through layers of soft pink tunnel, transitioning from magical garden world back to reality, emerging to reveal the same breakfast table from the beginning, the bowl of oatmeal, fresh fruits and vegetables arranged beautifully on the table, warm sunlight streaming through window, the food looking more meaningful now, claymation style throughout, cozy and inviting atmosphere, full circle journey complete, satisfying gentle conclusion, the garden reflected as a tiny warm glow in a spoon on the table.",
+          "motion_hint": "continuous slow zoom out, transition from garden to table"
+        }
+      ]
+    }
+  ],
+
+  "character_reference_prompts": {
+    "jun_xiaoyuan": "A cute chubby mushroom fairy guide character, round soft body like a marshmallow, wearing a tiny white lab coat made of felt fabric, holding a glowing science lamp on a wand, soft pink and cream body colors, big friendly eyes, always smiling, small stubby limbs, polymer clay texture, height about half of a mushroom house. Reference name: Jun Xiaoyuan (菌小园)",
+    "qianxian_seed": "A cute tiny seed character with soft bright green leaves as hair, small round brown body like an acorn, sparkly curious eyes, can float and parachute with its leaf hair, polymer clay and felt texture, very small compared to other characters. Reference name: Qianxian Seed (纤纤种子)",
+    "fermentation_worker": "Round chubby microbe worker characters, soft felt bodies in warm amber and brown tones, wearing tiny hard hats and goggles, carrying small wooden tools, friendly and hardworking expressions, about the size of a mushroom cap. Reference name: Fermentation Artisan (发酵工匠)",
+    "dingding_sprite": "A translucent water sprite character, body made of flowing blue felt-like material with sparkles inside, can jump and float above water, leaves a trail of golden particles, graceful and playful movements, about the size of a water droplet enlarged. Reference name: Dingding Spring Sprite (丁丁泉灵)",
+    "guard_characters": "Sturdy but cute guard characters standing on the intestinal wall, bodies like soft pink bricks with friendly faces painted on, holding shields that glow with warm golden light, protective but not intimidating, stand in a line on top of the wall. Reference name: Pingping Guard (屏屏守卫)"
+  },
+
+  "style_consistency_notes": {
+    "color_palette": "Pastel pink (#F4C2C2), soft green (#C2E5C2), baby blue (#C2D5F4), warm cream (#FFF5E6), golden (#F5D76E), soft purple (#D5C2F4)",
+    "texture": "Everything must look like it's made of polymer clay or soft felt fabric. No sharp edges. No metallic surfaces. No realistic materials.",
+    "lighting": "Always warm and soft, like golden hour sunlight diffused through a window. No harsh shadows. No cold/blue lighting except for stress scenes.",
+    "camera": "Slow gentle movements only. No sudden cuts in AI-generated segments. Smooth parallax for multi-layer scenes."
+  }
+}

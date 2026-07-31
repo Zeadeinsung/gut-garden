@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>肠道花园 — 页面布局预览</title>
+<style>
+  :root {
+    --forest: #4E6A3E;
+    --cream: #FFF9EF;
+    --coral: #F38D83;
+    --hero: #B06AB3;
+    --hero-gradient: linear-gradient(135deg, #B06AB3, #E882A0);
+    --card-bg: rgba(255,255,255,0.85);
+    --card-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --text: #3D3D3D;
+    --text-light: #888;
+    --text-muted: #B0B0B0;
+    --gold: #D4A853;
+    --silver: #A0A0A0;
+    --bronze: #C4916E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #F0E8D8;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Page selector tabs */
+  .page-tabs {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; gap: 4px; padding: 8px 12px;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid #E0D8C8;
+    overflow-x: auto; white-space: nowrap;
+  }
+  .page-tabs button {
+    padding: 8px 18px; border: 2px solid #DDD; border-radius: 20px;
+    background: #fff; cursor: pointer; font-size: 13px; font-weight: 600;
+    color: #666; transition: all 0.2s; flex-shrink: 0;
+  }
+  .page-tabs button:hover { border-color: var(--forest); color: var(--forest); }
+  .page-tabs button.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+  .page-container { margin-top: 56px; padding: 20px; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Mock browser chrome */
+  .browser-frame {
+    max-width: 1280px; margin: 0 auto;
+    background: var(--cream); border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    overflow: hidden; min-height: 800px;
+    position: relative;
+  }
+  .browser-topbar {
+    height: 32px; background: #E8E0D0;
+    display: flex; align-items: center; padding: 0 14px; gap: 8px;
+  }
+  .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .browser-dot.r { background: #E88080; }
+  .browser-dot.y { background: #E8C840; }
+  .browser-dot.g { background: #60C860; }
+
+  /* Shared */
+  .label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px;
+    display: inline-block; margin-bottom: 6px;
+  }
+  .label-green { background: #E8F0E0; color: var(--forest); }
+  .label-coral { background: #FEF0EE; color: var(--coral); }
+  .label-purple { background: #F3E8F5; color: var(--hero); }
+  .label-gold { background: #FDF5E0; color: var(--gold); }
+
+  .card {
+    background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: var(--card-shadow); padding: 16px;
+    backdrop-filter: blur(6px);
+  }
+  .card-title {
+    font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px;
+  }
+
+  /* ==================== HOME PAGE ==================== */
+  .home-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 260px;
+    grid-template-rows: auto 1fr auto;
+    gap: 16px; padding: 20px;
+    background: linear-gradient(180deg, #E8F5E0 0%, #FFF9EF 40%, #FEF5E8 100%);
+    min-height: 760px;
+    position: relative;
+  }
+  .home-layout::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 35%, rgba(78,106,62,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .home-top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+  .home-left { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
+  .home-center { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+  .home-right { position: relative; z-index: 1; }
+  .home-bottom { grid-column: 1 / -1; position: relative; z-index: 1; }
+
+  .brand-logo { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 800; color: var(--forest); }
+  .brand-logo .icon { width: 32px; height: 32px; background: var(--forest); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
+  .user-card { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--card-bg); border-radius: 30px; box-shadow: var(--card-shadow); }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .level-badge { background: var(--forest); color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .welcome h1 { font-size: 22px; font-weight: 700; color: var(--text); }
+  .welcome p { font-size: 13px; color: var(--text-light); }
+  .global-ctrls { display: flex; gap: 8px; }
+  .ctrl-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); box-shadow: var(--card-shadow); display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+
+  .task-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+  .task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .task-dot.done { background: #7CB342; }
+  .task-dot.pending { background: #DDD; }
+  .status-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .chip { padding: 4px 10px; border-radius: 14px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .chip.good { background: #E8F5E0; color: #5A8A3C; }
+  .tip-text { font-size: 12px; color: var(--text-light); font-style: italic; line-height: 1.6; }
+
+  .mascot-area { position: relative; }
+  .mascot-body { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #8BC34A, #5A8A3C); display: flex; align-items: center; justify-content: center; font-size: 50px; box-shadow: 0 8px 30px rgba(78,106,62,0.25); }
+  .speech-bubble { position: absolute; top: -10px; right: -130px; background: #fff; border-radius: 16px; padding: 10px 14px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.08); white-space: nowrap; }
+  .speech-bubble::after { content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%); border: 8px solid transparent; border-right-color: #fff; }
+
+  .hero-cta-btn {
+    width: 180px; height: 180px; border-radius: 50%;
+    background: var(--hero-gradient);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; color: #fff; cursor: pointer;
+    box-shadow: 0 12px 40px rgba(176,106,179,0.4);
+    transition: transform 0.2s;
+    position: relative;
+  }
+  .hero-cta-btn:hover { transform: scale(1.05); }
+  .hero-cta-btn .icon { font-size: 40px; }
+  .hero-cta-btn .title { font-size: 16px; font-weight: 700; }
+  .hero-cta-btn .sub { font-size: 11px; opacity: 0.85; }
+  .hero-badge { position: absolute; top: 8px; right: -20px; background: #FFF; color: var(--hero); font-size: 10px; padding: 3px 10px; border-radius: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+  .kingkong-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 8px; }
+  .kingkong-card { background: var(--card-bg); border-radius: var(--radius); padding: 18px 14px; text-align: center; cursor: pointer; transition: transform 0.2s; box-shadow: var(--card-shadow); }
+  .kingkong-card:hover { transform: translateY(-3px); }
+  .kingkong-card .icon { font-size: 36px; margin-bottom: 8px; }
+  .kingkong-card .name { font-size: 14px; font-weight: 700; }
+  .kingkong-card .desc { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+  .ai-panel { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--card-shadow); padding: 14px; display: flex; flex-direction: column; gap: 12px; height: 100%; }
+  .ai-panel-header { display: flex; align-items: center; justify-content: space-between; }
+  .ai-avatar { width: 36px; height: 36px; border-radius: 50%; background: #E8F5E0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .quick-ask { font-size: 12px; padding: 8px 12px; background: #F8F4F0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+  .quick-ask:hover { background: #F0EBE4; }
+  .obs-item { font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+  .btn { padding: 10px 20px; border-radius: 24px; font-weight: 700; font-size: 13px; cursor: pointer; border: none; text-align: center; }
+  .btn-primary { background: var(--forest); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--forest); }
+  .btn-sm { padding: 6px 14px; font-size: 11px; }
+
+  .progress-bar-track { height: 8px; background: #E8E0D0; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+  .progress-bar-fill { height: 100%; background: var(--forest); border-radius: 4px; }
+  .stepped-progress { display: flex; align-items: center; gap: 4px; }
+  .step-node { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .step-node.done { background: var(--forest); color: #fff; }
+  .step-node.current { background: #FFF; border: 3px solid var(--forest); color: var(--forest); font-weight: 700; }
+  .step-node.locked { background: #E8E0D0; color: #B0A890; }
+  .step-line { flex: 1; height: 2px; background: #E0D8C8; }
+  .step-line.done { background: var(--forest); }
+
+  /* ==================== GARDEN PAGE ==================== */
+  .garden-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr 230px;
+    grid-template-rows: auto 1fr auto;
+    gap: 12px; padding: 12px;
+    background: linear-gradient(180deg, #D4E8C0 0%, #E8F0D8 40%, #F0ECD0 70%, #D8E0C8 100%);
+    min-height: 760px; position: relative;
+  }
+  .garden-hud { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .hud-metric { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.75); padding: 6px 12px; border-radius: 20px; backdrop-filter: blur(4px); }
+  .ring-progress { width: 28px; height: 28px; border-radius: 50%; position: relative; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .ring-progress::before { content: ''; position: absolute; inset: 3px; border-radius: 50%; border: 3px solid var(--forest); border-right-color: transparent; transform: rotate(-45deg); }
+
+  .garden-canvas {
+    background: linear-gradient(180deg, #C8D8E0 0%, #D8E8C0 30%, #E8F0C8 50%, #E0D8B0 80%, #D0C898 100%);
+    border-radius: var(--radius); position: relative; overflow: hidden;
+    min-height: 500px;
+  }
+  .garden-layer { position: absolute; inset: 0; }
+  .poi-tag {
+    position: absolute; background: rgba(255,255,255,0.9); border-radius: 10px;
+    padding: 7px 12px; font-size: 11px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08); backdrop-filter: blur(4px);
+    display: flex; flex-direction: column; gap: 2px; white-space: nowrap;
+  }
+  .poi-tag .poi-name { font-size: 12px; color: var(--forest); }
+  .poi-tag .poi-lv { font-size: 10px; color: var(--text-light); }
+  .garden-toolbar { display: flex; gap: 8px; }
+  .tool-btn {
+    width: 48px; height: 48px; border-radius: 14px; background: var(--card-bg);
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+    cursor: pointer; position: relative; box-shadow: var(--card-shadow);
+  }
+  .tool-btn .badge-count {
+    position: absolute; top: -4px; right: -4px;
+    background: #E88060; color: #fff; font-size: 10px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ==================== CLASSROOM PAGE ==================== */
+  .classroom-layout {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    grid-template-rows: auto 1fr auto;
+    gap: 14px; padding: 16px;
+    background: linear-gradient(180deg, #E8F0E8 0%, #F5F0E8 50%, #F8F4EC 100%);
+    min-height: 760px;
+  }
+  .classroom-top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+  .wood-sign {
+    background: linear-gradient(180deg, #D4B896, #C4A880);
+    border-radius: 12px; padding: 12px 24px; text-align: center;
+    box-shadow: 0 4px 0 #A08060, 0 6px 16px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  .wood-sign h2 { color: #5A3E28; font-size: 18px; }
+  .wood-sign p { color: #7A6040; font-size: 12px; }
+  .knowledge-tree { display: flex; gap: 4px; font-size: 20px; }
+
+  .s-path-map {
+    position: relative; min-height: 480px;
+    background: linear-gradient(180deg, #E8ECD8 0%, #F0ECD8 50%, #F0E8D4 100%);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .map-path {
+    position: absolute;
+    border: 3px dashed #B0C090;
+    border-radius: 50%;
+  }
+  .map-node {
+    position: absolute; width: 130px;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 10px; text-align: center; cursor: pointer;
+    box-shadow: var(--card-shadow); font-size: 12px; font-weight: 600;
+    transition: transform 0.2s;
+  }
+  .map-node:hover { transform: scale(1.05); }
+  .map-node .node-icon { font-size: 28px; margin-bottom: 4px; }
+  .map-node .stars { color: var(--gold); font-size: 11px; }
+  .map-node.locked { opacity: 0.5; }
+
+  .milestone-track { display: flex; align-items: center; gap: 8px; }
+  .treasure-chest { font-size: 28px; }
+  .treasure-chest.locked { filter: grayscale(1); opacity: 0.6; }
+  .treasure-chest.current { animation: glow 1.5s ease-in-out infinite; }
+  @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 4px gold); } 50% { filter: drop-shadow(0 0 12px gold); } }
+
+  /* ==================== CHECKIN PAGE ==================== */
+  .checkin-layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    grid-template-rows: auto 1fr auto;
+    gap: 14px; padding: 16px;
+    background: linear-gradient(180deg, #FEF8E8 0%, #FFF9EF 40%, #FEF5E8 100%);
+    min-height: 760px;
+  }
+  .checkin-top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+  .energy-bar { flex: 1; max-width: 300px; }
+  .energy-label { font-size: 12px; font-weight: 600; display: flex; justify-content: space-between; }
+  .task-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .task-card {
+    background: var(--card-bg); border-radius: var(--radius);
+    padding: 20px 16px; text-align: center; cursor: pointer;
+    box-shadow: var(--card-shadow); transition: transform 0.2s;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .task-card:hover { transform: translateY(-3px); }
+  .task-card .task-illustration { font-size: 56px; }
+  .task-card .task-name { font-size: 16px; font-weight: 700; }
+  .task-card .task-status {
+    padding: 8px 20px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  }
+  .task-card .task-status.done { background: #E8F5E0; color: #5A8A3C; }
+  .task-card .task-status.pending { background: #FFF3E0; color: #E8A040; cursor: pointer; }
+  .task-card .task-xp { font-size: 12px; color: var(--gold); font-weight: 600; }
+
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
+  .cal-day { padding: 6px; font-size: 11px; border-radius: 6px; }
+  .cal-day.done { background: #E8F5E0; color: var(--forest); font-weight: 700; }
+  .cal-day.today { border: 2px solid var(--forest); font-weight: 700; }
+  .cal-day.miss { color: #CCC; }
+  .cal-header { font-size: 10px; color: var(--text-light); font-weight: 600; }
+
+  .reward-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
+  .reward-item { font-size: 24px; }
+  .reward-val { font-size: 11px; font-weight: 700; color: var(--gold); }
+
+  /* ==================== BADGES PAGE ==================== */
+  .badges-layout {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 14px; padding: 16px;
+    background: linear-gradient(180deg, #F8F0E8 0%, #FAF4EC 50%, #F8F0E8 100%);
+    min-height: 760px;
+  }
+  .badges-top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+  .user-status-bar { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; }
+  .wooden-shelf {
+    background: linear-gradient(180deg, #D4B896 0%, #C4A880 100%);
+    border-radius: 0 0 8px 8px; padding: 4px 0 10px 0;
+    box-shadow: 0 4px 0 #A08060, 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .badge-row { display: flex; gap: 12px; padding: 14px 16px 6px 16px; overflow-x: auto; }
+  .badge-item {
+    min-width: 90px; text-align: center; padding: 10px; border-radius: 12px;
+    background: rgba(255,255,255,0.6); cursor: pointer; transition: transform 0.2s;
+  }
+  .badge-item:hover { transform: translateY(-3px); }
+  .badge-item .badge-icon { font-size: 40px; }
+  .badge-item .badge-title { font-size: 11px; font-weight: 700; margin-top: 4px; }
+  .badge-item .badge-cond { font-size: 10px; color: var(--text-light); }
+  .badge-item .badge-status { font-size: 10px; font-weight: 600; margin-top: 4px; display: inline-block; padding: 2px 8px; border-radius: 8px; }
+  .badge-item .badge-status.owned { background: #E8F5E0; color: #5A8A3C; }
+  .badge-item .badge-status.locked { background: #F0F0F0; color: #AAA; }
+  .badge-item.locked-item { opacity: 0.5; filter: grayscale(0.8); }
+  .category-tab {
+    display: inline-block; padding: 6px 16px; border-radius: 16px;
+    font-size: 13px; font-weight: 700; margin: 4px 8px;
+    background: rgba(255,255,255,0.7); cursor: pointer;
+  }
+  .category-tab.active { background: var(--forest); color: #fff; }
+
+  .timeline { display: flex; flex-direction: column; gap: 8px; }
+  .tl-item { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+  .tl-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+  .tl-dot.done { background: var(--forest); color: #fff; }
+  .tl-dot.current { background: #FFF; border: 2px solid var(--forest); }
+  .tl-dot.future { background: #E8E0D0; color: #B0A890; }
+
+  .new-badge-flag {
+    position: relative; display: inline-block;
+  }
+  .new-flag {
+    position: absolute; top: -6px; right: -6px;
+    background: #E84040; color: #fff; font-size: 9px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px;
+  }
+
+  /* ==================== PROFILE PAGE ==================== */
+  .profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 16px; padding: 20px;
+    background: linear-gradient(180deg, #F5F0E8 0%, #FFF9EF 50%, #F8F4EC 100%);
+    min-height: 760px;
+  }
+  .profile-main { display: flex; flex-direction: column; gap: 16px; }
+  .profile-card {
+    display: flex; align-items: center; gap: 20px; padding: 24px;
+    background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--card-shadow);
+  }
+  .big-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stat-card { text-align: center; padding: 16px; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--card-shadow); }
+  .stat-card .stat-value { font-size: 28px; font-weight: 800; color: var(--forest); }
+  .stat-card .stat-label { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+  .history-tabs { display: flex; gap: 4px; }
+  .history-tab { padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; background: #F0EDE4; }
+  .history-tab.active { background: var(--forest); color: #fff; }
+
+  /* ==================== REPORT PAGE ==================== */
+  .report-layout {
+    display: flex; flex-direction: column; gap: 16px; padding: 20px;
+    background: var(--cream); min-height: 760px;
+  }
+  .report-header { display: flex; justify-content: space-between; align-items: center; }
+  .period-switch { display: flex; gap: 4px; background: #F0EDE4; border-radius: 20px; padding: 3px; }
+  .period-btn { padding: 8px 20px; border-radius: 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; }
+  .period-btn.active { background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .metric-section { background: var(--card-bg); border-radius: var(--radius); padding: 18px; box-shadow: var(--card-shadow); }
+  .metric-section h3 { font-size: 15px; margin-bottom: 12px; }
+  .metric-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #F0EDE4; }
+  .metric-val { font-weight: 700; color: var(--forest); }
+  .pie-placeholder { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto; }
+
+  /* ==================== SETTINGS PAGE ==================== */
+  .settings-layout {
+    display: flex; flex-direction: column; gap: 16px; padding: 20px;
+    background: var(--cream); min-height: 760px; max-width: 600px; margin: 0 auto;
+  }
+  .settings-section { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: var(--card-shadow); }
+  .settings-section h3 { font-size: 15px; margin-bottom: 14px; }
+  .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .slider { width: 160px; height: 6px; background: #E0D8C8; border-radius: 3px; position: relative; }
+  .slider-fill { height: 100%; background: var(--forest); border-radius: 3px; }
+  .slider-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 2px solid var(--forest); position: absolute; top: -6px; cursor: pointer; }
+
+  /* ==================== BOTTOM DOCK ==================== */
+  .bottom-dock {
+    display: flex; align-items: flex-end; justify-content: center; gap: 0;
+    padding: 8px 16px 6px 16px;
+    background: rgba(255,249,239,0.95); backdrop-filter: blur(12px);
+    border-top: 1px solid #E8E0D0;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+  }
+  .dock-tab {
+    flex: 1; max-width: 80px; text-align: center; cursor: pointer;
+    padding: 6px 4px 4px 4px; border-radius: 12px; transition: all 0.2s;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .dock-tab .tab-icon { font-size: 22px; }
+  .dock-tab .tab-label { font-size: 10px; font-weight: 600; color: #999; }
+  .dock-tab.active { background: #EDE0F5; }
+  .dock-tab.active .tab-label { color: var(--hero); }
+  .hero-dock-btn {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--hero-gradient);
+    margin-top: -28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(176,106,179,0.5);
+    z-index: 10; flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .hero-dock-btn:hover { transform: scale(1.08); }
+
+  /* ==================== ONBOARDING OVERLAY ==================== */
+  .onboarding-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.55); z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 20px;
+  }
+  .onboarding-spotlight {
+    position: absolute;
+    width: 180px; height: 180px; border-radius: 50%;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+    background: transparent;
+  }
+  .onboarding-card {
+    position: relative; z-index: 101;
+    background: #fff; border-radius: 20px; padding: 28px;
+    text-align: center; max-width: 320px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .onboarding-card h3 { font-size: 20px; margin-bottom: 8px; }
+  .onboarding-card p { font-size: 13px; color: var(--text-light); margin-bottom: 16px; }
+  .onboarding-card .step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: #DDD; }
+  .step-dot.active { background: var(--forest); width: 20px; border-radius: 4px; }
+
+  /* ==================== STOOL MODAL ==================== */
+  .modal-backdrop {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center; z-index: 200;
+    border-radius: 20px;
+  }
+  .modal-card {
+    background: #fff; border-radius: 20px; padding: 24px;
+    width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  }
+  .modal-card h3 { font-size: 18px; text-align: center; margin-bottom: 16px; }
+  .stool-icons-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+  .stool-icon-btn {
+    width: 56px; height: 56px; border-radius: 14px; border: 2px solid #E0D8C8;
+    display: flex; align-items: center; justify-content: center; font-size: 28px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .stool-icon-btn:hover { border-color: var(--forest); background: #F5F8F0; }
+  .stool-icon-btn.selected { border-color: var(--forest); background: #E8F5E0; }
+  .divider-text { text-align: center; color: var(--text-muted); font-size: 12px; margin: 12px 0; }
+  .upload-zone { border: 2px dashed #D0C8B8; border-radius: 12px; padding: 20px; text-align: center; color: var(--text-light); font-size: 13px; cursor: pointer; }
+
+  /* Utility */
+  .text-sm { font-size: 12px; }
+  .text-xs { font-size: 10px; }
+  .text-muted { color: var(--text-light); }
+  .font-bold { font-weight: 700; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mb-8 { margin-bottom: 8px; }
+  .gap-8 { gap: 8px; }
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .flex-1 { flex: 1; }
+  .text-center { text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="page-tabs" id="pageTabs">
+  <button class="active" data-page="home">首页 (苗页)</button>
+  <button data-page="garden">探索花园</button>
+  <button data-page="classroom">探索课堂</button>
+  <button data-page="checkin">每日打卡</button>
+  <button data-page="badges">成长徽章</button>
+  <button data-page="profile">我的主页</button>
+  <button data-page="report">成长报告</button>
+  <button data-page="settings">设置</button>
+  <button data-page="onboarding">新用户引导</button>
+  <button data-page="stool">便便记录弹窗</button>
+</div>
+
+<div class="page-container">
+
+<!-- ====== HOME PAGE ====== -->
+<div class="page active" id="page-home">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="home-layout">
+
+    <!-- Top bar -->
+    <div class="home-top">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="brand-logo"><div class="icon">🌱</div>Gut Garden</div>
+        <div class="user-card">
+          <div class="avatar">🧒</div>
+          <div><div style="font-weight:700;font-size:13px;">小明</div><div class="level-badge">Lv.3 幼苗阶段</div></div>
+        </div>
+      </div>
+      <div class="welcome" style="text-align:center;">
+        <h1>欢迎回来，小主人！👋</h1>
+        <p>你的肠道花园正在茁壮成长</p>
+      </div>
+      <div class="global-ctrls">
+        <div class="ctrl-btn">⚙️</div>
+        <div class="ctrl-btn">🔊</div>
+      </div>
+    </div>
+
+    <!-- Left sidebar -->
+    <div class="home-left">
+      <div class="card">
+        <div class="card-title">📋 今日任务</div>
+        <div class="task-row"><div class="task-dot done"></div><span>探索花园</span><span style="margin-left:auto;color:#7CB342;">1/1</span></div>
+        <div class="task-row"><div class="task-dot pending"></div><span>吃好</span><span style="margin-left:auto;color:#E8A040;">去确认</span></div>
+        <div class="task-row"><div class="task-dot pending"></div><span>睡好</span><span style="margin-left:auto;color:#E8A040;">去确认</span></div>
+        <div class="status-chips">
+          <span class="chip good">💧 水分充足</span>
+          <span class="chip good">🦠 菌群活跃</span>
+          <span class="chip good">🛡️ 屏障稳固</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 今日小贴士</div>
+        <p class="tip-text">多吃富含膳食纤维的食物，比如燕麦、苹果和胡萝卜，它们是肠道花园里小居民们最喜欢的"大餐"！</p>
+      </div>
+    </div>
+
+    <!-- Center -->
+    <div class="home-center">
+      <div class="mascot-area">
+        <div class="mascot-body">🍄</div>
+        <div class="speech-bubble">今天一起照顾小居民吧！</div>
+      </div>
+      <div class="hero-cta-btn">
+        <span class="icon">📸</span>
+        <span class="title">今日肠道扫描</span>
+        <span class="sub">记录便便 · 了解花园</span>
+        <div class="hero-badge">推荐每日一次</div>
+      </div>
+    </div>
+
+    <!-- Right AI panel -->
+    <div class="home-right">
+      <div class="ai-panel">
+        <div class="ai-panel-header">
+          <span style="font-weight:700;font-size:14px;">🤖 菌小园助手</span>
+          <span style="font-size:10px;color:var(--text-muted);cursor:pointer;">— □ ✕</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="ai-avatar">🧪</div>
+          <div style="font-size:12px;background:#F5F2EC;border-radius:12px;padding:8px 10px;">你好！我是菌小园～有什么想了解的吗？</div>
+        </div>
+        <div class="quick-ask">🥕 今天吃了什么？ <span>→</span></div>
+        <div class="quick-ask">🦠 酸奶对肠道有好处吗？ <span>→</span></div>
+        <div class="quick-ask">💨 为什么放屁会臭？ <span>→</span></div>
+        <button class="btn btn-primary" style="width:100%;">💬 和我聊天</button>
+        <div style="border-top:1px solid #F0EDE4;padding-top:10px;">
+          <div style="font-weight:700;font-size:12px;margin-bottom:6px;">📊 今日观察</div>
+          <div class="obs-item">💧 水分摄入达标</div>
+          <div class="obs-item">⚠️ <span style="color:#E8A040;">纤维摄入偏少</span></div>
+          <div class="obs-item">✅ 按时入睡</div>
+          <div style="text-align:right;font-size:11px;color:var(--forest);cursor:pointer;margin-top:4px;">查看完整报告 →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: King Kong Zone + Progress -->
+    <div class="home-bottom">
+      <div class="kingkong-grid">
+        <div class="kingkong-card"><div class="icon">🌿</div><div class="name">探索花园</div><div class="desc">投喂食物·观察变化</div></div>
+        <div class="kingkong-card"><div class="icon">✅</div><div class="name">每日打卡</div><div class="desc">3件小事·养成习惯</div></div>
+        <div class="kingkong-card"><div class="icon">📚</div><div class="name">知识课堂</div><div class="desc">翻转卡片·趣味问答</div></div>
+        <div class="kingkong-card"><div class="icon">🏆</div><div class="name">成长徽章</div><div class="desc">收集徽章·升级花园</div></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-weight:700;font-size:14px;">🌱 花园成长进度</div>
+            <div style="font-size:12px;color:var(--text-light);">已成长 12 天</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:var(--text-light);">下一阶段奖励</div>
+            <div style="font-size:22px;">🏠✨ 神秘菌屋</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0;margin-top:8px;">
+          <div class="step-node done">🌱</div><div class="step-line done"></div>
+          <div class="step-node done">🌿</div><div class="step-line done"></div>
+          <div class="step-node current">🌻</div><div class="step-line"></div>
+          <div class="step-node locked">🔒</div><div class="step-line"></div>
+          <div class="step-node locked">🔒</div><div class="step-line"></div>
+          <div class="step-node locked">🔒</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Dock -->
+  <div class="bottom-dock">
+    <div class="dock-tab active"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ====== GARDEN PAGE ====== -->
+<div class="page" id="page-garden">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="garden-layout">
+
+    <!-- HUD -->
+    <div class="garden-hud">
+      <span style="font-weight:700;font-size:15px;">← 探索花园</span>
+      <span style="font-size:12px;color:var(--text-light);">我的肠道生态世界</span>
+      <span style="flex:1;"></span>
+      <div class="hud-metric">🌿 生态 Lv.4</div>
+      <div class="hud-metric"><div class="ring-progress" style="border-color:var(--forest);">85%</div> 繁荣度</div>
+      <div class="hud-metric">🧑‍🤝‍🧑 居民 ×8</div>
+      <div class="hud-metric">🔥 连续 12天</div>
+      <div class="ctrl-btn">🔔</div>
+    </div>
+
+    <!-- Left panel -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card">
+        <div class="card-title" style="display:flex;justify-content:space-between;">🌿 花园状态 <span style="font-size:11px;color:var(--text-muted);">详情 →</span></div>
+        <div style="text-align:center;font-size:56px;margin:8px 0;">😊</div>
+        <div style="text-align:center;font-weight:700;color:#5A8A3C;font-size:15px;">生态平衡良好</div>
+        <button class="btn btn-primary" style="width:100%;margin-top:10px;">查看详情</button>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ 今日影响因素</div>
+        <div class="task-row"><span>💧 水分</span><span style="margin-left:auto;color:#7CB342;">+10</span></div>
+        <div class="task-row"><span>🥬 纤维</span><span style="margin-left:auto;color:#7CB342;">+15</span></div>
+        <div class="task-row"><span>🍰 高糖食物</span><span style="margin-left:auto;color:#E88060;">-8</span></div>
+        <div style="text-align:right;font-size:11px;color:var(--forest);cursor:pointer;">查看全部影响 →</div>
+      </div>
+    </div>
+
+    <!-- Center: Isometric Canvas -->
+    <div class="garden-canvas">
+      <!-- Decorative elements simulating an isometric map -->
+      <div style="position:absolute;top:15%;left:10%;font-size:60px;">🌳</div>
+      <div style="position:absolute;top:10%;left:50%;font-size:80px;">🏔️</div>
+      <div style="position:absolute;top:40%;left:30%;font-size:40px;">🏠</div>
+      <div style="position:absolute;top:60%;left:15%;font-size:36px;">🌾</div>
+      <div style="position:absolute;top:55%;left:55%;font-size:50px;">🌊</div>
+      <div style="position:absolute;top:70%;left:40%;font-size:44px;">🛖</div>
+      <div style="position:absolute;top:25%;right:20%;font-size:48px;">🌲</div>
+
+      <!-- POI Tags -->
+      <div class="poi-tag" style="top:8%;left:8%;">
+        <span class="poi-name">🏛️ 生命之树</span>
+        <span class="poi-lv">Lv.3 · 花园的核心</span>
+      </div>
+      <div class="poi-tag" style="top:38%;left:28%;">
+        <span class="poi-name">🏘️ 菌居民之家</span>
+        <span class="poi-lv">Lv.2 · 8位居民的家</span>
+      </div>
+      <div class="poi-tag" style="top:52%;left:52%;">
+        <span class="poi-name">🧪 发酵实验室</span>
+        <span class="poi-lv">Lv.1 · 食物变身工坊</span>
+      </div>
+      <div class="poi-tag" style="top:68%;left:38%;">
+        <span class="poi-name">🍄 风车蘑菇田</span>
+        <span class="poi-lv">Lv.2 · 绒毛平原</span>
+      </div>
+      <div class="poi-tag" style="top:22%;right:18%;">
+        <span class="poi-name">⛲ 短链脂肪酸泉</span>
+        <span class="poi-lv">金色泉水涌出</span>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:48px;">🧸</div>
+        <div style="font-weight:700;font-size:13px;">菌小园</div>
+        <div style="background:#F5F2EC;border-radius:10px;padding:8px;font-size:11px;margin-top:6px;">💬 "花园状态良好！继续加油哦～"</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 我观察到</div>
+        <div class="obs-item">💧 水分摄入充足</div>
+        <div class="obs-item">🥬 纤维摄入充足</div>
+        <div class="obs-item">😴 睡眠规律</div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 今日小建议</div>
+        <p class="tip-text">多投喂纤维食物吧，花园里的居民们会特别开心～</p>
+        <button class="btn btn-primary" style="width:100%;margin-top:8px;">💬 和我聊天</button>
+      </div>
+    </div>
+
+    <!-- Bottom: Toolbar + Task -->
+    <div style="grid-column:1/-1;display:flex;gap:12px;align-items:flex-end;">
+      <div class="tool-btn" style="width:auto;padding:0 14px;font-size:13px;font-weight:700;">🌍 花园地图</div>
+      <div style="flex:1;"></div>
+      <div class="garden-toolbar">
+        <div class="tool-btn">💧</div>
+        <div class="tool-btn">🧹<span class="badge-count">3</span></div>
+        <div class="tool-btn">🌱</div>
+        <div class="tool-btn">🔬</div>
+        <div class="tool-btn">📸</div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:14px;">
+        <div>
+          <div style="font-weight:700;font-size:12px;margin-bottom:4px;">📋 今日任务</div>
+          <div style="font-size:11px;">☑ 探索花园 1/1</div>
+          <div style="font-size:11px;">☐ 吃好 0/1</div>
+          <div style="font-size:11px;">☐ 睡好 0/1</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;color:var(--text-light);">完成奖励</div>
+          <div style="font-size:28px;">🎁</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-dock">
+    <div class="dock-tab"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab active"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== CLASSROOM PAGE ====== -->
+<div class="page" id="page-classroom">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="classroom-layout">
+
+    <!-- Top -->
+    <div class="classroom-top">
+      <div class="user-card">
+        <div class="avatar">🧒</div>
+        <div><div style="font-weight:700;font-size:13px;">小明</div><div class="level-badge">Lv.3 知识探索者</div></div>
+      </div>
+      <div class="wood-sign">
+        <h2>📚 探索课堂</h2>
+        <p>探索肠道生命的秘密</p>
+      </div>
+      <div style="text-align:right;">
+        <div class="knowledge-tree">🌳 🌳 🌳 🌱</div>
+        <div style="font-size:12px;color:var(--text-light);">已探索 12 个知识点</div>
+        <div style="font-size:11px;color:var(--gold);">下一阶段: 🌟 知识达人</div>
+      </div>
+    </div>
+
+    <!-- Center: S-path Map -->
+    <div class="s-path-map">
+      <!-- Simulated S-curve path -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+        <path d="M 90,80 Q 280,80 280,200 Q 280,320 90,320 Q 280,320 280,430" stroke="#B0C090" stroke-width="3" stroke-dasharray="8,4" fill="none"/>
+      </svg>
+
+      <div class="map-node" style="top:50px;left:20px;">
+        <div class="node-icon">🏛️</div>膳食纤维广场
+        <div class="stars">⭐⭐⭐ 3/6</div>
+      </div>
+      <div class="map-node" style="top:50px;right:40px;">
+        <div class="node-icon">🏭</div>发酵工坊
+        <div class="stars">⭐⭐ 2/6</div>
+      </div>
+      <div class="map-node" style="top:280px;left:20px;">
+        <div class="node-icon">⛲</div>短链脂肪酸泉
+        <div class="stars">⭐ 1/6</div>
+      </div>
+      <div class="map-node" style="top:280px;right:40px;">
+        <div class="node-icon">🧱</div>肠道屏障城墙
+        <div class="stars">⭐⭐⭐ 3/6</div>
+      </div>
+      <div class="map-node locked" style="top:400px;left:50%;transform:translateX(-50%);">
+        <div class="node-icon">🔭</div>生态平衡观测站
+        <div class="stars" style="color:#AAA;">🔒 未解锁</div>
+      </div>
+
+      <!-- Contextual nudge -->
+      <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.9);border-radius:16px;padding:6px 16px;font-size:12px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.06);">💬 今天想探索哪个知识区域呢？</div>
+    </div>
+
+    <!-- Right Panel -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:40px;">🤖</div>
+        <div style="font-weight:700;font-size:13px;">菌小园老师</div>
+        <div style="background:#F5F2EC;border-radius:10px;padding:8px;font-size:11px;margin-top:6px;">💬 "今天想探索哪个知识区域呢？"</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📚 快捷 FAQ</div>
+        <div class="quick-ask">🥕 食物的秘密 <span>→</span></div>
+        <div class="quick-ask">💪 健康好习惯 <span>→</span></div>
+        <div class="quick-ask">🔬 身体小信号 <span>→</span></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:6px;">🎲 随机探索</button>
+      </div>
+      <div class="card">
+        <div class="card-title" style="display:flex;justify-content:space-between;">📰 推荐内容 <span style="font-size:10px;color:var(--forest);cursor:pointer;">换一换</span></div>
+        <div style="font-size:12px;padding:6px 0;">🥗 纤维食物清单 <span style="color:var(--gold);float:right;">+10</span></div>
+        <div style="font-size:12px;padding:6px 0;">🧊 肠道冷知识 <span style="color:var(--gold);float:right;">+5</span></div>
+      </div>
+    </div>
+
+    <!-- Bottom: Milestones -->
+    <div style="grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:12px;background:var(--card-bg);border-radius:var(--radius);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:24px;">🎯</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;">今日任务</div>
+          <div style="font-size:11px;color:var(--text-light);">学习 1 个知识点</div>
+        </div>
+        <button class="btn btn-sm btn-primary">查看任务</button>
+      </div>
+      <div style="flex:1;"></div>
+      <div class="milestone-track">
+        <span style="font-size:12px;font-weight:600;">知识点宝箱:</span>
+        <span class="treasure-chest done">✅</span>
+        <span class="treasure-chest done">✅</span>
+        <span class="treasure-chest done">✅</span>
+        <span class="treasure-chest current">📦</span>
+        <span class="treasure-chest locked">🔒</span>
+        <span style="font-size:12px;color:var(--text-light);">已收集 12 个</span>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-dock">
+    <div class="dock-tab"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab active"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== CHECKIN PAGE ====== -->
+<div class="page" id="page-checkin">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="checkin-layout">
+
+    <!-- Top -->
+    <div class="checkin-top">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-weight:700;font-size:15px;">← 每日打卡</span>
+        <div class="hud-metric">🌿 生态 Lv.4</div>
+      </div>
+      <div class="energy-bar">
+        <div class="energy-label"><span>今日花园能量</span><span>85/100</span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" style="width:85%;"></div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;background:var(--card-bg);border-radius:12px;padding:6px 12px;font-size:11px;cursor:pointer;">
+        🏞️ 花园预览 →
+      </div>
+    </div>
+
+    <!-- Main: Task Cards -->
+    <div>
+      <div style="text-align:center;margin-bottom:12px;font-weight:700;font-size:16px;background:rgba(255,249,239,0.9);display:inline-block;padding:6px 24px;border-radius:20px;">📋 今日照顾清单</div>
+      <div class="task-cards-row">
+        <div class="task-card">
+          <div class="task-illustration">🌿</div>
+          <div class="task-name">探索花园</div>
+          <div style="font-size:11px;color:var(--text-light);">在花园里发现了有趣的东西！</div>
+          <div class="task-status done">✅ 已自动完成</div>
+          <div class="task-xp">⚡ 能量 +10</div>
+        </div>
+        <div class="task-card">
+          <div class="task-illustration">🍽️</div>
+          <div class="task-name">吃好</div>
+          <div style="font-size:11px;color:var(--text-light);">今天吃好了吗？</div>
+          <div class="task-status pending">👆 点击确认</div>
+          <div class="task-xp">⚡ 能量 +10 + 可选加分</div>
+        </div>
+        <div class="task-card">
+          <div class="task-illustration">😴</div>
+          <div class="task-name">睡好</div>
+          <div style="font-size:11px;color:var(--text-light);">今天睡好了吗？</div>
+          <div class="task-status pending">👆 点击确认</div>
+          <div class="task-xp">⚡ 能量 +10 + 可选加分</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:40px;">🧸</div>
+        <div style="font-weight:700;font-size:12px;">菌小园</div>
+        <div style="background:#F5F2EC;border-radius:8px;padding:6px;font-size:10px;margin-top:4px;">💬 "今天也要好好照顾花园哦！"</div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 今日小建议</div>
+        <p class="tip-text">记得多喝水，肠道花园需要充足的水分才能生机勃勃～</p>
+      </div>
+      <div class="card">
+        <div class="card-title">📚 今日小知识</div>
+        <p class="tip-text">膳食纤维是肠道居民的食物，多吃蔬菜水果能让它们更有活力！</p>
+        <button class="btn btn-sm btn-primary" style="margin-top:6px;">去知识课堂看看</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm" style="flex:1;background:#F5F2EC;">📚 知识课堂</button>
+        <button class="btn btn-sm" style="flex:1;background:#F5F2EC;">🏆 成长徽章</button>
+      </div>
+    </div>
+
+    <!-- Bottom: Calendar + Rewards -->
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 200px;gap:14px;">
+      <div class="card">
+        <div class="card-title" style="display:flex;justify-content:space-between;">📅 打卡日历 <span style="font-size:11px;color:var(--text-light);">2026年7月</span></div>
+        <div class="calendar-grid">
+          <div class="cal-header">日</div><div class="cal-header">一</div><div class="cal-header">二</div><div class="cal-header">三</div><div class="cal-header">四</div><div class="cal-header">五</div><div class="cal-header">六</div>
+          <div class="cal-day miss">·</div><div class="cal-day miss">·</div><div class="cal-day miss">·</div><div class="cal-day done">1</div><div class="cal-day done">2</div><div class="cal-day done">3</div><div class="cal-day done">4</div>
+          <div class="cal-day done">5</div><div class="cal-day done">6</div><div class="cal-day done">7</div><div class="cal-day done">8</div><div class="cal-day done">9</div><div class="cal-day done">10</div><div class="cal-day done">11</div>
+          <div class="cal-day done">12</div><div class="cal-day done">13</div><div class="cal-day done">14</div><div class="cal-day done">15</div><div class="cal-day done">16</div><div class="cal-day done">17</div><div class="cal-day done">18</div>
+          <div class="cal-day done">19</div><div class="cal-day done">20</div><div class="cal-day done">21</div><div class="cal-day done">22</div><div class="cal-day done">23</div><div class="cal-day done">24</div><div class="cal-day done">25</div>
+          <div class="cal-day done">26</div><div class="cal-day done">27</div><div class="cal-day done">28</div><div class="cal-day done">29</div><div class="cal-day today">30</div><div class="cal-day miss">31</div>
+        </div>
+        <div style="text-align:center;margin-top:8px;font-weight:600;font-size:13px;">🔥 连续打卡 <span style="color:var(--forest);">12 天</span> · 🎁 再坚持 2 天解锁奖励</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title">🎁 今日奖励</div>
+        <div class="reward-grid">
+          <div><div class="reward-item">💧</div><div class="reward-val">+5</div></div>
+          <div><div class="reward-item">🍃</div><div class="reward-val">+10</div></div>
+          <div><div class="reward-item">⭐</div><div class="reward-val">+5</div></div>
+          <div><div class="reward-item">☀️</div><div class="reward-val">+10</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-dock">
+    <div class="dock-tab"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab active"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== BADGES PAGE ====== -->
+<div class="page" id="page-badges">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="badges-layout">
+
+    <!-- Top -->
+    <div class="badges-top">
+      <span style="font-weight:700;font-size:15px;">← 🏆 成长徽章馆</span>
+      <span style="font-size:12px;color:var(--text-light);">每一枚徽章，都是你照顾花园的证明</span>
+      <button class="btn btn-sm" style="background:#F5F2EC;">📖 徽章说明</button>
+    </div>
+
+    <!-- User Status -->
+    <div class="user-status-bar card">
+      <div style="font-size:50px;">🧸</div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-weight:700;font-size:16px;">Lv.4 肠道小园丁</span>
+        </div>
+        <div class="progress-bar-track" style="margin:6px 0;"><div class="progress-bar-fill" style="width:72%;background:linear-gradient(90deg,var(--forest),var(--gold));"></div></div>
+        <span class="text-xs text-muted">720/1000 · 距离下一等级还差 280 成长值</span>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:800;color:var(--forest);">18<span style="font-size:16px;color:var(--text-light);">/60</span></div>
+        <div class="text-xs text-muted">已获得徽章</div>
+        <button class="btn btn-sm" style="margin-top:6px;">徽章总览</button>
+      </div>
+    </div>
+
+    <!-- Main: Badge Shelves -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <!-- Shelf 1 -->
+      <div>
+        <span class="category-tab active">1 健康习惯徽章</span>
+        <div class="wooden-shelf">
+          <div class="badge-row">
+            <div class="badge-item">
+              <div class="badge-icon">💧</div>
+              <div class="badge-title">水滴守护者</div>
+              <div class="badge-cond">连续喝水7天</div>
+              <div class="badge-status owned">🥉 已获得</div>
+            </div>
+            <div class="badge-item">
+              <div class="badge-icon">🥬</div>
+              <div class="badge-title">纤维之友</div>
+              <div class="badge-cond">吃蔬菜14天</div>
+              <div class="badge-status owned">🥈 已获得</div>
+            </div>
+            <div class="badge-item">
+              <div class="badge-icon">🌅</div>
+              <div class="badge-title">晨光鸟</div>
+              <div class="badge-cond">早睡7天</div>
+              <div class="badge-status owned">🥉 已获得</div>
+            </div>
+            <span style="display:flex;align-items:center;font-size:20px;color:#B0A090;">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shelf 2 -->
+      <div>
+        <span class="category-tab">2 探索达人徽章</span>
+        <div class="wooden-shelf">
+          <div class="badge-row">
+            <div class="badge-item">
+              <div class="badge-icon">🌾</div>
+              <div class="badge-title">花园农夫</div>
+              <div class="badge-cond">投喂100次</div>
+              <div class="badge-status owned">🥇 已获得</div>
+            </div>
+            <div class="badge-item">
+              <div class="badge-icon">🔍</div>
+              <div class="badge-title">放大镜专家</div>
+              <div class="badge-cond">观察20次</div>
+              <div class="badge-status owned">🥉 已获得</div>
+            </div>
+            <div class="badge-item locked-item">
+              <div class="badge-icon">🔒</div>
+              <div class="badge-title">???</div>
+              <div class="badge-cond">神秘徽章</div>
+              <div class="badge-status locked">🔒 未解锁</div>
+            </div>
+            <span style="display:flex;align-items:center;font-size:20px;color:#B0A090;">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shelf 3 -->
+      <div>
+        <span class="category-tab">3 科普小学者徽章</span>
+        <div class="wooden-shelf">
+          <div class="badge-row">
+            <div class="badge-item">
+              <div class="badge-icon">❓</div>
+              <div class="badge-title">好奇宝宝</div>
+              <div class="badge-cond">首次问答</div>
+              <div class="badge-status owned">🥉 已获得</div>
+            </div>
+            <div class="badge-item">
+              <div class="badge-icon">🧠</div>
+              <div class="badge-title">答题小能手</div>
+              <div class="badge-cond">答对10题</div>
+              <div class="badge-status owned">🥈 已获得</div>
+            </div>
+            <div class="badge-item locked-item">
+              <div class="badge-icon">🔒</div>
+              <div class="badge-title">百科博士</div>
+              <div class="badge-cond">答对50题</div>
+              <div class="badge-status locked">🔒 未解锁</div>
+            </div>
+            <span style="display:flex;align-items:center;font-size:20px;color:#B0A090;">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shelf 4 -->
+      <div>
+        <span class="category-tab">4 特殊成就徽章</span>
+        <div class="wooden-shelf">
+          <div class="badge-row">
+            <div class="badge-item">
+              <div class="badge-icon">⭐</div>
+              <div class="badge-title">完美一周</div>
+              <div class="badge-cond">7天全勤</div>
+              <div class="badge-status owned">🥉 已获得</div>
+            </div>
+            <div class="badge-item locked-item">
+              <div class="badge-icon">🔒</div>
+              <div class="badge-title">春节彩蛋</div>
+              <div class="badge-cond">春节登录</div>
+              <div class="badge-status locked">🔒 未解锁</div>
+            </div>
+            <div class="badge-item locked-item">
+              <div class="badge-icon">🔒</div>
+              <div class="badge-title">花园生日</div>
+              <div class="badge-cond">生日登录</div>
+              <div class="badge-status locked">🔒 未解锁</div>
+            </div>
+            <span style="display:flex;align-items:center;font-size:20px;color:#B0A090;">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;">🧸</div>
+        <div style="font-size:11px;background:#F5F2EC;border-radius:8px;padding:6px;">💬 "再收集2枚徽章就能解锁新等级啦！"</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📈 成长路径</div>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot done">✓</div> Lv.1 萌芽新星</div>
+          <div class="tl-item"><div class="tl-dot done">✓</div> Lv.2 绿叶新秀</div>
+          <div class="tl-item"><div class="tl-dot done">✓</div> Lv.3 花朵使者</div>
+          <div class="tl-item"><div class="tl-dot current">●</div> <strong>Lv.4 果实专家</strong></div>
+          <div class="tl-item"><div class="tl-dot future">🔒</div><span style="color:#B0A090;"> Lv.5 大树守护者</span></div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title">🎁 解锁预告</div>
+        <div style="font-size:48px;filter:grayscale(0.5);">🎪</div>
+        <div class="text-xs text-muted">神秘徽章</div>
+        <div class="progress-bar-track" style="margin:8px 0;"><div class="progress-bar-fill" style="width:60%;background:var(--gold);"></div></div>
+        <div class="text-xs text-muted">还差 2 枚徽章</div>
+        <button class="btn btn-primary" style="width:100%;margin-top:6px;">去探索</button>
+      </div>
+    </div>
+
+    <!-- Bottom: Recent -->
+    <div style="grid-column:1/-1;" class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-weight:700;font-size:14px;">📌 最近获得</div>
+          <div class="new-badge-flag">
+            <div class="badge-icon" style="font-size:40px;">🥇</div>
+            <div class="new-flag">NEW</div>
+          </div>
+          <div>
+            <div style="font-weight:700;">花园农夫 · 金</div>
+            <div class="text-xs text-muted">累计投喂100次 · +50XP · 2026-07-31</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="text-align:center;">
+            <div style="font-size:28px;">📖</div>
+            <div style="font-size:12px;font-weight:700;">收集册 <span style="color:var(--forest);">18/60</span></div>
+          </div>
+          <button class="btn btn-sm" style="background:#F5F2EC;">📤 分享我的徽章墙</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-dock">
+    <div class="dock-tab"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab active"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PROFILE PAGE ====== -->
+<div class="page" id="page-profile">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="profile-layout">
+
+    <div class="profile-main">
+      <span style="font-weight:700;font-size:15px;">← 我的主页</span>
+
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="big-avatar">🧒</div>
+        <div style="flex:1;">
+          <div style="font-size:20px;font-weight:700;">小明</div>
+          <div class="level-badge" style="display:inline-block;">Lv.4 肠道小园丁</div>
+          <div class="text-sm text-muted mt-8">加入于 2026-07-01 · 已照顾花园 30 天</div>
+        </div>
+        <button class="btn btn-sm" style="background:#F5F2EC;">✏️ 编辑资料</button>
+      </div>
+
+      <!-- Achievement Stats -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">15</div>
+          <div class="stat-label">🔥 最长连续(天)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">18<span style="font-size:16px;">/60</span></div>
+          <div class="stat-label">🏆 徽章收集</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">12</div>
+          <div class="stat-label">📚 知识探索(个)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">25</div>
+          <div class="stat-label">💩 便便记录(次)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">🌻</div>
+          <div class="stat-label">🏡 花园阶段 · 第3</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">720</div>
+          <div class="stat-label">⭐ 总经验值</div>
+        </div>
+      </div>
+
+      <!-- History Tabs -->
+      <div>
+        <div class="history-tabs">
+          <span class="history-tab active">打卡记录</span>
+          <span class="history-tab">便便记录</span>
+          <span class="history-tab">学习记录</span>
+        </div>
+        <div class="card mt-8">
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px solid #F0EDE4;">📅 2026-07-30 · 3/3 项完成 · ⚡ +30</div>
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px solid #F0EDE4;">📅 2026-07-29 · 3/3 项完成 · ⚡ +25</div>
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px solid #F0EDE4;">📅 2026-07-28 · 2/3 项完成 · ⚡ +20</div>
+          <div style="font-size:12px;padding:6px 0;color:var(--text-muted);text-align:center;">查看全部 →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Stats + Goal + Friends -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card">
+        <div class="card-title">📊 本周统计</div>
+        <div class="task-row"><span>打卡</span><span style="margin-left:auto;font-weight:600;">5/7 天</span></div>
+        <div class="task-row"><span>新徽章</span><span style="margin-left:auto;font-weight:600;">3 枚</span></div>
+        <div class="task-row"><span>学习</span><span style="margin-left:auto;font-weight:600;">8 个知识点</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎯 当前目标</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">达成「花朵使者」</div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" style="width:70%;"></div></div>
+        <div class="text-xs text-muted mt-8">7/10 天连续打卡</div>
+      </div>
+      <div class="card">
+        <div class="card-title">👥 好友</div>
+        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">
+          🚧 好友功能即将上线<br>敬请期待 V2 版本
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-dock">
+    <div class="dock-tab"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab active"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== REPORT PAGE ====== -->
+<div class="page" id="page-report">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="report-layout">
+
+    <div class="report-header">
+      <span style="font-weight:700;font-size:15px;">← 📊 成长报告</span>
+      <div class="period-switch">
+        <button class="period-btn">周报</button>
+        <button class="period-btn active">月报</button>
+      </div>
+      <span style="font-size:12px;color:var(--text-light);">2026年7月</span>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-section">
+        <h3>📋 打卡坚持</h3>
+        <div class="metric-row"><span>累计打卡天数</span><span class="metric-val">30 天</span></div>
+        <div class="metric-row"><span>当前连续天数</span><span class="metric-val">12 天</span></div>
+        <div class="metric-row"><span>最长连续纪录</span><span class="metric-val">15 天</span></div>
+      </div>
+      <div class="metric-section">
+        <h3>🎮 花园互动</h3>
+        <div class="metric-row"><span>累计投喂次数</span><span class="metric-val">120 次</span></div>
+        <div class="metric-row"><span>累计探索天数</span><span class="metric-val">30 天</span></div>
+      </div>
+      <div class="metric-section">
+        <h3>🧠 科普学习</h3>
+        <div class="metric-row"><span>累计答对题数</span><span class="metric-val">15 题</span></div>
+        <div class="metric-row"><span>完成知识模块</span><span class="metric-val">3/5 模块</span></div>
+        <div class="metric-row"><span>获得科普徽章</span><span class="metric-val">8 枚</span></div>
+      </div>
+      <div class="metric-section">
+        <h3>💩 消化健康</h3>
+        <div class="metric-row"><span>Type 1-2 (偏硬)</span><span class="metric-val">3 次</span></div>
+        <div class="metric-row"><span>Type 3-5 (正常)</span><span class="metric-val">18 次</span></div>
+        <div class="metric-row"><span>Type 6-7 (偏软)</span><span class="metric-val">4 次</span></div>
+        <div class="metric-row"><span>饮食建议采纳率</span><span class="metric-val">65%</span></div>
+      </div>
+      <div class="metric-section" style="grid-column:1/-1;">
+        <h3>🌱 总体成长</h3>
+        <div class="metric-row"><span>花园成长阶段</span><span class="metric-val">🌻 第3阶段 · 成长</span></div>
+        <div class="metric-row"><span>徽章收集进度</span><span class="metric-val">18/60 枚 · 30%</span></div>
+        <div class="metric-row"><span>总经验值</span><span class="metric-val">720 XP</span></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-dock">
+    <div class="dock-tab"><span class="tab-icon">🏠</span><span class="tab-label">苗页</span></div>
+    <div class="dock-tab"><span class="tab-icon">🌿</span><span class="tab-label">探索花园</span></div>
+    <div class="dock-tab"><span class="tab-icon">✅</span><span class="tab-label">每日打卡</span></div>
+    <div class="hero-dock-btn">📸</div>
+    <div class="dock-tab"><span class="tab-icon">📚</span><span class="tab-label">探索课堂</span></div>
+    <div class="dock-tab"><span class="tab-icon">🏆</span><span class="tab-label">成长徽章</span></div>
+    <div class="dock-tab"><span class="tab-icon">👤</span><span class="tab-label">我的主页</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== SETTINGS PAGE ====== -->
+<div class="page" id="page-settings">
+<div class="browser-frame">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="settings-layout">
+
+    <span style="font-weight:700;font-size:15px;">← ⚙️ 设置</span>
+
+    <div class="settings-section">
+      <h3>👶 儿童档案</h3>
+      <div class="setting-row">
+        <span>昵称</span>
+        <span style="font-weight:600;">小明</span>
+      </div>
+      <div class="setting-row">
+        <span>年龄</span>
+        <span style="font-weight:600;">6 岁</span>
+      </div>
+      <div class="setting-row">
+        <span>头像</span>
+        <span style="font-size:28px;">🧒</span>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>⏱️ 使用时长限制</h3>
+      <div class="setting-row">
+        <span>每日最长使用</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="slider"><div class="slider-fill" style="width:60%;"></div><div class="slider-thumb" style="left:55%;"></div></div>
+          <span style="font-weight:700;">30 分钟</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>🔒 隐私与安全</h3>
+      <div class="setting-row">
+        <span>便便照片上传</span>
+        <span style="color:var(--forest);font-weight:600;">已开启</span>
+      </div>
+      <div class="setting-row">
+        <span>数据导出</span>
+        <button class="btn btn-sm" style="background:#F5F2EC;">导出数据</button>
+      </div>
+      <div class="setting-row">
+        <span>删除账号</span>
+        <button class="btn btn-sm" style="background:#FEF0EE;color:#E88060;">删除数据</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>👤 账号</h3>
+      <div class="setting-row">
+        <span>手机号</span>
+        <span style="font-weight:600;">138****8888</span>
+      </div>
+      <div class="setting-row">
+        <span>退出登录</span>
+        <button class="btn btn-sm" style="background:#F5F2EC;">退出</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ====== ONBOARDING ====== -->
+<div class="page" id="page-onboarding">
+<div class="browser-frame" style="position:relative;">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="home-layout" style="min-height:760px;">
+
+    <!-- Same home page content behind the overlay -->
+    <div class="home-top">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="brand-logo"><div class="icon">🌱</div>Gut Garden</div>
+        <div class="user-card">
+          <div class="avatar">🧒</div>
+          <div><div style="font-weight:700;font-size:13px;">小明</div><div class="level-badge">Lv.3 幼苗阶段</div></div>
+        </div>
+      </div>
+      <div class="welcome" style="text-align:center;"><h1>欢迎回来，小主人！👋</h1></div>
+      <div class="global-ctrls"><div class="ctrl-btn">⚙️</div><div class="ctrl-btn">🔊</div></div>
+    </div>
+    <div class="home-left">
+      <div class="card"><div class="card-title">📋 今日任务</div></div>
+      <div class="card"><div class="card-title">💡 今日小贴士</div></div>
+    </div>
+    <div class="home-center">
+      <div class="mascot-area"><div class="mascot-body">🍄</div></div>
+      <div class="hero-cta-btn"><span class="icon">📸</span><span class="title">今日肠道扫描</span></div>
+    </div>
+    <div class="home-right"><div class="ai-panel"></div></div>
+    <div class="home-bottom"><div class="kingkong-grid"><div class="kingkong-card"><div class="icon">🌿</div></div><div class="kingkong-card"><div class="icon">✅</div></div><div class="kingkong-card"><div class="icon">📚</div></div><div class="kingkong-card"><div class="icon">🏆</div></div></div></div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="onboarding-overlay">
+    <div class="onboarding-card">
+      <div style="font-size:48px;margin-bottom:8px;">🌱</div>
+      <h3>认识你的花园</h3>
+      <p>这是你的肠道花园！每天来这里看看小居民们过得怎么样～</p>
+      <div class="step-dots">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button class="btn btn-sm" style="background:#F5F2EC;">跳过</button>
+        <button class="btn btn-sm btn-primary">下一步 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== STOOL MODAL ====== -->
+<div class="page" id="page-stool">
+<div class="browser-frame" style="position:relative;">
+  <div class="browser-topbar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+  <div class="home-layout" style="min-height:760px;filter:brightness(0.7);">
+    <!-- Dimmed background -->
+    <div class="home-top"><div class="brand-logo"><div class="icon">🌱</div>Gut Garden</div></div>
+    <div class="home-center"><div class="mascot-body">🍄</div><div class="hero-cta-btn"><span class="icon">📸</span></div></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop">
+    <div class="modal-card">
+      <h3>📸 今日便便观察</h3>
+
+      <div style="font-weight:600;font-size:13px;margin-bottom:8px;">默认模式：选择便便图标</div>
+      <div class="stool-icons-row">
+        <div class="stool-icon-btn">🐰</div>
+        <div class="stool-icon-btn">🍇</div>
+        <div class="stool-icon-btn selected">🍌</div>
+        <div class="stool-icon-btn">🍦</div>
+        <div class="stool-icon-btn">💧</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:12px;">
+        <span>兔子便便</span><span>葡萄串</span><span style="color:var(--forest);font-weight:700;">香蕉宝宝</span><span>软冰淇淋</span><span>水水</span>
+      </div>
+      <div class="text-xs text-muted text-center mb-8">← 从左到右：从便秘到腹泻 →</div>
+
+      <div class="divider-text">── 或使用高级模式 ──</div>
+
+      <div class="upload-zone mt-8">
+        <div style="font-size:32px;">📷</div>
+        <div style="font-weight:600;">上传便便照片</div>
+        <div class="text-xs text-muted">AI 分析 · 需注册账号 · JPG/PNG ≤10MB</div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button class="btn btn-sm" style="flex:1;background:#F5F2EC;">取消</button>
+        <button class="btn btn-sm btn-primary" style="flex:1;">确认记录</button>
+      </div>
+
+      <div class="text-xs text-muted text-center mt-8">
+        ⚕️ 数据仅存本地浏览器 · 分析仅供参考 · 不构成医疗建议
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- .page-container -->
+
+<script>
+  // Tab switching
+  document.querySelectorAll('#pageTabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#pageTabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + btn.dataset.page).classList.add('active');
+    });
+  });
+
+  // Sub-item picker simulation for checkin "吃好" card
+  document.querySelectorAll('.task-status.pending').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const card = this.closest('.task-card');
+      const taskName = card.querySelector('.task-name').textContent;
+      if (taskName === '吃好') {
+        alert('🍽️ 吃好 — 子项选择弹窗\n\n✅ 今天吃好了吗？\n\n可选加分：\n□ 🥗 吃了蔬菜  +15\n□ 🍎 吃了水果  +10\n□ 💧 喝了足够水  +10\n\n[确认完成]  [稍后再说]');
+      } else if (taskName === '睡好') {
+        alert('😴 睡好 — 子项选择弹窗\n\n✅ 今天睡好了吗？\n\n可选加分：\n□ 🏃 户外活动≥30分钟  +10\n□ 🌙 合理时间入睡  +10\n\n[确认完成]  [稍后再说]');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

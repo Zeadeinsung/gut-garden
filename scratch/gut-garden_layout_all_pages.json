@@ -1,0 +1,976 @@
+{
+  "_grid": {
+    "canvas": [1280, 800],
+    "dock": { "y": 720, "h": 80 },
+    "header": { "y": 24, "h": 48 },
+    "fixedHeader": {
+      "_note": "所有主页面Header四槽位标准，login/stoolModal/onboarding除外",
+      "leftSlot":    { "x": 16,   "w": 232, "role": "← 返回键+页面标题 (首页为Brand Logo)" },
+      "centerSlot":  { "x": 264,  "w": 752, "role": "页面专属中心内容 (欢迎语/HUD/能量条等)" },
+      "userSlot":    { "x": 1032, "w": 90,  "role": "👤 用户模块 (头像+昵称+Lv), profile页省略" },
+      "controlsSlot":{ "x": 1134, "w": 130, "role": "⚙️ 设置 + 🔊 音效, 所有主页面必现" }
+    },
+    "leftSidebar": { "x": 16, "w": 232 },
+    "rightPanel": { "x": 1032, "w": 248 },
+    "mainContent": { "x": 264, "w": 752 },
+    "gap": 12,
+    "sectionGap": 16,
+    "touchTarget": 48
+  },
+
+  "home": {
+    "page": "home",
+    "title": "首页",
+    "blocks": [
+      {
+        "id": "brand",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "Brand Logo + 品牌名",
+        "icon": "🌱", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "welcome",
+        "x": 264, "y": 24, "w": 752, "h": 48,
+        "label": "欢迎语 H1 + 副标题",
+        "icon": "💬", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "userMiniCard",
+        "x": 1032, "y": 24, "w": 90, "h": 48,
+        "label": "👤 用户 (头像+昵称+Lv)",
+        "icon": "👤", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "tasksCard",
+        "x": 16, "y": 88, "w": 232, "h": 320,
+        "label": "📋 今日任务卡 + 状态标签(水分/菌群/屏障)",
+        "icon": "📋", "z": 1, "color": "sidebar-block"
+      },
+      {
+        "id": "tipCard",
+        "x": 16, "y": 424, "w": 232, "h": 96,
+        "label": "💡 今日小贴士",
+        "icon": "💡", "z": 1, "color": "sidebar-block"
+      },
+      {
+        "id": "badgePanel",
+        "x": 16, "y": 536, "w": 232, "h": 96,
+        "label": "🌱 花园成长阶段徽章",
+        "icon": "🌱", "z": 1, "color": "sidebar-block"
+      },
+      {
+        "id": "mascot",
+        "x": 380, "y": 88, "w": 340, "h": 200,
+        "label": "🧸 菌小园 3D 角色 + 对话气泡",
+        "icon": "🧸", "notes": "Lottie 待机呼吸动画循环",
+        "z": 1, "color": "cta-block"
+      },
+      {
+        "id": "heroCTA",
+        "x": 420, "y": 310, "w": 260, "h": 170,
+        "label": "⭕ 今日肠道扫描 (核心CTA按钮)",
+        "icon": "📸", "notes": "点击弹出便便记录弹窗(图标选择/拍照双模式)",
+        "z": 1, "color": "cta-block"
+      },
+      {
+        "id": "aiPanel",
+        "x": 1032, "y": 88, "w": 248, "h": 540,
+        "label": "🤖 AI 助手面板 (菌小园+快捷提问+今日观察)",
+        "icon": "🤖", "notes": "SSE流式对话 | FAQ依首页场景: 花园介绍/今日吃什么/怎么照顾花园",
+        "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "kingkong1",
+        "x": 264, "y": 500, "w": 178, "h": 220,
+        "label": "🌿 探索花园",
+        "icon": "🌿", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "kingkong2",
+        "x": 454, "y": 500, "w": 178, "h": 220,
+        "label": "✅ 每日打卡",
+        "icon": "✅", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "kingkong3",
+        "x": 644, "y": 500, "w": 178, "h": 220,
+        "label": "📚 知识课堂",
+        "icon": "📚", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "kingkong4",
+        "x": 834, "y": 500, "w": 178, "h": 220,
+        "label": "🏆 成长徽章",
+        "icon": "🏆", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "progress",
+        "x": 264, "y": 680, "w": 752, "h": 40,
+        "label": "📊 花园成长进度: 🌱种子→🌿幼苗→🌻成长→🍎丰收→🌳大师→🏆终极 | 已成长12天 | 下一阶段: 神秘菌屋",
+        "icon": "📊", "notes": "6阶段节点进度条，点击阶段节点查看详情",
+        "z": 1, "color": "nav-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "garden": {
+    "page": "garden",
+    "title": "探索花园",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← 探索花园 / 我的肠道生态世界",
+        "icon": "←", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "hudMetrics",
+        "x": 264, "y": 24, "w": 752, "h": 48,
+        "label": "HUD指标: 生态Lv.4 | 繁荣度 85% | 菌居民×8 | 连续照顾12天",
+        "icon": "📊", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "userMiniCard",
+        "x": 1032, "y": 24, "w": 90, "h": 48,
+        "label": "👤 小明 Lv.4",
+        "icon": "👤", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "isometricCanvas",
+        "x": 0, "y": 0, "w": 1280, "h": 720,
+        "label": "🗺️ 2.5D 等距花园画布 (3层CSS视差: Sky-Far-200px / Mid-0 / Front-150px)",
+        "icon": "🗺️",
+        "notes": "美工根据POI大致分布绘制，不严格按此布局。Lottie角色在中景层，鼠标悬停POI→高亮+简介，点击POI→进入子场景",
+        "z": 0, "color": "main-block"
+      },
+      {
+        "id": "poi_treeOfLife",
+        "x": 410, "y": 100, "w": 130, "h": 90,
+        "label": "🏷️ 生命之树 Lv.3 (花园核心)",
+        "icon": "📦", "notes": "POI浮点标签",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "poi_sourFountain",
+        "x": 560, "y": 140, "w": 130, "h": 90,
+        "label": "🏷️ 酸酸喷泉 Lv.2 (短链脂肪酸泉)",
+        "icon": "📦", "notes": "POI浮点标签",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "poi_plantZone",
+        "x": 280, "y": 230, "w": 150, "h": 100,
+        "label": "🏷️ 肠道植物区 Lv.2 (纤维种植区)",
+        "icon": "📦", "notes": "POI浮点标签",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "poi_stream",
+        "x": 600, "y": 270, "w": 160, "h": 250,
+        "label": "🏷️ 肠道溪流 (营养运输水道)",
+        "icon": "📦", "notes": "POI浮点标签，纵向长条形沿溪流走向",
+        "z": 0, "color": "main-block"
+      },
+      {
+        "id": "poi_barrierCastle",
+        "x": 330, "y": 400, "w": 160, "h": 120,
+        "label": "🏷️ 屏障城堡 Lv.3 (肠道屏障城墙)",
+        "icon": "📦", "notes": "POI浮点标签",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "poi_residentHome",
+        "x": 700, "y": 160, "w": 150, "h": 110,
+        "label": "🏷️ 菌居民之家 Lv.2 (8位居民的家)",
+        "icon": "📦", "notes": "POI浮点标签",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "poi_ecoStation",
+        "x": 680, "y": 430, "w": 170, "h": 100,
+        "label": "🏷️ 生态观察站 Lv.1 (花园气象站)",
+        "icon": "📦", "notes": "POI浮点标签",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "gardenStatus",
+        "x": 16, "y": 88, "w": 232, "h": 190,
+        "label": "🌿 花园状态卡 (生态平衡良好) + [查看详情]",
+        "icon": "🌿", "z": 1, "color": "sidebar-block"
+      },
+      {
+        "id": "impactFactors",
+        "x": 16, "y": 294, "w": 232, "h": 322,
+        "label": "⚡ 影响因素列表 (+10/-8 实时增量) + [查看全部影响]",
+        "icon": "⚡", "notes": "数值动态变化动画",
+        "z": 1, "color": "sidebar-block"
+      },
+      {
+        "id": "mascotPanel",
+        "x": 1032, "y": 88, "w": 248, "h": 540,
+        "label": "🧸 菌小园 + 💬对话气泡 + 我观察到 + 今日小建议 + [和我聊天]",
+        "icon": "🧸",
+        "notes": "FAQ依花园场景: 怎么照顾花园/酸酸喷泉是什么/溪流为什么变色",
+        "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "mapFAB",
+        "x": 16, "y": 616, "w": 64, "h": 64,
+        "label": "🌍 花园地图 FAB",
+        "icon": "🌍", "z": 1, "color": "nav-block"
+      },
+      {
+        "id": "toolbar",
+        "x": 96, "y": 616, "w": 560, "h": 80,
+        "label": "🔧 快捷工具栏 (💧浇水 🧹清理×3 🌱种植 🔬放大镜 📸拍照)",
+        "icon": "🔧", "notes": "角标数字提示待办，按钮 48×48 统一尺寸",
+        "z": 1, "color": "nav-block"
+      },
+      {
+        "id": "taskPanel",
+        "x": 672, "y": 616, "w": 344, "h": 80,
+        "label": "📋 今日任务: ☑探索花园1/1 ☐吃好0/1 ☐睡好0/1 | 🎁完成奖励",
+        "icon": "📋", "z": 1, "color": "nav-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "classroom": {
+    "page": "classroom",
+    "title": "探索课堂",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← 探索课堂",
+        "icon": "←", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "woodSign",
+        "x": 264, "y": 18, "w": 752, "h": 60,
+        "label": "🪵 探索课堂 / 探索肠道生命的秘密 (木质挂牌装饰)",
+        "icon": "🪵", "notes": "拟物悬挂木牌，视觉特征允许略大于标准Header高度",
+        "z": 1, "color": "header-block"
+      },
+      {
+        "id": "knowledgeTree",
+        "x": 1032, "y": 78, "w": 248, "h": 36,
+        "label": "知识树 🌳🌳🌳🌱 已探索12个知识点",
+        "icon": "🌳", "notes": "浮动在右侧AI面板上方",
+        "z": 2, "color": "header-block"
+      },
+      {
+        "id": "userMiniCard",
+        "x": 1032, "y": 24, "w": 90, "h": 48,
+        "label": "👤 小明 Lv.3",
+        "icon": "👤", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "sPathMap",
+        "x": 0, "y": 0, "w": 1280, "h": 720,
+        "label": "🗺️ S型探索路径地图 (5个知识模块节点 + 星级收集度)",
+        "icon": "🗺️",
+        "notes": "S型曲线水流/小路串联5节点。节点: 建筑图标+名称+星级进度(如3/6)。未解锁灰显+🔒",
+        "z": 0, "color": "main-block"
+      },
+      {
+        "id": "node1_fiber",
+        "x": 200, "y": 100, "w": 200, "h": 90,
+        "label": "① 膳食纤维广场 🏛️ ⭐⭐⭐ 3/6",
+        "icon": "📦", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "node2_ferment",
+        "x": 620, "y": 110, "w": 200, "h": 90,
+        "label": "② 菌菌发酵坊 🏭 ⭐⭐ 2/6",
+        "icon": "📦", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "node3_scfa",
+        "x": 400, "y": 240, "w": 200, "h": 90,
+        "label": "③ 酸酸喷泉 ⛲ ⭐ 1/6",
+        "icon": "📦", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "node4_barrier",
+        "x": 180, "y": 390, "w": 200, "h": 90,
+        "label": "④ 屏障城堡 🧱 ⭐⭐⭐ 3/6",
+        "icon": "📦", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "node5_eco",
+        "x": 600, "y": 400, "w": 200, "h": 90,
+        "label": "⑤ 生态观察站 🔭 未解锁 🔒",
+        "icon": "📦", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "contextNudge",
+        "x": 440, "y": 86, "w": 280, "h": 28,
+        "label": "💬 今天想探索哪个知识区域呢？",
+        "icon": "💬", "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "aiCompanion",
+        "x": 1032, "y": 88, "w": 248, "h": 540,
+        "label": "🤖 菌小园老师 + 💬对话 + 📚快捷FAQ + [🎲随机探索] + 📰推荐内容(换一换)",
+        "icon": "🤖",
+        "notes": "FAQ依课堂场景: 食物的秘密/健康好习惯/身体小信号。推荐内容: 纤维食物清单+10/肠道冷知识+5",
+        "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "dailyTask",
+        "x": 16, "y": 616, "w": 280, "h": 104,
+        "label": "🎯 今日学习任务: 学习1个知识点 | [查看任务]",
+        "icon": "🎯", "z": 1, "color": "nav-block"
+      },
+      {
+        "id": "milestones",
+        "x": 312, "y": 616, "w": 704, "h": 104,
+        "label": "🎁 宝箱里程碑: ①✅ ②✅ ③✅ ④🔓 ⑤🔒 ⑥🔒 | 已收集12个知识点",
+        "icon": "🎁",
+        "notes": "宝箱状态: 已完成绿勾/当前发光/未解锁灰锁",
+        "z": 1, "color": "nav-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "checkin": {
+    "page": "checkin",
+    "title": "每日打卡",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← 每日打卡 [生态Lv.4]",
+        "icon": "←", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "energyBar",
+        "x": 264, "y": 24, "w": 752, "h": 48,
+        "label": "今日花园能量 ████████░░ 85/100",
+        "icon": "⚡", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "userMiniCard",
+        "x": 1032, "y": 24, "w": 90, "h": 48,
+        "label": "👤 小明 Lv.4",
+        "icon": "👤", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "reportBanner",
+        "x": 16, "y": 88, "w": 1000, "h": 30,
+        "label": "🔍 今日重点关注 (基于昨日便便报告)",
+        "icon": "🔍",
+        "notes": "条件渲染: 仅当昨日有便便记录且诊断结果异常时出现。无异常则不渲染，下方卡片整体上移。诊断→联动映射见卡片备注",
+        "z": 1, "color": "cta-block"
+      },
+      {
+        "id": "cardGarden",
+        "x": 16, "y": 88, "w": 1000, "h": 72,
+        "label": "🌿 探索花园 | 🎮小游戏 0/1 | 📺视频课 0/1 | 🧠常识题 0/3",
+        "icon": "🌿",
+        "notes": "复合关卡: 3项子任务全部完成才算通关。游戏和视频课进度随课堂模块解锁推进；常识题从题库随机抽取，每日常驻——即使所有课程已学完仍需完成，确保知识掌握。banner出现时y+36",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "cardEat",
+        "x": 16, "y": 166, "w": 1000, "h": 72,
+        "label": "🥗 健康饮食 | 今天吃好了吗？",
+        "icon": "🥗",
+        "notes": "确认后弹出可选子项: 吃了蔬菜+15 / 吃了水果+10。便便报告联动: Type1-2干硬→'多吃绿叶蔬菜和纤维食物'；Type6-7稀→'清淡饮食，避免生冷油腻'；油脂过多→'试试蒸煮替代油炸'。banner出现时y+36",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "cardSleep",
+        "x": 16, "y": 244, "w": 1000, "h": 72,
+        "label": "🌙 优质睡眠 | 昨晚睡得好吗？",
+        "icon": "🌙",
+        "notes": "确认后弹出可选子项: 早睡+10。便便报告联动: 作息不规律→'报告显示作息波动，今晚试试21:30前上床'。banner出现时y+36",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "cardWater",
+        "x": 16, "y": 322, "w": 1000, "h": 72,
+        "label": "💧 补充水分 | 今天喝够水了吗？",
+        "icon": "💧",
+        "notes": "点击计数/步进器(±按钮)。便便报告联动: Type1-2干硬→量化目标'今天目标: 8杯水'；默认目标'6杯水'。banner出现时y+36",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "cardSport",
+        "x": 16, "y": 400, "w": 1000, "h": 72,
+        "label": "🏃 活力运动 | 今天动起来了吗？",
+        "icon": "🏃",
+        "notes": "确认后弹出可选子项: 户外活动≥30min+10。通常不受便便报告直接影响。banner出现时y+36",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "assistant",
+        "x": 1032, "y": 88, "w": 248, "h": 616,
+        "label": "🧸 菌小园 + 💬对话 + 💡今日小建议 + 📚今日小知识 + 🔗快捷入口(知识课堂/成长徽章)",
+        "icon": "🧸",
+        "notes": "FAQ依打卡场景: 今天要做什么/怎么获得更多能量/补签怎么用",
+        "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "calendar",
+        "x": 16, "y": 524, "w": 490, "h": 196,
+        "label": "📅 打卡日历 (月视图) | 连续12天 · 🎁再坚持2天解锁奖励",
+        "icon": "📅",
+        "notes": "月视图网格。已打卡: 绿色圆点+花园小图标。今日: 高亮边框。点击历史日期→当日详情。补签入口≤3次/月",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "rewards",
+        "x": 522, "y": 524, "w": 494, "h": 196,
+        "label": "🎁 今日奖励: 💧+5 🍃+10 ⭐+5 ☀️+10",
+        "icon": "🎁", "notes": "4个掉落物图标+数值，网格布局",
+        "z": 1, "color": "main-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "badges": {
+    "page": "badges",
+    "title": "成长徽章",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← 🏆 成长徽章馆",
+        "icon": "🏆", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "pageSubtitle",
+        "x": 264, "y": 24, "w": 752, "h": 48,
+        "label": "每一枚徽章，都是你照顾花园的证明",
+        "icon": "💬", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "userMiniCard",
+        "x": 1032, "y": 24, "w": 90, "h": 48,
+        "label": "👤 小明 Lv.4",
+        "icon": "👤", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 📖 徽章说明 | 🔊 音效",
+        "icon": "⚙️", "notes": "徽章说明作为页面专属入口并入controls区域",
+        "z": 1, "color": "header-block"
+      },
+      {
+        "id": "userStatus",
+        "x": 16, "y": 88, "w": 1000, "h": 120,
+        "label": "👤 用户状态卡: 🧸 Lv.4 肠道小园丁 | ████████░░ 720/1000 距升级差280 | 已获得18/60枚 [徽章总览]",
+        "icon": "👤", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "shelf1",
+        "x": 16, "y": 222, "w": 1000, "h": 105,
+        "label": "🏷️ 1 健康习惯徽章 [🥉水滴守护者] [🥈纤维之友] [🥉晨光鸟] →",
+        "icon": "🏷️", "notes": "横向滑动，药丸标签+序号。已获得: 彩色+铜/银/金边框。未解锁: 灰度+🔒",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "shelf2",
+        "x": 16, "y": 339, "w": 1000, "h": 105,
+        "label": "🏷️ 2 探索达人徽章 [🥇花园农夫] [🥉放大镜专家] [🔒???] →",
+        "icon": "🏷️", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "shelf3",
+        "x": 16, "y": 456, "w": 1000, "h": 105,
+        "label": "🏷️ 3 科普小学者徽章 [❓好奇宝宝] [🧠答题能手] [🔒百科博士] →",
+        "icon": "🏷️", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "shelf4",
+        "x": 16, "y": 573, "w": 1000, "h": 105,
+        "label": "🏷️ 4 特殊成就徽章 [⭐完美一周] [🔒春节彩蛋] [🔒花园生日] →",
+        "icon": "🏷️", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "recentHighlight",
+        "x": 16, "y": 690, "w": 1000, "h": 30,
+        "label": "📌 最近获得: 🥇花园农夫 NEW! 累计投喂100次 +50XP 2026-07-31 | 📖收集册18/60 [分享我的徽章墙]",
+        "icon": "📌", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "assistantBadge",
+        "x": 1032, "y": 88, "w": 248, "h": 540,
+        "label": "🧸 助手提示 + 📈成长路径(Lv.1-5时间轴) + 🎁解锁预告(还差2枚) [去探索]",
+        "icon": "🧸",
+        "notes": "FAQ依徽章场景: 怎么获得更多徽章/徽章怎么升级/下一阶段解锁什么",
+        "z": 2, "color": "ai-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "profile": {
+    "page": "profile",
+    "title": "我的主页",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← 我的主页",
+        "icon": "←", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "profileCard",
+        "x": 16, "y": 88, "w": 1000, "h": 130,
+        "label": "🧒 头像(80px可编辑) | 小明 Lv.4 肠道小园丁 | 加入于2026-07-01 已照顾花园30天 | [✏️编辑]",
+        "icon": "🧒", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stat1",
+        "x": 16, "y": 232, "w": 324, "h": 96,
+        "label": "🔥 最长连续 15天",
+        "icon": "🔥", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stat2",
+        "x": 352, "y": 232, "w": 324, "h": 96,
+        "label": "🏆 徽章收集 18/60",
+        "icon": "🏆", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stat3",
+        "x": 688, "y": 232, "w": 324, "h": 96,
+        "label": "📚 知识探索 12个",
+        "icon": "📚", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stat4",
+        "x": 16, "y": 340, "w": 324, "h": 96,
+        "label": "💩 便便记录 25次",
+        "icon": "💩", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stat5",
+        "x": 352, "y": 340, "w": 324, "h": 96,
+        "label": "🏡 花园阶段 第3·成长",
+        "icon": "🏡", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stat6",
+        "x": 688, "y": 340, "w": 324, "h": 96,
+        "label": "⭐ 总经验值 720 XP",
+        "icon": "⭐", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "history",
+        "x": 16, "y": 448, "w": 1000, "h": 272,
+        "label": "📋 历史记录 (打卡|便便|学习 三Tab切换)",
+        "icon": "📋", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "weeklyStats",
+        "x": 1032, "y": 88, "w": 248, "h": 140,
+        "label": "📊 本周统计: 打卡5/7 徽章3 学习8",
+        "icon": "📊", "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "goal",
+        "x": 1032, "y": 242, "w": 248, "h": 140,
+        "label": "🎯 当前目标: 花朵使者 ██░░ 7/10天",
+        "icon": "🎯", "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "friends",
+        "x": 1032, "y": 396, "w": 248, "h": 200,
+        "label": "👥 好友 (V2开放) 🚧",
+        "icon": "👥", "notes": "V2开放，MVP显示占位",
+        "z": 2, "color": "ai-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "report": {
+    "page": "report",
+    "title": "成长报告",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← 📊 成长报告",
+        "icon": "←", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "period",
+        "x": 264, "y": 24, "w": 752, "h": 48,
+        "label": "[周报] [月报●] 2026年7月 ← →",
+        "icon": "📅", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "checkin",
+        "x": 16, "y": 88, "w": 620, "h": 200,
+        "label": "📋 打卡坚持: 累计30天 | 连续12天 | 最长15天",
+        "icon": "📋", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "garden",
+        "x": 652, "y": 88, "w": 612, "h": 200,
+        "label": "🎮 花园互动: 投喂120次 | 探索30天",
+        "icon": "🎮", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "learn",
+        "x": 16, "y": 304, "w": 620, "h": 200,
+        "label": "🧠 科普学习: 答对15题 | 完成3/5模块 | 徽章8枚",
+        "icon": "🧠", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "stool",
+        "x": 652, "y": 304, "w": 612, "h": 200,
+        "label": "💩 消化健康: Type分布饼图 + 采纳率65% | Type1-2红/3-5绿/6-7黄 分母<5展原值",
+        "icon": "💩", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "growth",
+        "x": 16, "y": 520, "w": 1248, "h": 100,
+        "label": "🌱 总体成长: 第3阶段 | 18/60枚 | 720XP",
+        "icon": "🌱", "z": 1, "color": "main-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "settings": {
+    "page": "settings",
+    "title": "设置",
+    "blocks": [
+      {
+        "id": "backTitle",
+        "x": 16, "y": 24, "w": 232, "h": 48,
+        "label": "← ⚙️ 设置",
+        "icon": "←", "notes": "需家长验证(简单算术)",
+        "z": 1, "color": "header-block"
+      },
+      {
+        "id": "controls",
+        "x": 1134, "y": 24, "w": 130, "h": 48,
+        "label": "⚙️ 设置 | 🔊 音效",
+        "icon": "⚙️", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "child",
+        "x": 16, "y": 88, "w": 600, "h": 150,
+        "label": "👶 儿童档案: 昵称/年龄/头像",
+        "icon": "👶", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "timelimit",
+        "x": 16, "y": 254, "w": 600, "h": 110,
+        "label": "⏱️ 使用时长限制 [====●===] 30分钟",
+        "icon": "⏱️", "notes": "滑块控件",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "privacy",
+        "x": 16, "y": 380, "w": 600, "h": 170,
+        "label": "🔒 隐私: 照片上传 | 数据导出 | 删除账号",
+        "icon": "🔒", "notes": "删除需二次确认",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "account",
+        "x": 16, "y": 566, "w": 600, "h": 130,
+        "label": "👤 账号: 138****8888 | 退出登录",
+        "icon": "👤", "z": 1, "color": "main-block"
+      }
+    ],
+    "dockTabs": [
+      { "id": "dock_home",    "icon": "🏠", "label": "首页",       "route": "/",          "hero": false },
+      { "id": "dock_garden",  "icon": "🌿", "label": "探索花园",   "route": "/garden",    "hero": false },
+      { "id": "dock_checkin", "icon": "✅", "label": "每日打卡",   "route": "/checkin",   "hero": false },
+      { "id": "dock_hero",    "icon": "📸", "label": "拍便便分析", "route": null,         "hero": true  },
+      { "id": "dock_class",   "icon": "📚", "label": "探索课堂",   "route": "/classroom", "hero": false },
+      { "id": "dock_badges",  "icon": "🏆", "label": "成长徽章",   "route": "/badges",    "hero": false },
+      { "id": "dock_profile", "icon": "👤", "label": "我的主页",   "route": "/profile",   "hero": false }
+    ]
+  },
+
+  "login": {
+    "page": "login",
+    "title": "登录/注册",
+    "notes": "手机号验证码登录，需注册后才能使用便便拍照分析/创建档案/查看报告",
+    "blocks": [
+      {
+        "id": "brandLogo",
+        "x": 440, "y": 120, "w": 400, "h": 80,
+        "label": "🌱 Gut Garden 肠道花园",
+        "icon": "🌱", "z": 1, "color": "header-block"
+      },
+      {
+        "id": "slogan",
+        "x": 390, "y": 210, "w": 500, "h": 36,
+        "label": "每一口食物，都在浇灌你的微观生态",
+        "icon": "💬", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "phoneInput",
+        "x": 390, "y": 280, "w": 500, "h": 56,
+        "label": "📱 手机号输入框 (11位)",
+        "icon": "📱", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "codeRow",
+        "x": 390, "y": 348, "w": 500, "h": 56,
+        "label": "🔢 验证码输入框 + [发送验证码] 按钮 (60s倒计时)",
+        "icon": "🔢", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "loginBtn",
+        "x": 440, "y": 430, "w": 400, "h": 56,
+        "label": "[登录/注册] 主按钮 (森林绿 #4E6A3E)",
+        "icon": "🔑", "z": 1, "color": "cta-block"
+      },
+      {
+        "id": "skipLink",
+        "x": 440, "y": 500, "w": 400, "h": 32,
+        "label": "先看看 → (以游客身份浏览)",
+        "icon": "👀", "notes": "跳转首页，localStorage模式",
+        "z": 1, "color": "main-block"
+      },
+      {
+        "id": "disclaimer",
+        "x": 340, "y": 570, "w": 600, "h": 56,
+        "label": "📋 免责声明: 本项目用于健康科普，不构成医疗建议。基于国产开源大模型。",
+        "icon": "📋", "z": 1, "color": "main-block"
+      },
+      {
+        "id": "loginBg",
+        "x": 0, "y": 0, "w": 1280, "h": 720,
+        "label": "🎨 登录页背景 (花园简化版插画，奶油米底色)",
+        "icon": "🎨", "z": 0, "color": "main-block"
+      }
+    ],
+    "dockTabs": []
+  },
+
+  "stoolModal": {
+    "page": "stoolModal",
+    "title": "便便记录弹窗 (全局Modal)",
+    "notes": "从底部Dock Hero CTA触发，或从打卡页触发。默认图标选择模式(local-first)，注册用户可选拍照模式",
+    "blocks": [
+      {
+        "id": "modalOverlay",
+        "x": 0, "y": 0, "w": 1280, "h": 800,
+        "label": "半透明黑色遮罩 (opacity: 0.5)",
+        "icon": "⬛", "z": 0, "color": "ai-block"
+      },
+      {
+        "id": "modalContainer",
+        "x": 340, "y": 60, "w": 600, "h": 620,
+        "label": "弹窗容器 (白色圆角卡片，毛玻璃效果)",
+        "icon": "📦", "z": 2, "color": "main-block"
+      },
+      {
+        "id": "modalTitle",
+        "x": 360, "y": 80, "w": 560, "h": 40,
+        "label": "📸 今日便便观察",
+        "icon": "📸", "z": 2, "color": "header-block"
+      },
+      {
+        "id": "modeSwitch",
+        "x": 360, "y": 132, "w": 560, "h": 48,
+        "label": "模式切换Tab: [🐰 图标选择 ●] [📷 拍照分析] (后者标注'需注册')",
+        "icon": "🔄", "z": 2, "color": "header-block"
+      },
+      {
+        "id": "iconGrid",
+        "x": 360, "y": 196, "w": 560, "h": 200,
+        "label": "5种便便图标: 🐰兔子便便(Type1) 🍇葡萄串(Type2) 🍌香蕉宝宝(Type3-4) 🍦软冰淇淋(Type5) 💧水水(Type6-7)",
+        "icon": "🎨",
+        "notes": "5列均分网格，当前选中高亮边框+放大，每个图标下方标注名称和Type号",
+        "z": 2, "color": "main-block"
+      },
+      {
+        "id": "photoUpload",
+        "x": 360, "y": 408, "w": 560, "h": 100,
+        "label": "─ 或 ─  📷 上传便便照片 (需注册) [拖拽或点击上传 · ≤10MB自动压缩 · HEIC→JPEG]",
+        "icon": "📷",
+        "notes": "游客模式显示为灰显+注册引导文案；注册用户正常可用",
+        "z": 2, "color": "main-block"
+      },
+      {
+        "id": "resultPreview",
+        "x": 360, "y": 520, "w": 560, "h": 72,
+        "label": "分析结果: '🌿 香蕉便 — 非常健康！继续保持均衡饮食～'",
+        "icon": "📊",
+        "notes": "图标选择后即时显示；拍照模式显示'分析中...'加载态",
+        "z": 2, "color": "main-block"
+      },
+      {
+        "id": "modalActions",
+        "x": 360, "y": 608, "w": 560, "h": 48,
+        "label": "[确认记录] [稍后再说]",
+        "icon": "✅",
+        "notes": "确认后数据存localStorage(游客)或发POST /api/stool/select-icon(注册)",
+        "z": 2, "color": "cta-block"
+      },
+      {
+        "id": "stoolDisclaimer",
+        "x": 360, "y": 660, "w": 560, "h": 20,
+        "label": "数据仅存本地 · 不构成医疗建议 · 出现持续症状请就医",
+        "icon": "⚠️", "z": 2, "color": "main-block"
+      }
+    ],
+    "dockTabs": []
+  },
+
+  "onboarding": {
+    "page": "onboarding",
+    "title": "新用户引导 (首次访问触发)",
+    "notes": "全屏遮罩覆盖，4步引导，30秒内完成。遮罩在首次访问时自动触发，完成后不再显示",
+    "blocks": [
+      {
+        "id": "onboardingOverlay",
+        "x": 0, "y": 0, "w": 1280, "h": 800,
+        "label": "全屏半透明遮罩 (opacity: 0.75) + 高亮镂空区域指向目标元素",
+        "icon": "⬛", "z": 2, "color": "ai-block"
+      },
+      {
+        "id": "step1",
+        "x": 340, "y": 400, "w": 600, "h": 160,
+        "label": "Step 1/4: '认识你的花园' — 指向首页花园状态看板 + 菌小园角色",
+        "icon": "🌱",
+        "notes": "高亮镂空: tasksCard区域(x:16,y:88,w:232,h:320)。文案: '这是你的肠道花园，每天来看看它吧！'",
+        "z": 3, "color": "cta-block"
+      },
+      {
+        "id": "step2",
+        "x": 340, "y": 400, "w": 600, "h": 160,
+        "label": "Step 2/4: '逛逛知识花园' — 指向探索课堂入口",
+        "icon": "📚",
+        "notes": "高亮镂空: kingkong3区域。文案: '这里有5个知识模块等你探索，每完成一个都能收集星星！'",
+        "z": 3, "color": "cta-block"
+      },
+      {
+        "id": "step3",
+        "x": 340, "y": 400, "w": 600, "h": 160,
+        "label": "Step 3/4: '记录便便观察' — 指向底部Dock Hero CTA",
+        "icon": "📸",
+        "notes": "高亮镂空: Dock Hero CTA按钮。文案: '每天观察便便，它告诉你花园的健康秘密！'",
+        "z": 3, "color": "cta-block"
+      },
+      {
+        "id": "step4",
+        "x": 340, "y": 400, "w": 600, "h": 160,
+        "label": "Step 4/4: '收集成长徽章' — 指向成长徽章入口",
+        "icon": "🏆",
+        "notes": "高亮镂空: kingkong4区域。文案: '坚持打卡就能解锁超酷徽章，花园也会升级哦！'",
+        "z": 3, "color": "cta-block"
+      },
+      {
+        "id": "onboardingNav",
+        "x": 500, "y": 576, "w": 280, "h": 48,
+        "label": "[← 上一步]  ● ○ ○ ○  [下一步 →]  [跳过]",
+        "icon": "⬅️",
+        "notes": "步进器。第一步隐藏'上一步'，第四步'下一步'变为'开始探索！'。跳过直接关闭引导",
+        "z": 3, "color": "nav-block"
+      }
+    ],
+    "dockTabs": []
+  }
+}
