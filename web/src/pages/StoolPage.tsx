@@ -1,0 +1,138 @@
+import { useState, useCallback } from 'react'
+import { toast } from '@/components/ui/Toast'
+import { Button } from '@/components/ui/Button'
+
+interface BristolType {
+  id: number
+  label: string
+  icon: string
+  desc: string
+  health: 'good' | 'ok' | 'bad'
+}
+
+const BRISTOL_TYPES: BristolType[] = [
+  { id: 1, label: '坚果状', icon: '🟤', desc: '干硬、分散的颗粒', health: 'bad' },
+  { id: 2, label: '香肠状', icon: '🟫', desc: '干硬、表面凹凸', health: 'bad' },
+  { id: 3, label: '条状有裂痕', icon: '🟠', desc: '表面有裂痕', health: 'ok' },
+  { id: 4, label: '香蕉状', icon: '💛', desc: '光滑柔软像香蕉', health: 'good' },
+  { id: 5, label: '软块状', icon: '🟡', desc: '边缘清晰的软块', health: 'ok' },
+  { id: 6, label: '糊状', icon: '🟢', desc: '边缘参差不齐', health: 'bad' },
+  { id: 7, label: '水状', icon: '🔵', desc: '完全液态', health: 'bad' },
+]
+
+interface LogEntry {
+  date: string
+  typeId: number
+  time: string
+}
+
+export default function StoolPage() {
+  const [selected, setSelected] = useState<number | null>(null)
+  const [logs, setLogs] = useState<LogEntry[]>(() => {
+    try {
+      const saved = localStorage.getItem('gg-stool-logs')
+      return saved ? JSON.parse(saved) : []
+    } catch { return [] }
+  })
+  const [showLog, setShowLog] = useState(false)
+
+  const handleLog = useCallback(() => {
+    if (selected === null) return
+    const entry: LogEntry = {
+      date: new Date().toISOString().slice(0, 10),
+      typeId: selected,
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    }
+    const updated = [entry, ...logs]
+    setLogs(updated)
+    localStorage.setItem('gg-stool-logs', JSON.stringify(updated))
+    const bristol = BRISTOL_TYPES.find((b) => b.id === selected)
+    toast(`已记录：${bristol?.label}`, 'success')
+  }, [selected, logs])
+
+  const healthColor = (h: string) => {
+    if (h === 'good') return 'bg-green-100 border-green-400'
+    if (h === 'ok') return 'bg-yellow-50 border-yellow-400'
+    return 'bg-red-50 border-red-300'
+  }
+
+  return (
+    <div className="flex flex-col h-full pb-20 px-4 overflow-auto">
+      <div className="text-center py-6">
+        <h1 className="text-2xl font-bold text-garden-forest">便便日记</h1>
+        <p className="text-sm text-gray-400 mt-1">根据布里斯托便便分类法记录</p>
+      </div>
+
+      {/* Bristol chart */}
+      <div className="max-w-sm mx-auto w-full">
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">布里斯托便便分类</h2>
+        <div className="flex flex-col gap-2">
+          {BRISTOL_TYPES.map((b) => (
+            <button
+              key={b.id}
+              className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
+                selected === b.id
+                  ? `border-garden-forest shadow-md ${healthColor(b.health)}`
+                  : 'border-transparent bg-white/40 hover:bg-white/70'
+              }`}
+              onClick={() => setSelected(b.id)}
+            >
+              <span className="text-3xl w-10 text-center">{b.icon}</span>
+              <div className="flex-1">
+                <p className="font-bold text-sm text-gray-700">类型{b.id}：{b.label}</p>
+                <p className="text-xs text-gray-400">{b.desc}</p>
+              </div>
+              <span className={`text-xs px-2 py-0.5 rounded-full ${
+                b.health === 'good' ? 'bg-green-100 text-green-700'
+                  : b.health === 'ok' ? 'bg-yellow-100 text-yellow-700'
+                  : 'bg-red-100 text-red-500'
+              }`}>
+                {b.health === 'good' ? '健康' : b.health === 'ok' ? '正常' : '注意'}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Log button */}
+      <div className="max-w-sm mx-auto w-full mt-4">
+        <Button
+          variant="primary"
+          className="w-full"
+          onClick={handleLog}
+          disabled={selected === null}
+        >
+          📝 记录便便
+        </Button>
+      </div>
+
+      {/* Recent logs */}
+      <div className="max-w-sm mx-auto w-full mt-6">
+        <button
+          className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-1"
+          onClick={() => setShowLog(!showLog)}
+        >
+          最近记录 {showLog ? '▲' : '▼'}
+        </button>
+        {showLog && (
+          <div className="flex flex-col gap-2">
+            {logs.slice(0, 14).map((entry, i) => {
+              const bristol = BRISTOL_TYPES.find((b) => b.id === entry.typeId)
+              return (
+                <div key={i} className="flex items-center gap-2 bg-white/40 rounded-lg px-3 py-2 text-sm">
+                  <span className="text-lg">{bristol?.icon}</span>
+                  <span className="text-gray-600">{entry.date}</span>
+                  <span className="text-gray-400">{entry.time}</span>
+                  <span className="text-gray-500 ml-auto">{bristol?.label}</span>
+                </div>
+              )
+            })}
+            {logs.length === 0 && (
+              <p className="text-center text-gray-300 text-sm py-4">暂无记录</p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

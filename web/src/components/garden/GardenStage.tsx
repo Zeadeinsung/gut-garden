@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
-import { useGardenStore } from '@/stores/gardenStore'
+import { useRef } from 'react'
+import { useParallax } from '@/hooks/useParallax'
+import { useGardenScene } from '@/hooks/useGardenScene'
 
 const LAYERS = [
   { name: 'garden_sky', translateZ: -200, speed: 0.1 },
@@ -9,26 +10,9 @@ const LAYERS = [
 
 export default function GardenStage() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const currentState = useGardenStore((s) => s.currentState)
+  const { midSrc } = useGardenScene()
 
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const onMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2
-      const y = (e.clientY / window.innerHeight - 0.5) * 2
-      el.querySelectorAll<HTMLElement>('[data-parallax]').forEach((layer) => {
-        const speed = parseFloat(layer.dataset.parallax || '0')
-        layer.style.transform = `translate(${x * speed * 20}px, ${y * speed * 20}px)`
-      })
-    }
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  const midSrc = currentState === 'healthy' ? '/assets/scenes/scene_garden_mid.png'
-    : currentState === 'high_sugar' ? '/assets/scenes/scene_garden_mid_high_sugar.png'
-    : '/assets/scenes/scene_garden_mid_dry.png'
+  useParallax(containerRef)
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden"
