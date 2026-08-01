@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-
-export type GardenState = 'healthy' | 'high_sugar' | 'dry' | 'recovering'
+import { persist } from 'zustand/middleware'
+import type { GardenState } from '@/types/garden'
 
 interface GardenStore {
   currentState: GardenState
@@ -13,13 +13,18 @@ interface GardenStore {
   addXp: (xp: number) => void
 }
 
-export const useGardenStore = create<GardenStore>((set) => ({
-  currentState: 'healthy',
-  moistureLevel: 50,
-  gardenLevel: 1,
-  gardenXp: 0,
-  interactionCount: 0,
-  setState: (s) => set({ currentState: s }),
-  addInteraction: () => set((st) => ({ interactionCount: st.interactionCount + 1 })),
-  addXp: (xp) => set((st) => ({ gardenXp: st.gardenXp + xp })),
-}))
+export const useGardenStore = create<GardenStore>()(
+  persist(
+    (set) => ({
+      currentState: 'healthy',
+      moistureLevel: 50,
+      gardenLevel: 1,
+      gardenXp: 0,
+      interactionCount: 0,
+      setState: (s) => set({ currentState: s }),
+      addInteraction: () => set((st) => ({ interactionCount: st.interactionCount + 1 })),
+      addXp: (xp) => set((st) => ({ gardenXp: st.gardenXp + xp })),
+    }),
+    { name: 'gg-garden' }
+  )
+)

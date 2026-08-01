@@ -1,0 +1,27 @@
+import type { ButtonHTMLAttributes } from 'react'
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'ghost'
+  size?: 'sm' | 'md' | 'lg'
+}
+
+const variants = {
+  primary: 'bg-garden-forest text-white hover:bg-[#3d5530]',
+  secondary: 'bg-garden-coral text-white hover:bg-[#e07a72]',
+  ghost: 'bg-transparent text-garden-forest hover:bg-garden-forest/10',
+}
+
+const sizes = {
+  sm: 'px-3 py-1.5 text-sm rounded-lg',
+  md: 'px-5 py-2.5 text-base rounded-xl',
+  lg: 'px-8 py-3.5 text-lg rounded-2xl',
+}
+
+export function Button({ variant = 'primary', size = 'md', className = '', ...props }: ButtonProps) {
+  return (
+    <button
+      className={`font-semibold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${variants[variant]} ${sizes[size]} ${className}`}
+      {...props}
+    />
+  )
+}

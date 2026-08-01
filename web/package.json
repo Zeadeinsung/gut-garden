@@ -27,6 +27,8 @@
     "framer-motion": "^12.42.2",
     "howler": "^2.2.4",
     "lottie-web": "^5.13.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "react-router-dom": "^7.18.1",
     "tailwindcss": "^4.3.3",
     "zustand": "^5.0.14"

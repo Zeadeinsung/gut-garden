@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { useGardenStore } from '../../stores/gardenStore'
+import { useGardenStore } from '@/stores/gardenStore'
 
 const LAYERS = [
-  { name: 'sky',  translateZ: -300, speed: 0 },
-  { name: 'far',  translateZ: -150, speed: 0.2 },
-  { name: 'mid',  translateZ: 0,    speed: 0.5 },
-  { name: 'near', translateZ: 150,  speed: 1.0 },
+  { name: 'garden_sky', translateZ: -200, speed: 0.1 },
+  { name: 'garden_mid', translateZ: 0, speed: 0.4 },
+  { name: 'garden_front', translateZ: 150, speed: 1.0 },
 ]
 
 export default function GardenStage() {
@@ -27,15 +26,15 @@ export default function GardenStage() {
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
-  const midLayer = currentState === 'healthy' ? '/assets/scene/scene_mid.png'
-    : currentState === 'high_sugar' ? '/assets/scene/scene_mid_high_sugar.png'
-    : '/assets/scene/scene_mid_dry.png'
+  const midSrc = currentState === 'healthy' ? '/assets/scenes/scene_garden_mid.png'
+    : currentState === 'high_sugar' ? '/assets/scenes/scene_garden_mid_high_sugar.png'
+    : '/assets/scenes/scene_garden_mid_dry.png'
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden"
       style={{ perspective: 1200, perspectiveOrigin: '50% 50%' }}>
       {LAYERS.map((l) => {
-        const src = l.name === 'mid' ? midLayer : `/assets/scene/scene_${l.name}.png`
+        const src = l.name === 'garden_mid' ? midSrc : `/assets/scenes/scene_${l.name}.png`
         return (
           <img
             key={l.name}

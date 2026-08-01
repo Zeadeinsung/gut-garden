@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
-:root {
-  --color-garden-blue: #b8d4e3;
-  --color-garden-pink: #f2c9c9;
-  --color-garden-green: #c1d5a4;
-  --color-garden-cream: #fefae0;
-  --color-garden-brown: #8b7355;
-  --color-garden-water: #7ec8e3;
+@theme {
+  --color-garden-forest: #4E6A3E;
+  --color-garden-cream: #FFF9EF;
+  --color-garden-coral: #F38D83;
+  --color-garden-hero: #B06AB3;
+  --color-garden-gold: #F4C542;
+  --color-garden-sky: #B8D4E3;
+  --color-garden-water: #7EC8E3;
 }
 
 body {
   margin: 0;
-  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: linear-gradient(135deg, var(--color-garden-blue), var(--color-garden-pink));
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  background: var(--color-garden-cream);
   min-height: 100vh;
-  overflow: hidden;
 }
