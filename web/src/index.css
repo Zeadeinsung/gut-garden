@@ -1,6 +1,13 @@
 @import "tailwindcss";
 @import "./styles/animations.css";
 
+@font-face {
+  font-family: 'JiangChengYuanTi';
+  src: url('/assets/fonts/JiangChengYuanTi-600W.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+
 @theme {
   --color-garden-forest: #4E6A3E;
   --color-garden-cream: #FFF9EF;
@@ -9,11 +16,31 @@
   --color-garden-gold: #F4C542;
   --color-garden-sky: #B8D4E3;
   --color-garden-water: #7EC8E3;
+  --font-round: 'JiangChengYuanTi', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.glass-card {
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(246, 248, 242, 0.78) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 4px 24px rgba(78, 106, 62, 0.06),
+    0 1px 3px rgba(78, 106, 62, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 body {
   margin: 0;
-  font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  font-family: 'JiangChengYuanTi', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   background: var(--color-garden-cream);
   min-height: 100vh;
 }
