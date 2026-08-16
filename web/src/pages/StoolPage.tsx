@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { toast } from '@/components/ui/Toast'
 import { Button } from '@/components/ui/Button'
+import { UiIcon } from '@/lib/uiIcons'
 
 interface BristolType {
   id: number
@@ -10,14 +11,24 @@ interface BristolType {
   health: 'good' | 'ok' | 'bad'
 }
 
+const STOOL_PNG: Record<number, string> = {
+  1: '/assets/stools/stool_type1_rabbit.png',
+  2: '/assets/stools/stool_type2_grape.png',
+  3: '/assets/stools/stool_type3_corn.png',
+  4: '/assets/stools/stool_type4_banana.png',
+  5: '/assets/stools/stool_type5_icecream.png',
+  6: '/assets/stools/stool_type6_marshmallow.png',
+  7: '/assets/stools/stool_type7_water.png',
+}
+
 const BRISTOL_TYPES: BristolType[] = [
-  { id: 1, label: '坚果状', icon: '🟤', desc: '干硬、分散的颗粒', health: 'bad' },
-  { id: 2, label: '香肠状', icon: '🟫', desc: '干硬、表面凹凸', health: 'bad' },
-  { id: 3, label: '条状有裂痕', icon: '🟠', desc: '表面有裂痕', health: 'ok' },
-  { id: 4, label: '香蕉状', icon: '💛', desc: '光滑柔软像香蕉', health: 'good' },
-  { id: 5, label: '软块状', icon: '🟡', desc: '边缘清晰的软块', health: 'ok' },
-  { id: 6, label: '糊状', icon: '🟢', desc: '边缘参差不齐', health: 'bad' },
-  { id: 7, label: '水状', icon: '🔵', desc: '完全液态', health: 'bad' },
+  { id: 1, label: '坚果状', icon: STOOL_PNG[1], desc: '干硬、分散的颗粒', health: 'bad' },
+  { id: 2, label: '香肠状', icon: STOOL_PNG[2], desc: '干硬、表面凹凸', health: 'bad' },
+  { id: 3, label: '条状有裂痕', icon: STOOL_PNG[3], desc: '表面有裂痕', health: 'ok' },
+  { id: 4, label: '香蕉状', icon: STOOL_PNG[4], desc: '光滑柔软像香蕉', health: 'good' },
+  { id: 5, label: '软块状', icon: STOOL_PNG[5], desc: '边缘清晰的软块', health: 'ok' },
+  { id: 6, label: '糊状', icon: STOOL_PNG[6], desc: '边缘参差不齐', health: 'bad' },
+  { id: 7, label: '水状', icon: STOOL_PNG[7], desc: '完全液态', health: 'bad' },
 ]
 
 interface LogEntry {
@@ -57,7 +68,7 @@ export default function StoolPage() {
   }
 
   return (
-    <div className="flex flex-col h-full pb-20 px-4 overflow-auto">
+    <div className="flex flex-col h-full pb-4 px-4 overflow-auto">
       <div className="text-center py-6">
         <h1 className="text-2xl font-bold text-garden-forest">便便日记</h1>
         <p className="text-sm text-gray-400 mt-1">根据布里斯托便便分类法记录</p>
@@ -77,7 +88,7 @@ export default function StoolPage() {
               }`}
               onClick={() => setSelected(b.id)}
             >
-              <span className="text-3xl w-10 text-center">{b.icon}</span>
+              <img src={b.icon} alt={b.label} className="w-10 h-10 object-contain shrink-0" />
               <div className="flex-1">
                 <p className="font-bold text-sm text-gray-700">类型{b.id}：{b.label}</p>
                 <p className="text-xs text-gray-400">{b.desc}</p>
@@ -102,7 +113,7 @@ export default function StoolPage() {
           onClick={handleLog}
           disabled={selected === null}
         >
-          📝 记录便便
+          <span className="inline-flex items-center gap-1.5"><UiIcon name="notebookPen" size={16} /> 记录便便</span>
         </Button>
       </div>
 
@@ -120,7 +131,7 @@ export default function StoolPage() {
               const bristol = BRISTOL_TYPES.find((b) => b.id === entry.typeId)
               return (
                 <div key={i} className="flex items-center gap-2 bg-white/40 rounded-lg px-3 py-2 text-sm">
-                  <span className="text-lg">{bristol?.icon}</span>
+                  <img src={bristol?.icon} alt={bristol?.label} className="w-8 h-8 object-contain" />
                   <span className="text-gray-600">{entry.date}</span>
                   <span className="text-gray-400">{entry.time}</span>
                   <span className="text-gray-500 ml-auto">{bristol?.label}</span>

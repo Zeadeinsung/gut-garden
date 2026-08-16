@@ -1,0 +1,53 @@
+total emoji occurrences: 278
+unique emoji: 100
+top 30:
+  🌱 x19
+  ️ x16
+  💧 x12
+  🌿 x11
+  🔒 x8
+  📚 x6
+  🏆 x6
+  📋 x6
+  ✅ x5
+  ✓ x5
+  🎁 x5
+  🍎 x5
+  💬 x5
+  🌳 x5
+  👶 x5
+  😊 x4
+  📸 x4
+  📷 x4
+  📊 x4
+  💡 x4
+  🎵 x4
+  🥗 x4
+  🌙 x4
+  🏃 x4
+  ‍ x4
+  😣 x3
+  🥵 x3
+  🤕 x3
+  ✕ x3
+  👀 x3
+
+files with emoji: 18
+   42  web/src\pages\HomePage.tsx
+   41  web/src\pages\CheckinPage.tsx
+   41  web/src\pages\GardenPage.tsx
+   29  web/src\pages\ClassroomPage.tsx
+   22  web/src\pages\SettingsPage.tsx
+   20  web/src\pages\BadgePage.tsx
+   19  web/src\pages\ProfilePage.tsx
+   14  web/src\components\modals\StoolModal.tsx
+   14  web/src\pages\LoginPage.tsx
+   13  web/src\pages\ReportPage.tsx
+    7  web/src\components\onboarding\OnboardingOverlay.tsx
+    5  web/src\components\garden\Character.tsx
+    4  web/src\components\navigation\Header.tsx
+    2  web/src\components\garden\DropZone.tsx
+    2  web/src\components\modals\AIChatModal.tsx
+    1  web/src\components\garden\LottiePlayer.tsx
+    1  web/src\components\garden\POITag.tsx
+    1  web/src\pages\StoolPage.tsx

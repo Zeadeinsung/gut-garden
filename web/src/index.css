@@ -10,6 +10,7 @@
 
 @theme {
   --color-garden-forest: #4E6A3E;
+  --color-garden-mascot: #93B14E;
   --color-garden-cream: #FFF9EF;
   --color-garden-coral: #F38D83;
   --color-garden-hero: #B06AB3;
@@ -31,11 +32,50 @@
     inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
-.no-scrollbar {
-  scrollbar-width: none;
+.solid-card {
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(250, 250, 246, 0.78));
+  border: 6px solid rgba(150, 150, 150, 0.10);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 4px 18px rgba(78, 106, 62, 0.08),
+    0 1px 3px rgba(78, 106, 62, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+
+.cream-card {
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 253, 245, 0.94), rgba(255, 246, 227, 0.8));
+  border: 6px solid rgba(150, 150, 150, 0.10);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 4px 16px rgba(78, 106, 62, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 统一模块：低饱和暖白半透明底（压制背景插画）+ 加粗淡灰描边 + 高斯模糊 */
+.card-module {
+  background: rgba(255, 251, 236, 0.95);
+  backdrop-filter: blur(16px);
+  border: 10px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 粗框：透明度从内向外渐变（内实外虚），适用于 rounded 卡片 */
+.gg-frame-fade {
+  position: relative;
+}
+.gg-frame-fade::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 6px;
+  background: linear-gradient(135deg, rgba(150, 150, 150, 0.40) 0%, rgba(150, 150, 150, 0.16) 50%, rgba(150, 150, 150, 0.02) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 body {

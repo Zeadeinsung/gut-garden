@@ -3,3 +3,8 @@ dist
 .env
 *.log
 .DS_Store
+server/.data/
+server/uploads/
+server/.tmp_*
+.shots/chrome_profile*/
+web/.preview_frames.png

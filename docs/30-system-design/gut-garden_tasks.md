@@ -290,7 +290,7 @@ interface AuthState { token: string | null; parent: Parent | null; activeChild: 
 
 | 位置 | Tab 名称 | 图标 | 路由 | 说明 |
 | ---- | ---- | ---- | ---- | ---- |
-| 左1 | 苗页 | `ui_nav_home.svg` | `/` | 首页 |
+| 左1 | 首页 | `ui_nav_home.svg` | `/` | 首页 |
 | 左2 | 探索花园 | `ui_nav_garden.svg` | `/garden` | 花园交互 |
 | 左3 | 每日打卡 | `ui_nav_checkin.svg` | `/checkin` | 打卡页面 |
 | **中** | **拍便便分析** | `ui_nav_stool.svg` | — | **Hero CTA 按钮** |

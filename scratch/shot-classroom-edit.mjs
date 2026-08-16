@@ -1,0 +1,63 @@
+import { chromium } from 'playwright-core'
+const CHROME = 'C:/Users/33273/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe'
+const BASE = 'http://localhost:3000'
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+const browser = await chromium.launch({ executablePath: CHROME, headless: true })
+const page = await browser.newPage({ viewport: { width: 1672, height: 941 } })
+await page.goto(BASE, { waitUntil: 'domcontentloaded' })
+await sleep(500)
+await page.evaluate(() => {
+  localStorage.clear()
+  localStorage.setItem('gg-auth', JSON.stringify({
+    state: {
+      mode: 'guest',
+      user: {
+        parent_id: 0, phone: '',
+        children: [{ id: 1, name: '小明', age: 6, avatar_url: null }],
+        active_child_id: 1,
+      },
+      token: null, loading: false,
+    },
+    version: 0,
+  }))
+  localStorage.setItem('gg-onboarding-done', '1')
+})
+
+// ── Step 1: Normal mode baseline ──
+await page.goto(`${BASE}/classroom`, { waitUntil: 'networkidle' })
+await sleep(3000)
+await page.screenshot({ path: 'D:/GutGardenBeta/scratch/classroom_normal.png' })
+console.log('saved classroom_normal.png')
+
+// ── Step 2: Simulate editing — save new positions in localStorage ──
+// Move node1_fiber 60px right and 40px down from its default position
+const savedPositions = {
+  cloudBanner:  { x: 378, y: 0, w: 640, h: 130 },
+  taskBar:      { x: 0, y: 696, w: 378, h: 145 },
+  chestBar:     { x: 393, y: 696, w: 698, h: 145 },
+  aiPanel:      { x: 1134, y: 13, w: 320, h: 807 },
+  // node1_fiber moved +60px right, +40px down
+  node1_fiber:  { x: 304, y: 265, w: 135, h: 44 },
+  node2_ferment:{ x: 746, y: 208, w: 130, h: 44 },
+  node3_scfa:   { x: 498, y: 383, w: 150, h: 44 },
+  node4_barrier:{ x: 222, y: 611, w: 150, h: 44 },
+  node5_eco:    { x: 852, y: 620, w: 150, h: 44 },
+}
+await page.evaluate((pos) => {
+  localStorage.setItem('gg-block-positions-classroom', JSON.stringify(pos))
+}, savedPositions)
+console.log('saved edited positions to localStorage')
+
+// ── Step 3: Reload to pick up saved positions ──
+await page.goto(`${BASE}/classroom`, { waitUntil: 'networkidle' })
+await sleep(3000)
+await page.screenshot({ path: 'D:/GutGardenBeta/scratch/classroom_normal_after.png' })
+console.log('saved classroom_normal_after.png')
+
+// ── Step 4: Enter edit mode to verify DraggableBlock shows the new positions ──
+await page.keyboard.press('Control+e')
+await sleep(1500)
+await page.screenshot({ path: 'D:/GutGardenBeta/scratch/classroom_edit_after.png' })
+console.log('saved classroom_edit_after.png')
+
+await browser.close()

@@ -8,6 +8,7 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ requireRegistered = false }: ProtectedRouteProps) {
   const mode = useAuthStore((s) => s.mode)
+  const user = useAuthStore((s) => s.user)
   const loading = useAuthStore((s) => s.loading)
 
   if (loading) {
@@ -16,6 +17,11 @@ export default function ProtectedRoute({ requireRegistered = false }: ProtectedR
         <Spinner />
       </div>
     )
+  }
+
+  // No active session (fresh visitor) → land on the login page first
+  if (!user) {
+    return <Navigate to="/login" replace />
   }
 
   if (requireRegistered && mode !== 'registered') {

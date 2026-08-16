@@ -24,10 +24,10 @@ export function ToastContainer() {
 
   useEffect(() => { addToastFn = addToast; return () => { addToastFn = null } }, [addToast])
 
-  const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-garden-forest' }
+  const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-garden-mascot' }
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+    <div className="absolute top-4 right-4 z-50 flex flex-col gap-2">
       {toasts.map((t) => (
         <div key={t.id} className={`${colors[t.type]} text-white px-4 py-3 rounded-xl shadow-lg animate-slide-in`}>
           {t.message}

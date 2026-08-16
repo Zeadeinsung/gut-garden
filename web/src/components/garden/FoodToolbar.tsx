@@ -20,16 +20,16 @@ function DraggableFood({ name, label }: { name: string; label: string }) {
       {...listeners}
       {...attributes}
       style={style}
-      className="w-14 h-14 rounded-xl bg-white/80 shadow flex items-center justify-center hover:scale-110 transition-transform cursor-grab active:cursor-grabbing"
+      className="w-12 h-12 rounded-full bg-white/80 shadow flex items-center justify-center hover:scale-110 transition-transform cursor-grab active:cursor-grabbing"
     >
-      <img src={`/assets/foods/food_${name}.png`} alt={label} className="w-10 h-10" />
+      <img src={`/assets/foods/food_${name}.png`} alt={label} className="w-8 h-8" />
     </button>
   )
 }
 
 export default function FoodToolbar() {
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 bg-white/50 backdrop-blur rounded-2xl px-4 py-2">
+    <div className="flex items-center gap-2">
       {FOODS.map((f) => (
         <DraggableFood key={f.name} name={f.name} label={f.label} />
       ))}

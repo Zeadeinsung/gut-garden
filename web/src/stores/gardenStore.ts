@@ -18,13 +18,22 @@ export const useGardenStore = create<GardenStore>()(
     (set) => ({
       currentState: 'healthy',
       moistureLevel: 50,
-      gardenLevel: 1,
+      gardenLevel: 5, // TEMP(预览): 丰收期效果，接入计算系统后改回 1
       gardenXp: 0,
       interactionCount: 0,
       setState: (s) => set({ currentState: s }),
       addInteraction: () => set((st) => ({ interactionCount: st.interactionCount + 1 })),
       addXp: (xp) => set((st) => ({ gardenXp: st.gardenXp + xp })),
     }),
-    { name: 'gg-garden' }
+    {
+      name: 'gg-garden',
+      // TEMP(预览): 强制显示丰收期(gardenLevel=5)看效果，接入计算系统后移除。
+      // 注意 current 先展开、persisted 后展开，避免默认值覆盖已保存的 gardenXp。
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<GardenStore>),
+        gardenLevel: 5,
+      }),
+    }
   )
 )

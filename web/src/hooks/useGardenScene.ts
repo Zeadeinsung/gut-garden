@@ -37,11 +37,17 @@ export function useGardenScene() {
     }
   }, [])
 
-  const midSrc =
-    currentState === 'healthy' ? '/assets/scenes/scene_garden_mid.png'
-      : currentState === 'high_sugar' ? '/assets/scenes/scene_garden_mid_high_sugar.png'
-      : currentState === 'dry' ? '/assets/scenes/scene_garden_mid_dry.png'
-      : '/assets/scenes/scene_garden_mid.png'
+  const layerSrc = (layer: 'sky' | 'mid' | 'front') => {
+    const suffix =
+      currentState === 'high_sugar' ? '_high_sugar'
+      : currentState === 'dry' ? '_dry'
+      : ''
+    return `/assets/scenes/scene_garden_${layer}${suffix}.png`
+  }
 
-  return { currentState, moistureLevel, midSrc, applyFeed }
+  const skySrc = layerSrc('sky')
+  const midSrc = layerSrc('mid')
+  const frontSrc = layerSrc('front')
+
+  return { currentState, moistureLevel, skySrc, midSrc, frontSrc, applyFeed }
 }

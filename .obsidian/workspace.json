@@ -1,0 +1,234 @@
+{
+  "main": {
+    "id": "2a7431950d485008",
+    "type": "split",
+    "children": [
+      {
+        "id": "7f1d8c7b940576c6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ddca684e9daee294",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "docs/gut-garden_比赛交流材料.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "gut-garden_比赛交流材料"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8390cf31e5b7eee2",
+    "type": "split",
+    "children": [
+      {
+        "id": "a5281ff4b4b60d3a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ebbda9ec0510236d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "cd9ceda460d37b75",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "5b152358409ec035",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "25acdd64ceda1736",
+    "type": "split",
+    "children": [
+      {
+        "id": "aa02887346156a85",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d24ed7a4d9e778c0",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "be2d4750ef45c68c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "16cc5107b24c74c3",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "88c2021d81fad6c7",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "6caa82fd3214cc15",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "ddca684e9daee294",
+  "lastOpenFiles": [
+    "docs/30-system-design/美术素材清单与交付规范.md",
+    "docs/gut-garden_比赛交流材料.md",
+    "web/dist/assets/ClassroomPage-D12GeLnV.js",
+    "web/dist/assets/CheckinPage-CeG0EBUW.js",
+    "web/dist/assets/BadgePage-BCo2ztcX.js",
+    "web/dist/assets/index-B4nQzB3a.js",
+    "web/dist/assets/index-lmJGUCH5.css",
+    "web/dist/assets/index-DPTBL_Uw.css",
+    "web/dist/assets/StoolPage-kMmzXJjz.js",
+    "web/dist/assets/StoolModal-BxiIPurN.js",
+    "web/dist/assets/SettingsPage-HLDn3YWm.js",
+    "web/dist/assets/ReportPage-DOe-RrMm.js",
+    "_tmp_issue_body.md",
+    "docs/30-system-design/gut-garden_任务看板.md",
+    "docs/30-system-design/gut-garden_前端架构设计.md",
+    "docs/30-system-design/gut-garden_系统设计.md",
+    "docs/协作开发指南.md",
+    "docs/30-system-design/gut-garden_tasks.md",
+    "README.md",
+    "server/node_modules/@fastify/jwt/example/UsingCertificates.md",
+    "web/dist/assets/vite-BF8QNONU.svg",
+    "web/dist/assets/hero-CLDdwZDr.png",
+    "web/dist/icons.svg",
+    "web/dist/favicon.svg",
+    "web/node_modules/@types/react-dom/README.md",
+    "web/node_modules/@types/react/README.md",
+    "web/node_modules/set-cookie-parser/README.md",
+    "server/node_modules/@typescript/typescript-win32-x64/README.md",
+    "server/node_modules/@esbuild/win32-x64/README.md",
+    "server/node_modules/tsx/README.md",
+    "server/node_modules/@types/node/README.md",
+    "server/node_modules/fastify/SPONSORS.md",
+    "server/node_modules/fastify/SECURITY.md",
+    "server/node_modules/dotenv/skills/dotenvx/SKILL.md",
+    "server/node_modules/dotenv/skills/dotenv/SKILL.md",
+    "server/node_modules/dotenv/README.md",
+    "server/node_modules/dotenv/README-es.md",
+    "server/node_modules/mnemonist/README.md",
+    "server/node_modules/fastify/docs/resources/encapsulation_context.svg",
+    "server/node_modules/fastify/docs/Reference/Warnings.md",
+    "server/node_modules/fastify/docs/Reference/Validation-and-Serialization.md",
+    "server/node_modules/steed/assets/banner.svg",
+    "server/node_modules/steed/assets/banner.png",
+    "server/node_modules/steed/assets/banner-inverse.svg",
+    "server/node_modules/steed/assets/banner-inverse.png",
+    "web/node_modules/lottie-web/test/animations/footage/images/img_1.jpg"
+  ]
+}

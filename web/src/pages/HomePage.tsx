@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCheckinStore } from '@/stores/checkinStore'
 import { useGardenStore } from '@/stores/gardenStore'
@@ -9,37 +10,59 @@ import { useEditorPage } from '@/hooks/useEditorPage'
 import Header from '@/components/navigation/Header'
 import { UiIcon } from '@/lib/uiIcons'
 
-const STAGE_NAMES = ['种子', '幼苗', '成长', '丰收', '大师', '终极']
-const STAGE_ICONS = ['sprout', 'leaf', 'flower', 'apple', 'tree', 'trophy']
+const STAGE_NAMES = ['幼苗期', '成长期', '繁荣期', '茂盛期', '丰收期', '守护期']
+const STAGE_ICONS = ['sprout', 'leaf', 'flower', 'tree', 'wheat', 'trophy']
 
 const KINGKONGS = [
-  { id: 'kingkong1', path: '/garden', label: '探索花园', icon: 'leaf', desc: '照顾小居民\n让花园更繁荣', scene: 'from-green-100 to-green-50', arrow: '#4E6A3E', img: '/assets/ui/ui_kingkong_garden.png' },
-  { id: 'kingkong2', path: '/checkin', label: '每日打卡', icon: 'checkCircle', desc: '完成健康任务\n培养好习惯', scene: 'from-orange-100 to-orange-50', arrow: '#F39C5B', img: '/assets/ui/ui_kingkong_checkin.png' },
-  { id: 'kingkong3', path: '/classroom', label: '知识课堂', icon: 'book', desc: '有趣的肠道知识\n边玩边学', scene: 'from-blue-100 to-blue-50', arrow: '#5BA8F3', img: '/assets/ui/ui_kingkong_class.png' },
-  { id: 'kingkong4', path: '/badges', label: '成长徽章', icon: 'trophy', desc: '解锁成就徽章\n见证成长', scene: 'from-purple-100 to-purple-50', arrow: '#9B6AB3', img: '/assets/ui/ui_kingkong_badges.png' },
+  { id: 'kingkong1', path: '/garden', label: '探索花园', icon: 'leaf', desc: '照顾小居民\n让花园更繁荣', borderColor: '#4CAF50', titleColor: '#2E7D32', fill: 'linear-gradient(180deg,#E8F5E8,#C8E6C9)', img: '/assets/ui/ui_kingkong_garden.png' },
+  { id: 'kingkong2', path: '/checkin', label: '每日打卡', icon: 'checkCircle', desc: '完成健康任务\n培养好习惯', borderColor: '#FF9800', titleColor: '#D84315', fill: 'linear-gradient(180deg,#FFF3E0,#FFE0B2)', img: '/assets/ui/ui_kingkong_checkin.png' },
+  { id: 'kingkong3', path: '/classroom', label: '知识课堂', icon: 'book', desc: '有趣的肠道知识\n边玩边学', borderColor: '#2196F3', titleColor: '#1976D2', fill: 'linear-gradient(180deg,#E3F2FD,#BBDEFB)', img: '/assets/ui/ui_kingkong_class.png' },
+  { id: 'kingkong4', path: '/badges', label: '成长徽章', icon: 'trophy', desc: '解锁成就徽章\n见证成长', borderColor: '#9B6AB3', titleColor: '#7B1FA2', fill: 'linear-gradient(180deg,#F3E5F5,#E1BEE7)', img: '/assets/ui/ui_kingkong_badges.png' },
 ]
 
-const AI_QUESTIONS = ['🍎 今天吃了什么？', '💩 便便颜色正常吗？', '🌱 如何改善便秘？']
+const AI_QUESTIONS = ['今天吃了什么？', '便便颜色正常吗？', '如何改善便秘？']
 
-// Default positions from JSON spec (offset by header height: 72px)
-// Canvas is 1280 wide; scroll area ends ~710px (header 72 + dock 68).
+// 金刚区卡片屋子轮廓：SVG 平滑贝塞尔曲线（圆润拱顶 + 直壁屋身 + 圆底角）
+// objectBoundingBox 坐标系（0~1），随卡片尺寸缩放
+const HOUSE_PATH = 'M 0.5,0 C 0.46,0.012 0.40,0.03 0.32,0.06 C 0.22,0.095 0.012,0.15 0.012,0.20 L 0.012,0.86 C 0.012,0.90 0.02,0.92 0.035,0.94 L 0.965,0.94 C 0.98,0.92 0.988,0.90 0.988,0.86 L 0.988,0.20 C 0.988,0.15 0.78,0.095 0.68,0.06 C 0.60,0.03 0.54,0.012 0.5,0 Z'
+const HOUSE_CLIP = 'url(#kk-house)'
+
+const hexToRgba = (hex: string, a: number) => {
+  const n = parseInt(hex.replace('#', ''), 16)
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`
+}
+
+// 描边用浅色调：混合 62% 白色，降低饱和度/深度
+const softBorder = (hex: string, a: number) => {
+  const n = parseInt(hex.replace('#', ''), 16)
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255
+  const w = 0.62
+  return `rgba(${Math.round(r + (255 - r) * w)}, ${Math.round(g + (255 - g) * w)}, ${Math.round(b + (255 - b) * w)}, ${a})`
+}
+
+// Canvas is 1280 wide; content scrolls vertically as needed.
 const HOME_DEFAULTS: Record<string, BlockPos> = {
-  tasksCard:  { x: 16,  y: 16,  w: 232, h: 360 },
-  tipCard:    { x: 16,  y: 392, w: 232, h: 96 },
-  badgePanel: { x: 16,  y: 504, w: 232, h: 96 },
-  mascot:     { x: 380, y: 16,  w: 340, h: 200 },
-  heroCTA:    { x: 420, y: 238, w: 260, h: 170 },
-  aiPanel:    { x: 1032, y: 16, w: 248, h: 540 },
-  kingkong1:  { x: 260, y: 430, w: 181, h: 198 },
-  kingkong2:  { x: 453, y: 430, w: 181, h: 198 },
-  kingkong3:  { x: 646, y: 430, w: 181, h: 198 },
-  kingkong4:  { x: 839, y: 430, w: 181, h: 198 },
-  progress:   { x: 264, y: 636, w: 752, h: 64 },
+  userInfo:     { x: 16,  y: 16,  w: 264, h: 128 },
+  gardenStatus: { x: 16,  y: 156, w: 264, h: 212 },
+  tipCard:      { x: 16,  y: 378, w: 264, h: 96 },
+  welcomeBanner:{ x: 300, y: 32,  w: 380, h: 70 },
+  mascot:       { x: 300, y: 86,  w: 380, h: 180 },
+  heroCTA:      { x: 422, y: 282, w: 140, h: 140 },
+  kingkong1:    { x: 300, y: 448, w: 174, h: 230 },
+  kingkong2:    { x: 486, y: 448, w: 174, h: 230 },
+  kingkong3:    { x: 672, y: 448, w: 174, h: 230 },
+  kingkong4:    { x: 858, y: 448, w: 174, h: 230 },
+  badgePanel:   { x: 346, y: 688, w: 640, h: 100 },
+  aiPanel:      { x: 1032, y: 16, w: 248, h: 500 },
 }
 
 function getTodayKey() {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function clamp(n: number, lo: number, hi: number) {
+  return Math.max(lo, Math.min(hi, n))
 }
 
 export default function HomePage() {
@@ -52,7 +75,6 @@ export default function HomePage() {
 
   const { editing, containerRef, pos, handleMove, handleResize, handleReset } = useEditorPage('home', HOME_DEFAULTS, {
     init: (merged) => {
-      // Auto-sync kingkong2/3/4 size to match kingkong1
       const ref = merged.kingkong1 || HOME_DEFAULTS.kingkong1
       return {
         ...merged,
@@ -64,19 +86,20 @@ export default function HomePage() {
   })
 
   const childName = user?.children.find((c) => c.id === user.active_child_id)?.name ?? '宝宝'
+  const childAvatar = user?.children.find((c) => c.id === user.active_child_id)?.avatar_url
+  const stageIndex = clamp((gardenLevel || 1) - 1, 0, STAGE_NAMES.length - 1)
+
   const todayKey = getTodayKey()
   const doneCount =
     today && today.date === todayKey
       ? today.tasks.filter((t) => t.status === 'done' || t.status === 'makeup').length
       : 0
-  const stageIndex = Math.min(gardenLevel - 1, STAGE_NAMES.length - 1)
 
-  const TASK_LIST = [
-    { icon: 'leaf', label: '探索花园' },
-    { icon: 'salad', label: '健康饮食' },
-    { icon: 'moon', label: '优质睡眠' },
-    { icon: 'droplet', label: '补充水分' },
-    { icon: 'footprints', label: '活力运动' },
+  const healthScore = clamp(Math.round((moistureLevel || 0) * 0.55 + 40), 0, 100)
+  const statusRows = [
+    { icon: 'dropletLine', label: '水分', value: moistureLevel >= 60 ? '充足' : moistureLevel >= 30 ? '一般' : '不足', color: 'text-sky-500' },
+    { icon: 'saladLine', label: '营养', value: gardenLevel >= 3 ? '均衡' : '待补充', color: 'text-green-600' },
+    { icon: 'heartLine', label: '活力', value: currentState === 'dry' || currentState === 'high_sugar' ? '需关注' : '活跃', color: 'text-rose-500' },
   ]
 
   return (
@@ -86,33 +109,21 @@ export default function HomePage() {
         transparent
         leftSlot={
           <div className="flex items-center gap-2">
-            <img src="/assets/ui/ui_logo.png" alt="Gut Garden 肠道花园" className="h-9 object-contain" />
-          </div>
-        }
-        centerSlot={
-          <div>
-            <h1 className="text-base font-bold text-garden-forest leading-tight">
-              欢迎回来，{childName}！👋
-            </h1>
-            <p className="text-xs text-gray-400">你的肠道花园正在茁壮成长</p>
+            <img src="/assets/ui/ui_logo.png" alt="Gut Garden 肠道花园" className="h-[54px] object-contain -ml-[30px]" />
           </div>
         }
         userSlot={
-          <div className="flex items-center gap-1">
-            <span className="w-7 h-7 rounded-full bg-garden-sky flex items-center justify-center overflow-hidden">
-              {user?.children.find((c) => c.id === user.active_child_id)?.avatar_url ? (
-                <img
-                  src={user.children.find((c) => c.id === user.active_child_id)!.avatar_url!}
-                  alt=""
-                  className="w-full h-full rounded-full object-cover"
-                />
+          <div className="flex items-center gap-1.5">
+            <span className="w-9 h-9 rounded-full bg-garden-sky flex items-center justify-center overflow-hidden ring-2 ring-white/90 shadow-md shrink-0">
+              {childAvatar ? (
+                <img src={childAvatar} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
                 <img src="/assets/ui/ui_avatar_default_child.png" alt="" className="w-full h-full rounded-full object-cover" />
               )}
             </span>
-            <span className="text-[10px] font-semibold text-garden-forest bg-green-100 px-1.5 py-0.5 rounded-full whitespace-nowrap inline-flex items-center gap-1">
-              <UiIcon name="sprout" size={12} />
-              Lv.{gardenLevel} {STAGE_NAMES[stageIndex]}阶段
+            <span className="text-[10px] font-semibold text-white bg-[#4CAF50] px-2 py-1 rounded-full whitespace-nowrap inline-flex items-center gap-1 shadow-sm">
+              <UiIcon name="sprout" size={11} />
+              Lv.{gardenLevel}
             </span>
           </div>
         }
@@ -132,89 +143,127 @@ export default function HomePage() {
 
       {/* Absolute positioning context */}
       <div ref={containerRef} className="flex-1 relative min-h-0">
-        {/* Left column — 花园状态 + 小贴士 + 阶段 */}
+
+        {/* Left column — user info */}
         <DraggableBlock
-          blockId="tasksCard" defaultPos={pos('tasksCard')}
+          blockId="userInfo" defaultPos={pos('userInfo')}
           editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}
         >
-          <div className="glass-card p-4 h-full flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-lg flex items-center text-gray-500"><UiIcon name="clipboard" size={17} /></span>
-                <h3 className="font-bold text-sm text-garden-forest">今日任务</h3>
-              </div>
-              <span className="text-xs font-bold text-garden-forest bg-green-100 px-2 py-0.5 rounded-full">
-                {doneCount}/5
-              </span>
-            </div>
-
-            <ProgressBar value={doneCount} max={5} color="bg-garden-forest" />
-
-            <div className="flex-1 flex flex-col justify-center gap-1.5 py-2">
-              {TASK_LIST.map((t, i) => {
-                const done = i < doneCount
-                return (
-                  <div
-                    key={t.label}
-                    className={`flex items-center gap-2 rounded-xl px-3 py-1.5 ${
-                      done ? 'bg-green-50' : 'bg-white/70 border border-white/80'
-                    }`}
-                  >
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
-                      done ? 'bg-green-500 text-white' : 'bg-gray-100'
-                    }`}>
-                      {done ? <UiIcon name="check" size={11} /> : <UiIcon name={t.icon} size={11} className="opacity-40 grayscale" />}
-                    </span>
-                    <span className={`text-xs ${done ? 'text-green-600 line-through' : 'text-gray-600'}`}>
-                      {t.label}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* Status chips */}
-            <div className="border-t border-white/60 pt-2 flex justify-around">
-              {[
-                { icon: 'droplet', label: '水分充足', on: moistureLevel >= 40 },
-                { icon: 'sprout', label: '菌群活跃', on: currentState !== 'dry' },
-                { icon: 'shield', label: '屏障稳固', on: currentState !== 'high_sugar' },
-              ].map((m) => (
-                <span key={m.label} className="flex items-center gap-1 rounded-full px-2 py-0.5 bg-white/70 whitespace-nowrap">
-                  <UiIcon name={m.icon} size={12} className={m.on ? '' : 'opacity-40 grayscale'} />
-                  <span className={`text-[9px] ${m.on ? 'text-gray-500' : 'text-gray-300'}`}>{m.label}</span>
-                </span>
-              ))}
+          <div className="w-full h-full flex items-center px-3 relative overflow-hidden">
+            <span className="w-16 h-16 rounded-full bg-white shadow-inner flex items-center justify-center overflow-hidden shrink-0 ring-[3px] ring-white/90 relative z-10">
+              {childAvatar ? (
+                <img src={childAvatar} alt="" className="w-full h-full rounded-full object-cover" />
+              ) : (
+                <img src="/assets/ui/ui_avatar_default_child.png" alt="" className="w-full h-full rounded-full object-cover" />
+              )}
+            </span>
+            <div
+              className="relative z-0 -ml-8 flex-1 min-w-0 h-[54px] rounded-full flex flex-col justify-center pl-10 pr-4 border border-white/60 backdrop-blur-md"
+              style={{ background: 'linear-gradient(90deg, rgba(196,229,186,0.65), rgba(255,255,255,0.45) 55%, rgba(255,241,202,0.65))' }}
+            >
+              <p className="font-bold text-[15px] text-gray-800 leading-tight truncate">{childName}</p>
+              <p className="text-[11px] mt-1 leading-tight whitespace-nowrap">
+                <span className="font-bold text-amber-600">Lv.{gardenLevel}</span>
+                <span className="text-green-600 font-medium ml-1.5">{STAGE_NAMES[stageIndex].replace('期', '')}阶段</span>
+              </p>
             </div>
           </div>
         </DraggableBlock>
 
+        {/* Left column — garden status */}
+        <DraggableBlock
+          blockId="gardenStatus" defaultPos={pos('gardenStatus')}
+          editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}
+        >
+          <div className="solid-card card-module p-3 h-full flex flex-col">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-sm text-green-800 inline-flex items-center gap-1">
+                <UiIcon name="leafLine" size={14} className="text-green-600" />今日花园状态
+              </h3>
+              <button className="text-gray-300 hover:text-gray-400" title="帮助"><UiIcon name="info" size={14} /></button>
+            </div>
+            <div className="flex-1 flex items-center justify-center py-1">
+              <div className="relative w-[86px] h-[86px]">
+                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(78,106,62,0.12)" strokeWidth="12" />
+                  <circle
+                    cx="50" cy="50" r="42" fill="none" stroke="url(#healthGrad)" strokeWidth="12" strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 42}`}
+                    strokeDashoffset={`${2 * Math.PI * 42 * (1 - Math.min(100, Math.max(0, healthScore)) / 100)}`}
+                  />
+                  <defs>
+                    <linearGradient id="healthGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#A5D6A7" />
+                      <stop offset="100%" stopColor="#2E7D32" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-[30px] font-bold text-green-700 leading-none">{healthScore}</span>
+                  <span className="text-[9px] text-green-600 mt-0.5">健康指数</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-center text-[11px] text-green-700">健康指数：良好</p>
+            <div className="grid grid-cols-3 gap-1.5 mt-2">
+              {statusRows.map((r) => (
+                <div key={r.label} className="flex flex-col items-center bg-white/55 border border-white/60 rounded-xl py-2">
+                  <UiIcon name={r.icon} size={18} className={r.color} />
+                  <span className="text-[11px] text-gray-400 mt-1">{r.label}</span>
+                  <span className="text-xs font-semibold text-gray-600">{r.value}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-auto pt-2 border-t border-white/70 flex items-center justify-between gap-2">
+              <span className="text-[9px] text-gray-400 whitespace-nowrap">今日任务</span>
+              <div className="flex-1"><ProgressBar value={doneCount} max={5} color="bg-garden-mascot" /></div>
+              <span className="text-[10px] font-bold text-garden-forest">{doneCount}/5</span>
+            </div>
+          </div>
+        </DraggableBlock>
+
+        {/* Left column — tip */}
         <DraggableBlock
           blockId="tipCard" defaultPos={pos('tipCard')}
           editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}
         >
-          <div className="glass-card p-4 h-full">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-base flex items-center"><UiIcon name="lightbulb" size={15} className="text-amber-500" /></span>
-              <h3 className="font-bold text-xs text-garden-forest">今日小贴士</h3>
+          <div className="cream-card card-module p-3.5 h-full">
+            <div className="flex items-center gap-1.5 mb-1">
+              <h3 className="font-bold text-sm text-amber-800">今日小贴士</h3>
+              <span className="ml-auto flex items-center"><UiIcon name="lightbulbLine" size={15} className="text-amber-500" /></span>
             </div>
-            <p className="text-xs text-gray-500 leading-relaxed">多吃蔬菜和水果，帮助益生菌茁壮成长哦！</p>
+            <p className="text-[11px] text-gray-500 leading-relaxed">多吃蔬菜和水果，帮助益生菌茁壮成长哦！</p>
           </div>
         </DraggableBlock>
 
-        {/* Center — 吉祥物 + 扫描球体 */}
+        {/* 欢迎语 */}
+        <DraggableBlock
+          blockId="welcomeBanner" defaultPos={pos('welcomeBanner')}
+          editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}
+        >
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center scale-150">
+              <h1 className="text-xl font-bold text-garden-forest leading-tight">
+                欢迎回来，{childName}！
+              </h1>
+              <p className="text-xs text-emerald-600 mt-0.5">你的肠道花园正在茁壮成长</p>
+            </div>
+          </div>
+        </DraggableBlock>
+
+        {/* 小园精灵 + 对话框 */}
         <DraggableBlock
           blockId="mascot" defaultPos={pos('mascot')}
           editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}
         >
-          <div className="relative flex items-center justify-center h-full">
-            <div className="absolute -top-1 left-4 bg-white rounded-2xl rounded-bl-sm px-3 py-1.5 text-xs text-gray-600 shadow-md z-10">
-              今天一起照顾小居民吧！❤️
+          <div className="flex items-center justify-center h-full pl-6">
+            <div className="bg-white rounded-3xl rounded-bl-sm px-4 py-2.5 text-sm text-gray-600 shadow-md shrink-0 mr-2 leading-relaxed text-center ml-2">
+              今天一起照顾<br/>小居民吧！
             </div>
             <img
-              src="/assets/characters/lottie/char_xiaoyuan_idle.png"
+              src="/assets/characters/png/char_bighead_home.png"
               alt="菌小园"
-              className="h-[78%] object-contain drop-shadow-lg animate-bounce-slow"
+              className="h-[82%] object-contain drop-shadow-lg animate-bounce-slow"
             />
           </div>
         </DraggableBlock>
@@ -224,26 +273,51 @@ export default function HomePage() {
           editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}
         >
           <div className="relative h-full flex items-center justify-center">
-            <span className="absolute top-1 right-1 bg-garden-coral/90 text-white text-[9px] px-2 py-0.5 rounded-full font-medium z-10">
+            <span className="absolute top-0 right-0 bg-[#FF9800]/90 text-white text-[9px] px-2 py-0.5 rounded-full font-medium z-10">
               推荐 每日一次
             </span>
             <button
-              className="relative w-[126px] h-[126px] rounded-full text-white flex flex-col items-center justify-center gap-0.5 hover:scale-105 active:scale-95 transition-transform"
-              style={{
-                background: 'radial-gradient(circle at 35% 30%, #FFD9A0 0%, #FFB074 25%, #F38D83 55%, #E0707A 100%)',
-                boxShadow:
-                  '0 14px 34px rgba(243, 141, 131, 0.45), inset 0 -8px 18px rgba(0,0,0,0.14), inset 0 5px 12px rgba(255,255,255,0.5)',
-              }}
+              className="flex flex-col items-center justify-center gap-1 hover:scale-105 active:scale-95 transition-transform origin-center relative"
               onClick={() => setStoolModalOpen(true)}
+              style={{
+                animation: 'floatBlink 2s ease-in-out infinite',
+              }}
             >
-              <UiIcon name="camera" size={26} className="text-white" />
-              <span className="font-bold text-xs leading-tight mt-0.5">今日肠道扫描</span>
-              <span className="text-[9px] text-white/85 leading-tight px-3 text-center">拍便便 · AI分析</span>
+              <div
+                className="absolute rounded-full"
+                style={{
+                  top: '-1.5rem',
+                  bottom: '-1.5rem',
+                  left: '-3rem',
+                  right: '-3rem',
+                  background: 'radial-gradient(ellipse at center, rgba(255,60,0,0.9) 0%, rgba(255,80,20,0.7) 30%, rgba(255,120,50,0.4) 55%, transparent 75%)',
+                  filter: 'blur(4px)',
+                }}
+              />
+              <UiIcon name="camera" size={48} className="text-white relative" />
+              <span className="font-bold text-2xl text-white leading-tight relative whitespace-nowrap">今日肠道扫描</span>
+              <span className="text-sm text-white/80 leading-tight text-center relative">扫码一次</span>
             </button>
+            <style>{`
+              @keyframes floatBlink {
+                0%, 100% { transform: translateY(0); opacity: 1; }
+                40% { transform: translateY(-6px); opacity: 0.7; }
+                70% { transform: translateY(-2px); opacity: 0.85; }
+              }
+            `}</style>
           </div>
         </DraggableBlock>
 
-        {/* Bottom feature cards */}
+        {/* 金刚区屋形轮廓定义（平滑贝塞尔） */}
+        <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
+          <defs>
+            <clipPath id="kk-house" clipPathUnits="objectBoundingBox">
+              <path d={HOUSE_PATH} />
+            </clipPath>
+          </defs>
+        </svg>
+
+        {/* Bottom feature cards — colored border style */}
         {KINGKONGS.map((kk) => (
           <DraggableBlock
             key={kk.id}
@@ -253,114 +327,144 @@ export default function HomePage() {
             containerRef={containerRef}
             onMove={handleMove} onResize={handleResize}
           >
-            <button
-              className="glass-card flex flex-col w-full h-full p-3 hover:shadow-md hover:scale-[1.02] transition-all active:scale-95"
-              onClick={() => navigate(kk.path)}
-            >
-              {/* Top: 3D scene illustration */}
-              <div className={`w-full flex-1 min-h-0 rounded-2xl bg-gradient-to-b ${kk.scene} flex items-center justify-center relative overflow-hidden`}>
-                {kk.img ? (
-                  <img src={kk.img} alt={kk.label} className="w-full h-full object-contain p-1.5" />
-                ) : (
-                  <>
-                    <span className="absolute top-1.5 left-2 text-[10px] opacity-60 text-amber-400"><UiIcon name="sparkles" size={12} /></span>
-                    <span className="text-4xl drop-shadow-md"><UiIcon name={kk.icon} size={38} /></span>
-                    <span className="absolute bottom-1.5 right-2 text-[10px] opacity-60 text-green-500"><UiIcon name="leaf" size={12} /></span>
-                  </>
-                )}
-              </div>
-              {/* Bottom: title + desc + arrow */}
-              <div className="flex items-center justify-between gap-1 mt-2">
-                <div className="text-left min-w-0">
-                  <span className="block font-bold text-sm text-gray-700 leading-tight">{kk.label}</span>
-                  <span className="block text-[9px] text-gray-400 leading-relaxed mt-0.5 whitespace-pre-line">{kk.desc}</span>
+            <div className="w-full h-full hover:scale-[1.02] active:scale-95 transition-all relative"
+                 style={{ filter: 'drop-shadow(0 3px 8px rgba(78,106,62,0.14))' }}>
+              {/* 图片独立于 clipPath 之外，允许超出卡片边界 */}
+              <img
+                src={kk.img} alt={kk.label}
+                className="absolute top-0 left-1/2 w-[65%] object-contain drop-shadow-sm scale-150 z-10 pointer-events-none -translate-x-1/2 -translate-y-[5%]"
+              />
+              <button
+                className="w-full h-full p-1.5 relative"
+                style={{ clipPath: HOUSE_CLIP, background: softBorder(kk.borderColor, 0.55) }}
+                onClick={() => navigate(kk.path)}
+              >
+                <div className="w-full h-full flex flex-col items-center justify-end pb-2 px-2 relative"
+                     style={{ clipPath: HOUSE_CLIP, background: kk.fill }}>
+                  <div className="px-2 pb-6 pt-[42%] text-center">
+                    <span className="block font-bold text-lg leading-tight" style={{ color: kk.titleColor }}>{kk.label}</span>
+                    <span className="block text-xs text-gray-500 leading-relaxed mt-0.5 whitespace-pre-line">{kk.desc}</span>
+                  </div>
+                  {/* 右下角箭头：主题色圆角方块 + 白色实心三角（参照参考图） */}
+                  <div className="absolute right-[9px] bottom-[9px] w-[22px] h-[22px] rounded-[8px] flex items-center justify-center pointer-events-none shadow-sm"
+                       style={{ background: kk.borderColor }}>
+                    <svg width="13" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+                      <path d="M3.5 1.5 L13 7.5 L3.5 13.5 Z" fill="white" />
+                    </svg>
+                  </div>
                 </div>
-                <span
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md shrink-0"
-                  style={{ background: kk.arrow }}
-                >
-                  →
-                </span>
-              </div>
-            </button>
+              </button>
+            </div>
           </DraggableBlock>
         ))}
 
-        {/* 花园成长进度（替代花园阶段） */}
+        {/* 花园成长进度 bar — 参照参考图：米色底 + 大标题 + 大节点 + 连接线 */}
         <DraggableBlock
           blockId="badgePanel" defaultPos={pos('badgePanel')}
           editing={editing} movable
           containerRef={containerRef} onMove={handleMove} onResize={handleResize}
         >
-          <div className="glass-card p-3 h-full flex flex-col justify-center gap-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] text-gray-400">花园成长进度</span>
-              <span className="text-xs font-bold text-garden-forest">
-                已成长 <span className="text-garden-gold">{streak}</span> 天
-              </span>
+          <div
+            className="card-module h-full flex items-center gap-3 px-4"
+            style={{
+              borderRadius: '20px',
+              boxShadow: '0 2px 10px rgba(78,106,62,0.05)',
+            }}
+          >
+            <div className="shrink-0 self-center">
+              <p className="text-[18px] font-bold text-[#2E7D32] leading-tight whitespace-nowrap">花园成长进度</p>
+              <p className="text-[13px] font-medium text-[#666] leading-tight whitespace-nowrap mt-1">
+                已成长 <span className="text-[#FF6D00] font-bold">{streak}</span> 天
+              </p>
             </div>
-            <div className="flex items-center justify-between">
-              {STAGE_NAMES.map((name, i) => {
-                const unlocked = i <= stageIndex
-                const isCurrent = i === stageIndex
-                return (
-                  <div key={name} className="flex flex-col items-center gap-0.5">
+            <div className="flex-1 min-w-0 flex flex-col justify-center px-14">
+              {/* 圆圈 + 连接线 */}
+              <div className="relative flex items-center justify-between px-[6px]">
+                <div className="absolute left-[24px] right-[24px] top-1/2 -translate-y-1/2 h-[8px] rounded-full bg-[#E8E4D5]" />
+                {STAGE_NAMES.map((name, i) => {
+                  const unlocked = i <= stageIndex
+                  const isCurrent = i === stageIndex
+                  return (
+                    <Fragment key={name}>
+                      {i > 0 && (
+                        <div className={`relative z-10 flex-1 h-[8px] rounded-full ${i <= stageIndex + 1 ? 'bg-gradient-to-r from-[#FFB74D] to-[#FF9800]' : 'bg-transparent'}`} />
+                      )}
+                      <span
+                        className={`relative z-10 w-[36px] h-[36px] rounded-full border-2 flex items-center justify-center shadow-sm shrink-0 ${
+                          unlocked
+                            ? 'border-[#66BB6A] bg-gradient-to-b from-[#8BC34A] to-[#4CAF50]'
+                            : 'border-[#D8D4C6] bg-[#E8E4DA]'
+                        }`}
+                      >
+                        {unlocked
+                          ? <UiIcon name={STAGE_ICONS[i]} size={20} className="text-white drop-shadow-sm" />
+                          : <UiIcon name="lock" size={15} className="text-[#B0AB9C]" />}
+                      </span>
+                    </Fragment>
+                  )
+                })}
+              </div>
+              {/* 阶段名称标签 */}
+              <div className="flex justify-between px-[6px] mt-2">
+                {STAGE_NAMES.map((name, i) => {
+                  const unlocked = i <= stageIndex
+                  const isCurrent = i === stageIndex
+                  return (
                     <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${
-                        unlocked ? 'bg-garden-forest text-white' : 'bg-gray-200 text-gray-400'
+                      key={name}
+                      className={`text-[10px] leading-none whitespace-nowrap text-center ${
+                        isCurrent ? 'text-[#2E7D32] font-bold' : unlocked ? 'text-[#5B8C4E]' : 'text-[#A8A298]'
                       }`}
                     >
-                      {unlocked ? <UiIcon name={STAGE_ICONS[i]} size={11} /> : <UiIcon name="lock" size={11} />}
-                    </span>
-                    <span className={`text-[8px] leading-none ${isCurrent ? 'text-garden-forest font-bold' : unlocked ? 'text-green-600' : 'text-gray-300'}`}>
                       {name}
                     </span>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
-            <div className="text-right">
-              <span className="text-[9px] text-gray-400">下一阶段奖励：</span>
-              <span className="text-[10px] font-bold text-garden-forest inline-flex items-center gap-1">神秘菌屋 <UiIcon name="house" size={12} /></span>
+            <div className="shrink-0 self-center flex flex-col items-center gap-1">
+              <img src="/assets/ui/ui_reward_house.png" alt="下一份惊喜" className="h-[42px] w-[42px] object-contain" />
+              <span className="text-[12px] font-semibold text-[#FF9800] leading-none whitespace-nowrap">下一份惊喜</span>
             </div>
           </div>
         </DraggableBlock>
 
-        {/* Right panel — 菌小园助手 */}
+        {/* Right panel — AI assistant */}
         <DraggableBlock
           blockId="aiPanel" defaultPos={pos('aiPanel')}
           editing={editing} movable resizable
           containerRef={containerRef} onMove={handleMove} onResize={handleResize}
         >
-          <div className="glass-card p-4 h-full flex flex-col">
+          <div className="solid-card card-module p-4 h-full flex flex-col">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-garden-cream flex items-center justify-center shadow-inner">
-                  <UiIcon name="bot" size={18} className="text-garden-forest" />
+                <span className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center shadow-md overflow-hidden">
+                  <img src="/assets/characters/png/char_xiaoyuan.png" alt="菌小园助手" className="w-7 h-7 object-contain" />
                 </span>
-                <h3 className="font-bold text-sm text-garden-forest">菌小园助手</h3>
+                <h3 className="font-bold text-sm text-green-700">菌小园助手</h3>
               </div>
             </div>
 
             <div className="flex-1 overflow-auto">
-              <div className="bg-garden-cream rounded-xl rounded-bl-sm p-3 mb-2">
-                <p className="text-xs text-gray-500">嗨！我是你的AI菌小园助手~</p>
+              <div className="bg-[#E8F5E8] rounded-xl rounded-bl-sm p-3 mb-2">
+                <p className="text-xs text-gray-600">嗨！我是你的AI菌小园助手~</p>
               </div>
-              <div className="bg-white/70 rounded-xl rounded-bl-sm p-3 mb-3">
+              <div className="bg-white rounded-xl rounded-bl-sm p-3 mb-3 border border-black/5">
                 <p className="text-xs text-gray-500">今天想了解什么呢？</p>
               </div>
               <div className="flex flex-col gap-1.5 mb-3">
                 {AI_QUESTIONS.map((q) => (
                   <button
                     key={q}
-                    className="text-xs text-left text-gray-600 hover:text-garden-forest bg-white/60 rounded-lg px-3 py-2 hover:bg-white/90 transition-colors"
+                    className="group flex items-center justify-between gap-2 text-xs text-left text-gray-600 hover:text-garden-forest bg-white/80 rounded-xl px-3 py-2 hover:bg-white transition-colors border border-black/5"
                   >
-                    {q}
+                    <span>{q}</span>
+                    <span className="text-gray-300 group-hover:text-garden-forest shrink-0">›</span>
                   </button>
                 ))}
               </div>
               <button
-                className="w-full py-2 bg-garden-forest text-white rounded-xl text-xs font-bold hover:bg-[#3d5530] active:scale-95 transition-all"
+                className="w-full py-2 bg-[#4CAF50] text-white rounded-xl text-xs font-bold hover:bg-[#43A047] active:scale-95 transition-all"
                 onClick={() => setAiChatOpen(true)}
               >
                 和我聊天
@@ -370,9 +474,9 @@ export default function HomePage() {
             <div className="mt-3 pt-3 border-t border-white/60 text-xs shrink-0">
               <p className="font-bold text-gray-500 mb-1.5 inline-flex items-center gap-1"><UiIcon name="chart" size={13} />今日观察</p>
               <ul className="text-[11px] text-gray-400 space-y-1">
-                <li className="inline-flex items-center gap-1"><UiIcon name="droplet" size={11} className="text-sky-500" />连续 {streak} 天喝水达标</li>
-                <li className="inline-flex items-center gap-1"><UiIcon name="tree" size={11} className="text-green-500" />蔬菜摄入稍少，建议多吃深色蔬菜</li>
-                <li className="inline-flex items-center gap-1"><UiIcon name="handshake" size={11} className="text-amber-500" />今日互动 {interactionCount} 次</li>
+                <li className="inline-flex items-center gap-1"><UiIcon name="dropletLine" size={11} className="text-sky-500" />连续 {streak} 天喝水达标</li>
+                <li className="inline-flex items-center gap-1"><UiIcon name="treeLine" size={11} className="text-green-500" />蔬菜摄入稍少，建议多吃深色蔬菜</li>
+                <li className="inline-flex items-center gap-1"><UiIcon name="handshakeLine" size={11} className="text-amber-500" />今日互动 {interactionCount} 次</li>
               </ul>
               <button
                 className="text-garden-forest hover:underline mt-1.5 text-[11px] font-medium"

@@ -1,3 +1,5 @@
+import { UiIcon } from '@/lib/uiIcons'
+
 interface POITagProps {
   name: string
   x: number
@@ -23,7 +25,7 @@ export function POITag({ name, x, y, unlocked, onClick }: POITagProps) {
           ? 'bg-white/90 text-garden-forest'
           : 'bg-gray-200 text-gray-400'
       }`}>
-        {unlocked ? name : '🔒'}
+        {unlocked ? name : <span className="inline-flex items-center gap-1"><UiIcon name="lock" size={14} /> 未解锁</span>}
       </div>
     </button>
   )

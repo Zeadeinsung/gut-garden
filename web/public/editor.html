@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>肠道花园 — 页面布局编辑器（可拖拽）</title>
+<style>
+  :root {
+    --forest: #4E6A3E; --cream: #FFF9EF; --coral: #F38D83; --hero: #B06AB3;
+    --card-bg: rgba(255,255,255,0.9);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    background: #2A2A2A; color: #333; overflow: hidden; height: 100vh;
+  }
+
+  /* Top toolbar */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+    background: #1A1A1A; color: #fff; flex-wrap: wrap;
+  }
+  #toolbar select, #toolbar button {
+    padding: 8px 14px; border-radius: 8px; border: none; font-size: 13px; cursor: pointer; font-weight: 600;
+  }
+  #toolbar select { background: #333; color: #fff; }
+  #toolbar button { background: #444; color: #fff; }
+  #toolbar button.active { background: #5A8A3C; }
+  #toolbar button.danger { background: #C0392B; }
+  #toolbar button.primary { background: #5A8A3C; color: #fff; font-size: 14px; padding: 10px 20px; }
+  #toolbar .sep { width: 1px; height: 20px; background: #555; margin: 0 4px; }
+  #toolbar label { font-size: 12px; color: #AAA; display: flex; align-items: center; gap: 4px; }
+  #toolbar .dirty-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F38D83; margin-left: 2px; }
+
+  #canvas-wrap {
+    margin-top: 52px; height: calc(100vh - 52px); overflow: auto;
+    display: flex; align-items: flex-start; justify-content: center; padding: 20px;
+    margin-right: 300px;
+  }
+
+  #canvas {
+    position: relative;
+    width: 1280px; min-height: 800px;
+    background: var(--cream);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transition: background 0.3s;
+    padding-bottom: 80px;
+  }
+  #canvas::before {
+    content: ''; display: block; height: 28px;
+    background: #E8E0D0; border-radius: 20px 20px 0 0;
+  }
+
+  /* Blocks */
+  .block {
+    position: absolute; cursor: default;
+    border: 2px solid transparent; border-radius: 10px;
+    transition: box-shadow 0.15s;
+    background: var(--card-bg);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .block .block-label {
+    position: absolute; top: -24px; left: 4px;
+    font-size: 11px; font-weight: 700; color: #fff;
+    padding: 3px 10px; border-radius: 5px; white-space: nowrap;
+    display: none; pointer-events: none;
+    background: #333; max-width: 280px; overflow: hidden; text-overflow: ellipsis;
+  }
+  .block .block-inner {
+    width: 100%; height: 100%; overflow: hidden; border-radius: 8px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: #555; text-align: center;
+    padding: 10px; gap: 6px;
+  }
+  .block .block-inner .block-icon { font-size: 24px; }
+  .block .block-inner .block-name { font-size: 13px; font-weight: 700; line-height: 1.3; }
+  .block .block-inner .block-notes-preview { font-size: 10px; color: #999; font-style: italic; line-height: 1.3; max-height: 28px; overflow: hidden; }
+  .block .block-inner .block-notes-indicator {
+    position: absolute; bottom: 4px; right: 6px;
+    font-size: 12px; opacity: 0.7;
+  }
+  .block .block-handle {
+    position: absolute; top: 4px; right: 4px;
+    width: 22px; height: 22px; border-radius: 4px;
+    background: rgba(0,0,0,0.5); color: #fff;
+    display: none; align-items: center; justify-content: center;
+    font-size: 12px; cursor: grab;
+  }
+  .block .resize-handle {
+    position: absolute; bottom: 0; right: 0;
+    width: 14px; height: 14px; border-radius: 0 0 8px 0;
+    background: rgba(78,106,62,0.5); cursor: nwse-resize;
+    display: none;
+  }
+
+  /* Edit mode */
+  body.editing .block {
+    border-color: rgba(78,106,62,0.4); cursor: move;
+  }
+  body.editing .block:hover {
+    box-shadow: 0 0 0 3px rgba(78,106,62,0.3), 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 10;
+  }
+  body.editing .block .block-label { display: block; }
+  body.editing .block .block-handle { display: flex; }
+  body.editing .block .resize-handle { display: block; }
+
+  /* Block color codes */
+  .block.header-block { background: #E8F0E0; }
+  .block.sidebar-block { background: #FEF8F0; }
+  .block.main-block { background: #FFF; }
+  .block.ai-block { background: #F5F0FA; }
+  .block.nav-block { background: #F0EDE4; }
+  .block.cta-block { background: #FFF5F5; }
+  .block.dock-block { background: #FFF9EF; border: 2px dashed #D0C8B8; border-radius: 12px; }
+
+  .block.dragging { opacity: 0.7; z-index: 100 !important; }
+
+  /* ====== DOCK AREA ====== */
+  #dock-area {
+    position: absolute; bottom: 8px; left: 16px; right: 16px; height: 66px;
+    background: rgba(255,249,239,0.95); backdrop-filter: blur(12px);
+    border-top: 1px solid #E8E0D0;
+    border-radius: 16px;
+    display: flex; align-items: flex-end; justify-content: center; gap: 0;
+    padding: 4px 8px 4px 8px; z-index: 60;
+  }
+  body.editing #dock-area { border: 2px dashed rgba(176,106,179,0.5); }
+  .dock-slot {
+    flex: 1; max-width: 76px; text-align: center; cursor: pointer;
+    padding: 4px 2px 2px 2px; border-radius: 10px; position: relative;
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    transition: background 0.2s; min-height: 54px;
+  }
+  body.editing .dock-slot {
+    border: 1px dashed rgba(0,0,0,0.12); cursor: move;
+  }
+  body.editing .dock-slot:hover { background: rgba(176,106,179,0.08); }
+  .dock-slot .di { font-size: 20px; pointer-events: none; }
+  .dock-slot .dl { font-size: 9px; font-weight: 600; color: #999; pointer-events: none; }
+  .dock-slot.active { background: #EDE0F5; }
+  .dock-slot.active .dl { color: #B06AB3; }
+  .hero-slot {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, #B06AB3, #E882A0);
+    margin-top: -24px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: #fff; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(176,106,179,0.5);
+    position: relative;
+  }
+  body.editing .hero-slot { cursor: move; border: 2px dashed rgba(255,255,255,0.6); }
+  .dock-slot .dock-label-tag {
+    position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; font-weight: 700; background: #333; color: #fff;
+    padding: 2px 6px; border-radius: 3px; white-space: nowrap;
+    display: none; pointer-events: none;
+  }
+  body.editing .dock-slot .dock-label-tag { display: block; }
+  .hero-slot .dock-label-tag {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; font-weight: 700; background: #333; color: #fff;
+    padding: 2px 6px; border-radius: 3px; white-space: nowrap;
+    display: none; pointer-events: none;
+  }
+  body.editing .hero-slot .dock-label-tag { display: block; }
+
+  /* ====== PROPERTY PANEL ====== */
+  #propPanel {
+    position: fixed; right: 0; top: 52px; bottom: 0; width: 290px;
+    background: #1E1E1E; color: #CCC; z-index: 900;
+    padding: 16px; overflow-y: auto; font-size: 13px;
+    border-left: 1px solid #333;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  #propPanel h3 { font-size: 13px; color: #fff; margin: 0; }
+  #propPanel .empty-state { color: #666; text-align: center; margin-top: 40px; font-size: 12px; }
+  #propPanel label { font-size: 11px; color: #999; display: block; margin-bottom: 4px; font-weight: 600; }
+  #propPanel input, #propPanel textarea {
+    width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #444;
+    background: #2A2A2A; color: #EEE; font-size: 12px; font-family: inherit;
+    resize: vertical;
+  }
+  #propPanel textarea { min-height: 60px; }
+  #propPanel input:focus, #propPanel textarea:focus { outline: none; border-color: #5A8A3C; }
+  #propPanel .prop-row { display: flex; gap: 6px; }
+  #propPanel .prop-row > * { flex: 1; }
+  #propPanel .prop-row label { margin-bottom: 2px; }
+  #propPanel .btn-row { display: flex; gap: 6px; }
+  #propPanel .btn-row button { flex: 1; padding: 6px; border-radius: 6px; border: none; cursor: pointer; font-size: 11px; font-weight: 600; }
+  #propPanel .btn-del { background: #5A2020; color: #E88080; }
+  #propPanel .btn-del:hover { background: #702828; }
+  #propPanel .btn-dup { background: #2A2A40; color: #80A0E0; }
+  #propPanel .info-text { font-size: 10px; color: #777; line-height: 1.5; }
+  #propPanel .color-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+  /* Toast */
+  #prompt-area { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
+  #prompt-toast { background: #1A1A1A; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; box-shadow: 0 8px 30px rgba(0,0,0,0.3); display: none; }
+
+  /* Dock drag ghost */
+  .dock-dragging { opacity: 0.4; }
+  .dock-drag-over { background: rgba(176,106,179,0.15) !important; border-color: #B06AB3 !important; }
+
+  /* ====== EXPORT MODAL ====== */
+  #exportOverlay {
+    position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.7);
+    display: none; align-items: center; justify-content: center;
+  }
+  #exportOverlay.show { display: flex; }
+  #exportModal {
+    background: #1E1E1E; color: #CCC; border-radius: 16px; padding: 24px;
+    width: 700px; max-height: 80vh; display: flex; flex-direction: column; gap: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  #exportModal h2 { color: #fff; font-size: 18px; margin: 0; }
+  #exportModal .export-tabs { display: flex; gap: 4px; }
+  #exportModal .export-tab {
+    padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer;
+    font-size: 12px; font-weight: 600; background: #333; color: #999;
+  }
+  #exportModal .export-tab.active { background: #5A8A3C; color: #fff; }
+  #exportModal textarea {
+    width: 100%; height: 350px; padding: 12px; border-radius: 8px;
+    border: 1px solid #444; background: #2A2A2A; color: #EEE;
+    font: 11px/1.5 'Consolas','Courier New',monospace;
+    resize: vertical;
+  }
+  #exportModal .export-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  #exportModal .export-actions button {
+    padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #exportModal .btn-copy  { background: #5A8A3C; color: #fff; }
+  #exportModal .btn-down  { background: #3A6A8C; color: #fff; }
+  #exportModal .btn-close { background: #444; color: #CCC; }
+  #exportModal .info-note { font-size: 11px; color: #888; }
+  #exportModal code { background: #333; padding: 1px 6px; border-radius: 3px; color: #F38D83; }
+</style>
+</head>
+<body class="editing">
+
+<!-- TOOLBAR -->
+<div id="toolbar">
+  <span style="font-weight:800;font-size:15px;color:#fff;">🧬 布局编辑器</span>
+  <span class="sep"></span>
+  <select id="pageSelect">
+    <option value="home">首页 (苗页)</option>
+    <option value="garden">探索花园</option>
+    <option value="classroom">探索课堂</option>
+    <option value="checkin">每日打卡</option>
+    <option value="badges">成长徽章</option>
+    <option value="profile">我的主页</option>
+    <option value="report">成长报告</option>
+    <option value="settings">设置</option>
+  </select>
+  <span class="sep"></span>
+  <button id="btnEdit" class="active">✋ 编辑模式</button>
+	  <button id="btnAddBlock">+ 添加模块</button>
+  <button id="btnSave" class="primary">💾 导出当前页布局</button>
+  <button id="btnExportAll">📦 导出全部页面</button>
+  <button id="btnReset">↺ 重置当前页</button>
+  <span class="sep"></span>
+  <label><input type="checkbox" id="chkGrid" checked> 网格</label>
+  <span class="sep"></span>
+  <span style="font-size:11px;color:#888;">拖拽移动 · 右下角缩放 · 双击改名 · 切换页面自动保存 · 选中后在右侧面板编辑图层顺序</span>
+</div>
+
+<div id="canvas-wrap">
+  <div id="canvas"></div>
+</div>
+
+<!-- PROPERTY PANEL -->
+<div id="propPanel">
+  <h3>📋 属性面板</h3>
+  <div class="empty-state" id="propEmpty">← 点击画布中的模块或导航栏<br>即可编辑名称和备注</div>
+  <div id="propContent" style="display:none;display:flex;flex-direction:column;gap:10px;">
+    <div>
+      <label>📌 模块名称</label>
+      <input type="text" id="propName" placeholder="输入名称...">
+    </div>
+    <div>
+      <label>📝 交互备注</label>
+      <textarea id="propNotes" placeholder="例如：滚轮驱动播放、点击弹出子项选择、横向滑动切换、hover触发翻转动画……"></textarea>
+    </div>
+    <div class="prop-row">
+      <div><label>X</label><input type="number" id="propX" step="1"></div>
+      <div><label>Y</label><input type="number" id="propY" step="1"></div>
+      <div><label>W</label><input type="number" id="propW" step="1" min="40"></div>
+      <div><label>H</label><input type="number" id="propH" step="1" min="20"></div>
+    </div>
+    <div class="prop-row">
+      <div><label>Z-Index</label><input type="number" id="propZ" step="1"></div>
+      <div style="flex:2;"><span class="info-text">图层顺序，数值越大越靠前，背景设为0</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-dup" id="btnDup">📋 复制模块</button>
+      <button class="btn-del" id="btnDel">🗑 删除模块</button>
+    </div>
+    <div class="info-text" id="propInfo"></div>
+    <div id="dockProps" style="display:none;">
+      <div style="border-top:1px solid #333;padding-top:10px;margin-top:4px;">
+        <label>🔗 导航链接 (路由)</label>
+        <input type="text" id="propRoute" placeholder="例如: /garden">
+        <div class="info-text" style="margin-top:4px;">Hero按钮没有路由，点击时弹出便便记录弹窗</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div id="exportOverlay">
+  <div id="exportModal">
+    <h2>📦 导出布局数据</h2>
+    <div class="export-tabs" id="exportTabs"></div>
+    <textarea id="exportText" readonly spellcheck="false"></textarea>
+    <div class="export-actions">
+      <button class="btn-close" id="btnExportClose">关闭</button>
+      <button class="btn-down" id="btnDownload">💾 下载 JSON 文件</button>
+      <button class="btn-copy" id="btnCopy">📋 复制到剪贴板</button>
+    </div>
+    <div class="info-note">
+      提示：调整好布局后，<b>下载 JSON 文件</b>保存到本地，或<b>复制到剪贴板</b>贴给我。切换页面<b>自动保存</b>修改，不会丢失。
+    </div>
+  </div>
+</div>
+
+<div id="prompt-area"><div id="prompt-toast"></div></div>
+
+<script>
+// ============ PAGE LAYOUT DEFINITIONS ============
+const pageDefs = {
+  home: {
+    title: '首页 (苗页)',
+    blocks: [
+      { id:'brand',     x:20,  y:40,  w:200, h:36, label:'Brand Logo + 品牌名', icon:'🌱', notes:'', z:0, color:'header-block' },
+      { id:'userCard',  x:230, y:38,  w:200, h:36, label:'用户档案卡 (头像+昵称+Lv)', icon:'👤', notes:'', z:0, color:'header-block' },
+      { id:'welcome',   x:490, y:36,  w:300, h:36, label:'欢迎语 H1 + 副标题', icon:'💬', notes:'', z:0, color:'header-block' },
+      { id:'controls',  x:1170,y:38,  w:80,  h:36, label:'设置⚙️ 音效🔊', icon:'⚙️', notes:'', z:0, color:'header-block' },
+
+      { id:'tasksCard',  x:20,  y:90,  w:210, h:180, label:'📋 今日任务卡 + 状态标签', icon:'📋', notes:'', z:0, color:'sidebar-block' },
+      { id:'tipCard',    x:20,  y:280, w:210, h:110, label:'💡 今日小贴士', icon:'💡', notes:'', z:0, color:'sidebar-block' },
+      { id:'badgePanel', x:20,  y:400, w:210, h:90,  label:'🌱 花园成长阶段徽章', icon:'🌱', notes:'', z:0, color:'sidebar-block' },
+
+      { id:'mascot',     x:480, y:90,  w:320, h:200, label:'🧸 菌小园 3D 角色 + 对话气泡', icon:'🧸', notes:'角色待机呼吸动画 (Lottie循环)', z:0, color:'cta-block' },
+      { id:'heroCTA',    x:520, y:300, w:240, h:160, label:'⭕ 今日肠道扫描 (核心CTA按钮)', icon:'📸', notes:'点击弹出便便记录弹窗', z:0, color:'cta-block' },
+
+      { id:'aiPanel',    x:1030,y:90,  w:230, h:480, label:'🤖 AI 助手面板 (菌小园+快捷提问+今日观察)', icon:'🤖', notes:'SSE流式对话', z:0, color:'ai-block' },
+
+      { id:'kingkong1',  x:20,  y:510, w:280, h:110, label:'🌿 探索花园 (金刚区1)', icon:'🌿', notes:'', z:0, color:'main-block' },
+      { id:'kingkong2',  x:315, y:510, w:280, h:110, label:'✅ 每日打卡 (金刚区2)', icon:'✅', notes:'', z:0, color:'main-block' },
+      { id:'kingkong3',  x:610, y:510, w:280, h:110, label:'📚 知识课堂 (金刚区3)', icon:'📚', notes:'', z:0, color:'main-block' },
+      { id:'kingkong4',  x:905, y:510, w:280, h:110, label:'🏆 成长徽章 (金刚区4)', icon:'🏆', notes:'', z:0, color:'main-block' },
+
+      { id:'progress',   x:20,  y:640, w:1160,h:70,  label:'底部进度条 (6阶段 + 下一奖励预告)', icon:'📊', notes:'节点进度条，点击阶段节点查看详情', z:0, color:'nav-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  garden: {
+    title: '探索花园',
+    blocks: [
+      { id:'backBtn',    x:16,  y:36,  w:160, h:30, label:'← 返回 + 页面标题', icon:'←', notes:'', z:0, color:'header-block' },
+      { id:'hudMetrics', x:400, y:36,  w:600, h:30, label:'HUD指标: Lv.4 | 繁荣度85% | 居民×8 | 连续12天', icon:'📊', notes:'', z:0, color:'header-block' },
+      { id:'soundBtn',   x:1220,y:36,  w:40,  h:30, label:'🔔 音效开关', icon:'🔔', notes:'', z:0, color:'header-block' },
+
+      { id:'gardenStatus',x:16, y:78,  w:195, h:170, label:'🌿 花园状态卡 + 查看详情', icon:'🌿', notes:'', z:0, color:'sidebar-block' },
+      { id:'impactFactors',x:16,y:258, w:195, h:180, label:'⚡ 影响因素列表 (+10/-8)', icon:'⚡', notes:'实时增量数字动画', z:0, color:'sidebar-block' },
+
+      { id:'isometricCanvas', x:225,y:78, w:780,h:440, label:'🗺️ 2.5D 等距画布 + POI标签(5个浮点)', icon:'🗺️', notes:'3层CSS视差: Sky(-200px)/Mid(0)/Front(150px)\nLottie角色在中景层\n鼠标悬停POI→高亮+简介\n点击POI→进入子场景', z:0, color:'main-block' },
+
+      { id:'mascotPanel', x:1020,y:78,  w:240, h:140, label:'🧸 菌小园 + 对话气泡', icon:'🧸', notes:'Lottie循环', z:0, color:'ai-block' },
+      { id:'observations',x:1020,y:226, w:240, h:150, label:'📋 我观察到 (3条洞察)', icon:'📋', notes:'', z:0, color:'ai-block' },
+      { id:'tipPanel',    x:1020,y:384, w:240, h:140, label:'💡 今日小建议 + 和我聊天', icon:'💡', notes:'', z:0, color:'ai-block' },
+
+      { id:'mapFAB',     x:16,  y:530, w:50,  h:50,  label:'🌍 花园地图 FAB', icon:'🌍', notes:'', z:0, color:'nav-block' },
+      { id:'toolbar',    x:280, y:530, w:400, h:50,  label:'🔧 快捷工具栏 (浇水/清理🛑3/种植/放大镜/拍照)', icon:'🔧', notes:'角标数字提示待办', z:0, color:'nav-block' },
+      { id:'taskPanel',  x:780, y:530, w:360, h:70,  label:'📋 今日任务清单 (3项 + 奖励)', icon:'📋', notes:'3主项: 花园/吃好/睡好', z:0, color:'nav-block' },
+      { id:'gardenHUDbottom', x:16,y:590, w:1160,h:40, label:'底部信息条: 花园状态摘要', icon:'ℹ️', notes:'', z:0, color:'nav-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  classroom: {
+    title: '探索课堂',
+    blocks: [
+      { id:'profile',    x:20,  y:36,  w:200, h:36, label:'👤 小明 Lv.3 知识探索者', icon:'👤', notes:'', z:0, color:'header-block' },
+      { id:'woodSign',   x:440, y:30,  w:400, h:48, label:'🪵 探索课堂 / 探索肠道生命的秘密 (木质挂牌)', icon:'🪵', notes:'', z:0, color:'header-block' },
+      { id:'knowledgeTree',x:1080,y:34,w:180, h:38, label:'知识树 🌳🌳🌳🌱 已探索12个', icon:'🌳', notes:'', z:0, color:'header-block' },
+
+      { id:'sPathMap',   x:20,  y:82,  w:1000,h:470, label:'🗺️ S型探索路径地图 (5个知识模块节点 + 星级收集度)', icon:'🗺️', notes:'S型曲线路径，节点沿路径排列\n每个节点: 建筑图标+名称+星级进度\n未解锁节点灰显+🔒', z:0, color:'main-block' },
+
+      { id:'aiCompanion',x:1040,y:82,  w:220, h:150, label:'🤖 菌小园老师 + 对话气泡', icon:'🤖', notes:'', z:0, color:'ai-block' },
+      { id:'faqList',    x:1040,y:240, w:220, h:180, label:'📚 快捷FAQ + 随机探索按钮', icon:'📚', notes:'', z:0, color:'ai-block' },
+      { id:'recommend',  x:1040,y:430, w:220, h:130, label:'📰 推荐内容列表 + 换一换', icon:'📰', notes:'', z:0, color:'ai-block' },
+
+      { id:'dailyTask',  x:20,  y:565, w:350, h:55,  label:'🎯 今日学习任务: 1个知识点', icon:'🎯', notes:'', z:0, color:'nav-block' },
+      { id:'milestones', x:500, y:565, w:520, h:55,  label:'宝箱里程碑: ✅✅✅📦🔒🔒 已收集12个', icon:'🎁', notes:'宝箱状态: 已完成绿勾/当前发光/未解锁灰锁', z:0, color:'nav-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  checkin: {
+    title: '每日打卡',
+    blocks: [
+      { id:'backTitle',  x:20,  y:36,  w:220, h:36, label:'← 每日打卡 + 生态Lv.4', icon:'←', notes:'', z:0, color:'header-block' },
+      { id:'energyBar',  x:400, y:36,  w:480, h:36, label:'今日花园能量 ████████░░ 85/100', icon:'⚡', notes:'', z:0, color:'header-block' },
+      { id:'gardenPreview',x:1100,y:34,w:150, h:40, label:'🏞️ 花园预览 →', icon:'🏞️', notes:'缩略图点击跳转花园页', z:0, color:'header-block' },
+
+      { id:'checkinTitle',x:20,y:84,w:980,h:30,  label:'📋 今日照顾清单 (区块标题)', icon:'📋', notes:'', z:0, color:'main-block' },
+      { id:'taskGarden', x:20,  y:124, w:310, h:220, label:'🌿 探索花园\n✅ 已自动完成\n能量+10', icon:'🌿', notes:'系统自动检测≥3次花园交互\n降级条件: 行为日志丢失→切换手动确认', z:0, color:'main-block' },
+      { id:'taskEat',    x:350, y:124, w:310, h:220, label:'🍽️ 吃好\n👆 点击确认\n能量+10 + 可选加分', icon:'🍽️', notes:'点击→弹出子项选择:\n□ 🥗蔬菜+15 □ 🍎水果+10 □ 💧喝水+10\n确认/稍后再说', z:0, color:'main-block' },
+      { id:'taskSleep',  x:680, y:124, w:310, h:220, label:'😴 睡好\n👆 点击确认\n能量+10 + 可选加分', icon:'😴', notes:'点击→弹出子项选择:\n□ 🏃户外+10 □ 🌙早睡+10\n确认/稍后再说', z:0, color:'main-block' },
+
+      { id:'assistant',  x:1040,y:84,  w:220, h:120, label:'🧸 菌小园 + 对话气泡', icon:'🧸', notes:'', z:0, color:'ai-block' },
+      { id:'tipCard',    x:1040,y:214, w:220, h:100, label:'💡 今日小建议', icon:'💡', notes:'', z:0, color:'ai-block' },
+      { id:'knowledge',  x:1040,y:324, w:220, h:120, label:'📚 今日小知识 + 去知识课堂', icon:'📚', notes:'', z:0, color:'ai-block' },
+      { id:'quickLinks', x:1040,y:454, w:220, h:50,  label:'🔗 快捷入口: 知识课堂 | 成长徽章', icon:'🔗', notes:'', z:0, color:'ai-block' },
+
+      { id:'calendar',   x:20,  y:530, w:700, h:200, label:'📅 打卡日历 (月视图)\n连续12天 · 🎁再坚持2天', icon:'📅', notes:'月视图网格\n已打卡: 绿色圆点+花园小图标\n今日: 高亮边框\n点击历史日期→当日详情\n补签入口 ≤3次/月', z:0, color:'main-block' },
+      { id:'rewards',    x:740, y:530, w:280, h:200, label:'🎁 今日奖励\n💧+5 🍃+10 ⭐+5 ☀️+10', icon:'🎁', notes:'4个掉落物图标+数值', z:0, color:'main-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  badges: {
+    title: '成长徽章',
+    blocks: [
+      { id:'title',      x:20,  y:36,  w:380, h:36, label:'← 🏆 成长徽章馆 / 每一枚徽章都是证明', icon:'🏆', notes:'', z:0, color:'header-block' },
+      { id:'infoBtn',    x:1200,y:36,  w:60,  h:36, label:'📖 徽章说明', icon:'📖', notes:'帮助/规则入口', z:0, color:'header-block' },
+
+      { id:'userStatus', x:20,  y:82,  w:1020,h:90,  label:'👤 用户状态卡: 🧸 Lv.4 | 720/1000 | 18/60已获得', icon:'👤', notes:'进度条+距离下一级提示', z:0, color:'main-block' },
+
+      { id:'shelf1',     x:20,  y:188, w:1020,h:120, label:'1 健康习惯徽章 [💧水滴守护者] [🥬纤维之友] [🌅晨光鸟] →', icon:'🏷️', notes:'横向滑动，右侧→箭头', z:0, color:'main-block' },
+      { id:'shelf2',     x:20,  y:316, w:1020,h:120, label:'2 探索达人徽章 [🥇花园农夫] [🔍放大镜专家] [🔒???] →', icon:'🏷️', notes:'已获得: 彩色+铜/银/金边框\n未解锁: 灰度+🔒+解锁条件', z:0, color:'main-block' },
+      { id:'shelf3',     x:20,  y:444, w:1020,h:120, label:'3 科普小学者徽章 [❓好奇宝宝] [🧠答题能手] [🔒百科博士] →', icon:'🏷️', notes:'点击已获得徽章→弹窗:\n获得日期+稀有度+升级进度', z:0, color:'main-block' },
+      { id:'shelf4',     x:20,  y:572, w:1020,h:120, label:'4 特殊成就徽章 [⭐完美一周] [🔒春节彩蛋] [🔒花园生日] →', icon:'🏷️', notes:'', z:0, color:'main-block' },
+
+      { id:'assistantBadge',x:1060,y:82,w:200,h:120, label:'🧸 助手提示', icon:'🧸', notes:'动态反馈+鼓励文案', z:0, color:'ai-block' },
+      { id:'timeline',   x:1060,y:212, w:200,h:200, label:'📈 成长路径时间轴\nLv1✅ Lv2✅ Lv3✅ Lv4● Lv5🔒', icon:'📈', notes:'已完成: 绿勾\n当前: 高亮\n未解锁: 灰+🔒', z:0, color:'ai-block' },
+      { id:'unlockTeaser',x:1060,y:422,w:200,h:140, label:'🎁 解锁预告\n? 神秘徽章\n还差2枚 [去探索]', icon:'🎁', notes:'微型进度条', z:0, color:'ai-block' },
+
+      { id:'recent',     x:20,  y:702, w:1240,h:70,  label:'📌 最近获得: 🥇花园农夫·金 NEW! | 📖收集册18/60 [分享]', icon:'📌', notes:'NEW角标+时间戳', z:0, color:'main-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  profile: {
+    title: '我的主页',
+    blocks: [
+      { id:'title',      x:20,  y:36,  w:200, h:36, label:'← 我的主页', icon:'←', notes:'', z:0, color:'header-block' },
+
+      { id:'profileCard',x:20,  y:84,  w:760, h:120, label:'🧒 头像(80px可编辑) | 小明 Lv.4 | 加入30天 | [✏️编辑]', icon:'🧒', notes:'', z:0, color:'main-block' },
+      { id:'stat1',      x:20,  y:216, w:240, h:90,  label:'🔥 最长连续 15天', icon:'🔥', notes:'', z:0, color:'main-block' },
+      { id:'stat2',      x:275, y:216, w:240, h:90,  label:'🏆 徽章收集 18/60', icon:'🏆', notes:'', z:0, color:'main-block' },
+      { id:'stat3',      x:530, y:216, w:240, h:90,  label:'📚 知识探索 12个', icon:'📚', notes:'', z:0, color:'main-block' },
+      { id:'stat4',      x:20,  y:318, w:240, h:90,  label:'💩 便便记录 25次', icon:'💩', notes:'', z:0, color:'main-block' },
+      { id:'stat5',      x:275, y:318, w:240, h:90,  label:'🏡 花园阶段 第3·成长', icon:'🏡', notes:'', z:0, color:'main-block' },
+      { id:'stat6',      x:530, y:318, w:240, h:90,  label:'⭐ 总经验值 720 XP', icon:'⭐', notes:'', z:0, color:'main-block' },
+
+      { id:'history',    x:20,  y:420, w:760, h:270, label:'📋 历史记录 (打卡|便便|学习 三Tab切换)', icon:'📋', notes:'Tab切换内容区', z:0, color:'main-block' },
+
+      { id:'weeklyStats',x:820, y:84,  w:240, h:120, label:'📊 本周统计: 打卡5/7 徽章3 学习8', icon:'📊', notes:'', z:0, color:'ai-block' },
+      { id:'goal',       x:820, y:216, w:240, h:120, label:'🎯 当前目标: 花朵使者 ██░░ 7/10天', icon:'🎯', notes:'', z:0, color:'ai-block' },
+      { id:'friends',    x:820, y:348, w:240, h:200, label:'👥 好友 (V2开放) 🚧', icon:'👥', notes:'V2开放，MVP显示占位', z:0, color:'ai-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  report: {
+    title: '成长报告',
+    blocks: [
+      { id:'title',      x:20,  y:36,  w:220, h:36, label:'← 📊 成长报告', icon:'←', notes:'', z:0, color:'header-block' },
+      { id:'period',     x:540, y:34,  w:200, h:40, label:'[周报] [月报●] 2026年7月', icon:'📅', notes:'', z:0, color:'header-block' },
+
+      { id:'checkin',    x:20,  y:86,  w:600, h:160, label:'📋 打卡坚持: 累计30天 | 连续12天 | 最长15天', icon:'📋', notes:'', z:0, color:'main-block' },
+      { id:'garden',     x:640, y:86,  w:600, h:160, label:'🎮 花园互动: 投喂120次 | 探索30天', icon:'🎮', notes:'', z:0, color:'main-block' },
+      { id:'learn',      x:20,  y:258, w:600, h:160, label:'🧠 科普学习: 答对15题 | 完成3/5模块 | 徽章8枚', icon:'🧠', notes:'', z:0, color:'main-block' },
+      { id:'stool',      x:640, y:258, w:600, h:160, label:'💩 消化健康: Type分布饼图 + 采纳率65%', icon:'💩', notes:'Type1-2红/3-5绿/6-7黄\n分母<5时展原值非百分比', z:0, color:'main-block' },
+      { id:'growth',     x:20,  y:430, w:1220,h:100, label:'🌱 总体成长: 第3阶段 | 18/60枚 | 720XP', icon:'🌱', notes:'', z:0, color:'main-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  },
+  settings: {
+    title: '设置',
+    blocks: [
+      { id:'title',      x:20,  y:36,  w:200, h:36, label:'← ⚙️ 设置', icon:'←', notes:'需家长验证(简单算术)', z:0, color:'header-block' },
+
+      { id:'child',      x:20,  y:86,  w:560, h:140, label:'👶 儿童档案: 昵称/年龄/头像', icon:'👶', notes:'', z:0, color:'main-block' },
+      { id:'timelimit',  x:20,  y:240, w:560, h:100, label:'⏱️ 使用时长限制 [====●===] 30分钟', icon:'⏱️', notes:'滑块控件', z:0, color:'main-block' },
+      { id:'privacy',    x:20,  y:354, w:560, h:160, label:'🔒 隐私: 照片上传 | 数据导出 | 删除账号', icon:'🔒', notes:'删除需二次确认', z:0, color:'main-block' },
+      { id:'account',    x:20,  y:528, w:560, h:120, label:'👤 账号: 138****8888 | 退出登录', icon:'👤', notes:'', z:0, color:'main-block' },
+    ],
+    dockTabs: [
+      { id:'dock_home',    icon:'🏠', label:'苗页',   route:'/',           hero:false },
+      { id:'dock_garden',  icon:'🌿', label:'探索花园', route:'/garden',    hero:false },
+      { id:'dock_checkin', icon:'✅', label:'每日打卡', route:'/checkin',   hero:false },
+      { id:'dock_hero',    icon:'📸', label:'拍便便分析', route:null,       hero:true },
+      { id:'dock_class',   icon:'📚', label:'探索课堂', route:'/classroom', hero:false },
+      { id:'dock_badges',  icon:'🏆', label:'成长徽章', route:'/badges',    hero:false },
+      { id:'dock_profile', icon:'👤', label:'我的主页', route:'/profile',   hero:false },
+    ]
+  }
+};
+
+// ============ STATE ============
+let currentPage = 'home';
+let blocks = [];
+let dockTabs = [];
+let editing = true;
+let selectedBlockId = null;
+let showGrid = true;
+
+// Working copy persists edits across page switches
+let workingPages = {};
+function initWorkingPages() {
+  for (const [key, def] of Object.entries(pageDefs)) {
+    workingPages[key] = {
+      blocks: def.blocks.map(b => ({...b, notes: b.notes || ''})),
+      dockTabs: (def.dockTabs || pageDefs.home.dockTabs).map(d => ({...d, notes: d.notes || ''})),
+    };
+  }
+}
+initWorkingPages();
+
+const canvas = document.getElementById('canvas');
+
+// ============ DIRTY TRACKING ============
+function isPageDirty(pageName) {
+  const def = pageDefs[pageName];
+  const wp = workingPages[pageName];
+  if (!wp) return false;
+  return JSON.stringify(wp.blocks) !== JSON.stringify(def.blocks.map(b => ({...b, notes: b.notes || ''}))) ||
+         JSON.stringify(wp.dockTabs) !== JSON.stringify((def.dockTabs || pageDefs.home.dockTabs).map(d => ({...d, notes: d.notes || ''})));
+}
+
+function updateDirtyIndicator() {
+  const sel = document.getElementById('pageSelect');
+  for (const opt of sel.options) {
+    if (isPageDirty(opt.value)) {
+      if (!opt.textContent.includes(' *')) opt.textContent = opt.textContent.replace(' *', '') + ' *';
+    } else {
+      opt.textContent = opt.textContent.replace(' *', '');
+    }
+  }
+}
+
+// ============ PROPERTY PANEL ============
+function showPropPanel(kind, id) {
+  const empty = document.getElementById('propEmpty');
+  const content = document.getElementById('propContent');
+  const dockProps = document.getElementById('dockProps');
+  const info = document.getElementById('propInfo');
+
+  if (!id) {
+    empty.style.display = 'block';
+    content.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  content.style.display = 'flex';
+
+  if (kind === 'block') {
+    const b = blocks.find(bb => bb.id === id);
+    if (!b) return;
+    document.getElementById('propName').value = b.label;
+    document.getElementById('propNotes').value = b.notes || '';
+    document.getElementById('propX').value = Math.round(b.x);
+    document.getElementById('propY').value = Math.round(b.y);
+    document.getElementById('propW').value = Math.round(b.w);
+    document.getElementById('propH').value = Math.round(b.h);
+    document.getElementById("propZ").value = b.z || 0;
+    info.textContent = 'ID: ' + b.id + ' | 颜色: ' + (b.color || 'main-block');
+    dockProps.style.display = 'none';
+    document.getElementById('btnDup').style.display = '';
+    document.getElementById('btnDel').style.display = '';
+  } else if (kind === 'dock') {
+    const d = dockTabs.find(dd => dd.id === id);
+    if (!d) return;
+    document.getElementById('propName').value = d.label;
+    document.getElementById('propNotes').value = d.notes || '';
+    document.getElementById('propX').value = '';
+    document.getElementById('propY').value = '';
+    document.getElementById('propW').value = '';
+    document.getElementById('propH').value = '';
+    info.textContent = '导航栏 Tab | 类型: ' + (d.hero ? 'Hero CTA 凸起按钮' : '普通 Tab');
+    dockProps.style.display = 'block';
+    document.getElementById('propRoute').value = d.route || '';
+    document.getElementById('btnDup').style.display = 'none';
+    document.getElementById('btnDel').style.display = d.hero ? 'none' : '';
+  }
+}
+
+function hidePropPanel() {
+  document.getElementById('propEmpty').style.display = 'block';
+  document.getElementById('propContent').style.display = 'none';
+}
+
+// Prop panel input bindings
+document.getElementById('propName').addEventListener('input', function() {
+  if (!selectedBlockId) return;
+  if (selectedBlockId.startsWith('dock_')) {
+    const d = dockTabs.find(dd => dd.id === selectedBlockId);
+    if (d) { d.label = this.value; updateDockLabel(selectedBlockId); }
+  } else {
+    const b = blocks.find(bb => bb.id === selectedBlockId);
+    if (b) { b.label = this.value; updateBlockLabel(selectedBlockId); }
+  }
+  markDirty();
+});
+
+document.getElementById('propNotes').addEventListener('input', function() {
+  if (!selectedBlockId) return;
+  if (selectedBlockId.startsWith('dock_')) {
+    const d = dockTabs.find(dd => dd.id === selectedBlockId);
+    if (d) { d.notes = this.value; updateDockNotes(selectedBlockId); }
+  } else {
+    const b = blocks.find(bb => bb.id === selectedBlockId);
+    if (b) { b.notes = this.value; updateBlockNotes(selectedBlockId); }
+  }
+  markDirty();
+});
+
+['propX','propY','propW','propH'].forEach(field => {
+  document.getElementById(field).addEventListener('input', function() {
+    if (!selectedBlockId || selectedBlockId.startsWith('dock_')) return;
+    const b = blocks.find(bb => bb.id === selectedBlockId);
+    if (!b) return;
+    const val = parseInt(this.value) || 0;
+    b[field.slice(-1).toLowerCase()] = val;
+    const el = document.getElementById('block-' + selectedBlockId);
+    if (el) {
+      el.style.left = b.x + 'px';
+      el.style.top = b.y + 'px';
+      el.style.width = b.w + 'px';
+      el.style.height = b.h + 'px';
+  el.style.zIndex = b.z || 0;
+    }
+    markDirty();
+  });
+});
+
+document.getElementById('propRoute').addEventListener('input', function() {
+  if (!selectedBlockId || !selectedBlockId.startsWith('dock_')) return;
+  const d = dockTabs.find(dd => dd.id === selectedBlockId);
+  if (d) { d.route = this.value || null; markDirty(); }
+});
+
+document.getElementById('btnDel').addEventListener('click', () => {
+  if (!selectedBlockId) return;
+  if (selectedBlockId.startsWith('dock_')) {
+    const d = dockTabs.find(dd => dd.id === selectedBlockId);
+    if (!d || d.hero) return;
+    if (!confirm('删除导航Tab "' + d.label + '"？')) return;
+    dockTabs = dockTabs.filter(dd => dd.id !== selectedBlockId);
+  } else {
+    const b = blocks.find(bb => bb.id === selectedBlockId);
+    if (!b) return;
+    if (!confirm('删除模块 "' + b.label + '"？')) return;
+    blocks = blocks.filter(bb => bb.id !== selectedBlockId);
+    const el = document.getElementById('block-' + selectedBlockId);
+    if (el) el.remove();
+  }
+  selectedBlockId = null;
+  clearAllSelections();
+  hidePropPanel();
+  renderDock();
+  markDirty();
+});
+
+document.getElementById('btnDup').addEventListener('click', () => {
+  if (!selectedBlockId || selectedBlockId.startsWith('dock_')) return;
+  const b = blocks.find(bb => bb.id === selectedBlockId);
+  if (!b) return;
+  const newBlock = {
+    ...b,
+    id: b.id + '_copy_' + Date.now(),
+    x: b.x + 30,
+    y: b.y + 30,
+    label: b.label + ' (副本)',
+  };
+  blocks.push(newBlock);
+  createBlockElement(newBlock);
+  selectBlock(newBlock.id);
+  markDirty();
+});
+
+function markDirty() {
+  updateDirtyIndicator();
+}
+
+// ============ RENDER ============
+function renderPage(pageName, forceReset) {
+  // Save current page edits before switching
+  if (currentPage && workingPages[currentPage] && !forceReset && blocks.length > 0) {
+    workingPages[currentPage].blocks = blocks.map(b => ({...b}));
+    workingPages[currentPage].dockTabs = dockTabs.map(d => ({...d}));
+  }
+
+  currentPage = pageName;
+  const wp = workingPages[pageName];
+  blocks = wp.blocks.map(b => ({...b, notes: b.notes || ''}));
+  dockTabs = wp.dockTabs.map(d => ({...d, notes: d.notes || ''}));
+
+  // Clear
+  canvas.querySelectorAll('.block, #dock-area').forEach(el => el.remove());
+  selectedBlockId = null;
+  hidePropPanel();
+  clearAllSelections();
+
+  // Render
+  blocks.forEach(b => createBlockElement(b));
+  renderDock();
+
+  document.body.classList.toggle('editing', editing);
+  document.getElementById('pageSelect').value = pageName;
+  document.getElementById('btnEdit').classList.toggle('active', editing);
+
+  updateDirtyIndicator();
+}
+
+function createBlockElement(b) {
+  const el = document.createElement('div');
+  el.className = 'block ' + (b.color || '');
+  el.id = 'block-' + b.id;
+  el.style.left = b.x + 'px';
+  el.style.top = b.y + 'px';
+  el.style.width = b.w + 'px';
+  el.style.height = b.h + 'px';
+  el.style.zIndex = b.z || 0;
+  el.dataset.blockId = b.id;
+  el.innerHTML = `
+    <div class="block-label">${escHtml(b.label)}</div>
+    <div class="block-inner">
+      <div class="block-icon">${b.icon || ''}</div>
+      <div class="block-name">${escHtml(b.label)}</div>
+      ${b.notes ? `<div class="block-notes-preview">${escHtml(b.notes.split('\n')[0])}</div>` : ''}
+      ${b.notes ? `<div class="block-notes-indicator">📝</div>` : ''}
+    </div>
+    <div class="block-handle">⋮⋮</div>
+    <div class="resize-handle"></div>
+  `;
+  canvas.appendChild(el);
+
+  makeDraggable(el);
+  makeResizable(el);
+
+  el.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('resize-handle')) return;
+    selectBlock(b.id);
+  });
+
+  el.addEventListener('dblclick', (e) => {
+    const newLabel = prompt('模块名称:', b.label);
+    if (newLabel !== null) {
+      b.label = newLabel;
+      updateBlockLabel(b.id);
+      if (selectedBlockId === b.id) {
+        document.getElementById('propName').value = newLabel;
+      }
+      markDirty();
+    }
+  });
+}
+
+function updateBlockLabel(id) {
+  const b = blocks.find(bb => bb.id === id);
+  const el = document.getElementById('block-' + id);
+  if (!b || !el) return;
+  el.querySelector('.block-label').textContent = b.label;
+  el.querySelector('.block-name').textContent = b.label;
+}
+
+function updateBlockNotes(id) {
+  const b = blocks.find(bb => bb.id === id);
+  const el = document.getElementById('block-' + id);
+  if (!b || !el) return;
+  const preview = el.querySelector('.block-notes-preview');
+  const indicator = el.querySelector('.block-notes-indicator');
+  if (b.notes) {
+    if (!preview) {
+      const p = document.createElement('div');
+      p.className = 'block-notes-preview';
+      el.querySelector('.block-inner').appendChild(p);
+    }
+    el.querySelector('.block-notes-preview').textContent = b.notes.split('\n')[0];
+    if (!indicator) {
+      const ind = document.createElement('div');
+      ind.className = 'block-notes-indicator';
+      ind.textContent = '📝';
+      el.querySelector('.block-inner').appendChild(ind);
+    }
+  } else {
+    if (preview) preview.remove();
+    if (indicator) indicator.remove();
+  }
+}
+
+function updateDockLabel(id) {
+  const slot = document.getElementById('slot-' + id);
+  if (!slot) return;
+  const labelEl = slot.querySelector('.dl');
+  const tagEl = slot.querySelector('.dock-label-tag');
+  const d = dockTabs.find(dd => dd.id === id);
+  if (!d) return;
+  if (labelEl) labelEl.textContent = d.label;
+  if (tagEl) tagEl.textContent = d.label;
+}
+
+function updateDockNotes(id) {
+  // Notes for dock items are stored but shown in property panel only
+}
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ============ DOCK ============
+function renderDock() {
+  let dock = document.getElementById('dock-area');
+  if (dock) dock.remove();
+
+  dock = document.createElement('div');
+  dock.id = 'dock-area';
+  canvas.appendChild(dock);
+
+  dockTabs.forEach((d, idx) => {
+    if (d.hero) {
+      const hero = document.createElement('div');
+      hero.className = 'hero-slot';
+      hero.id = 'slot-' + d.id;
+      hero.dataset.dockId = d.id;
+      hero.innerHTML = `<span class="dock-label-tag">${escHtml(d.label)}</span>${d.icon}`;
+      hero.title = d.notes || d.label;
+      dock.appendChild(hero);
+      makeDockDraggable(hero, idx);
+      hero.addEventListener('mousedown', (e) => { e.stopPropagation(); selectDock(d.id); });
+      hero.addEventListener('dblclick', (e) => {
+        const newLabel = prompt('Hero 按钮名称:', d.label);
+        if (newLabel !== null) { d.label = newLabel; updateDockLabel(d.id); markDirty(); }
+      });
+    } else {
+      const slot = document.createElement('div');
+      slot.className = 'dock-slot';
+      if (d.route && currentPage === d.route.replace('/','') || (d.route === '/' && currentPage === 'home')) {
+        slot.classList.add('active');
+      }
+      slot.id = 'slot-' + d.id;
+      slot.dataset.dockId = d.id;
+      slot.innerHTML = `
+        <span class="dock-label-tag">${escHtml(d.label)}</span>
+        <span class="di">${d.icon}</span>
+        <span class="dl">${escHtml(d.label)}</span>
+      `;
+      slot.title = d.notes || '';
+      dock.appendChild(slot);
+      makeDockDraggable(slot, idx);
+      slot.addEventListener('mousedown', (e) => { e.stopPropagation(); selectDock(d.id); });
+      slot.addEventListener('dblclick', (e) => {
+        const newLabel = prompt('Tab 名称:', d.label);
+        if (newLabel !== null) { d.label = newLabel; updateDockLabel(d.id); markDirty(); }
+      });
+    }
+  });
+}
+
+function makeDockDraggable(el, origIdx) {
+  if (!editing) return;
+  el.draggable = true;
+  el.addEventListener('dragstart', (e) => {
+    if (!editing) { e.preventDefault(); return; }
+    el.classList.add('dock-dragging');
+    e.dataTransfer.setData('text/plain', el.dataset.dockId);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  el.addEventListener('dragend', () => { el.classList.remove('dock-dragging'); });
+  el.addEventListener('dragover', (e) => {
+    if (!editing) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    el.classList.add('dock-drag-over');
+  });
+  el.addEventListener('dragleave', () => { el.classList.remove('dock-drag-over'); });
+  el.addEventListener('drop', (e) => {
+    if (!editing) return;
+    e.preventDefault();
+    el.classList.remove('dock-drag-over');
+    const fromId = e.dataTransfer.getData('text/plain');
+    const toId = el.dataset.dockId;
+    if (fromId === toId) return;
+    const fromIdx = dockTabs.findIndex(d => d.id === fromId);
+    const toIdx = dockTabs.findIndex(d => d.id === toId);
+    if (fromIdx < 0 || toIdx < 0) return;
+    if (dockTabs[fromIdx].hero || dockTabs[toIdx].hero) return;
+    const [moved] = dockTabs.splice(fromIdx, 1);
+    dockTabs.splice(toIdx, 0, moved);
+    renderDock();
+    markDirty();
+    toast('🔀 导航Tab顺序已调整');
+  });
+}
+
+// ============ SELECTION ============
+function selectBlock(id) {
+  selectedBlockId = id;
+  clearAllSelections();
+  const el = document.getElementById('block-' + id);
+  if (el) el.style.outline = '3px solid #4E6A3E';
+  showPropPanel('block', id);
+}
+
+function selectDock(id) {
+  selectedBlockId = id;
+  clearAllSelections();
+  const el = document.getElementById('slot-' + id);
+  if (el) el.style.outline = '3px solid #B06AB3';
+  showPropPanel('dock', id);
+}
+
+function clearAllSelections() {
+  document.querySelectorAll('.block, .dock-slot, .hero-slot').forEach(el => el.style.outline = '');
+}
+
+// ============ DRAG & DROP (Blocks) ============
+let dragState = null;
+
+function makeDraggable(el) {
+  el.addEventListener('mousedown', (e) => {
+    if (!editing) return;
+    if (e.target.classList.contains('resize-handle')) return;
+    if (e.button !== 0) return;
+    const blockId = el.dataset.blockId;
+    const block = blocks.find(b => b.id === blockId);
+    if (!block) return;
+    dragState = { blockId, startX: e.clientX, startY: e.clientY, origX: block.x, origY: block.y, el };
+    el.classList.add('dragging');
+    selectBlock(blockId);
+    e.preventDefault();
+  });
+}
+
+function makeResizable(el) {
+  el.querySelector('.resize-handle').addEventListener('mousedown', (e) => {
+    if (!editing) return;
+    const blockId = el.dataset.blockId;
+    const block = blocks.find(b => b.id === blockId);
+    if (!block) return;
+    dragState = { blockId, startX: e.clientX, startY: e.clientY, origW: block.w, origH: block.h, el, resize: true };
+    e.preventDefault();
+    e.stopPropagation();
+  });
+}
+
+document.addEventListener('mousemove', (e) => {
+  if (!dragState) return;
+  if (dragState.resize) {
+    const dx = e.clientX - dragState.startX;
+    const dy = e.clientY - dragState.startY;
+    const block = blocks.find(b => b.id === dragState.blockId);
+    if (block) {
+      block.w = Math.max(40, dragState.origW + dx);
+      block.h = Math.max(20, dragState.origH + dy);
+      dragState.el.style.width = block.w + 'px';
+      dragState.el.style.height = block.h + 'px';
+      if (selectedBlockId === block.id) {
+        document.getElementById('propW').value = Math.round(block.w);
+        document.getElementById('propH').value = Math.round(block.h);
+      }
+    }
+  } else {
+    const dx = e.clientX - dragState.startX;
+    const dy = e.clientY - dragState.startY;
+    const block = blocks.find(b => b.id === dragState.blockId);
+    if (block) {
+      block.x = Math.max(0, dragState.origX + dx);
+      block.y = Math.max(30, dragState.origY + dy);
+      dragState.el.style.left = block.x + 'px';
+      dragState.el.style.top = block.y + 'px';
+      if (selectedBlockId === block.id) {
+        document.getElementById('propX').value = Math.round(block.x);
+        document.getElementById('propY').value = Math.round(block.y);
+      }
+    }
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  if (dragState) {
+    if (dragState.el) dragState.el.classList.remove('dragging');
+    dragState = null;
+    markDirty();
+  }
+});
+
+
+document.getElementById('propZ').addEventListener('input', function() {
+  if (!selectedBlockId || selectedBlockId.startsWith('dock_')) return;
+  const b = blocks.find(bb => bb.id === selectedBlockId);
+  if (!b) return;
+  b.z = parseInt(this.value) || 0;
+  const el = document.getElementById('block-' + selectedBlockId);
+  if (el) el.style.zIndex = b.z;
+  markDirty();
+});
+
+
+function addNewBlock() {
+  if (!editing) return;
+  const id = 'custom_' + Date.now();
+  const block = { id, x: 200, y: 200, w: 200, h: 100, label: '新模块', icon: '📦', notes: '', z: 0, color: 'main-block' };
+  blocks.push(block);
+  createBlockElement(block);
+  selectBlock(id);
+  markDirty();
+  toast('📦 新模块已添加 — 在右侧面板编辑属性');
+}
+document.getElementById('btnAddBlock').addEventListener('click', addNewBlock);
+
+// ============ TOOLBAR ============
+document.getElementById('pageSelect').addEventListener('change', (e) => renderPage(e.target.value));
+
+document.getElementById('btnEdit').addEventListener('click', () => {
+  editing = !editing;
+  document.body.classList.toggle('editing', editing);
+  document.getElementById('btnEdit').classList.toggle('active', editing);
+  if (!editing) { hidePropPanel(); selectedBlockId = null; clearAllSelections(); }
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  if (confirm('确定重置「' + pageDefs[currentPage].title + '」为默认布局？所有修改将丢失。')) {
+    // Reset working copy from defaults
+    const def = pageDefs[currentPage];
+    workingPages[currentPage] = {
+      blocks: def.blocks.map(b => ({...b, notes: b.notes || ''})),
+      dockTabs: (def.dockTabs || pageDefs.home.dockTabs).map(d => ({...d, notes: d.notes || ''})),
+    };
+    renderPage(currentPage, true);
+    toast('↺ 已重置为默认布局');
+  }
+});
+
+// ============ EXPORT ============
+function getExportData(pageName) {
+  const wp = workingPages[pageName];
+  if (!wp) return null;
+  return {
+    page: pageName,
+    title: pageDefs[pageName].title,
+    blocks: wp.blocks.map(b => ({
+      id: b.id, x: Math.round(b.x), y: Math.round(b.y),
+      w: Math.round(b.w), h: Math.round(b.h),
+      label: b.label, icon: b.icon, notes: b.notes, z: b.z || 0, color: b.color,
+    })),
+    dockTabs: wp.dockTabs.map(d => ({
+      id: d.id, icon: d.icon, label: d.label, route: d.route, hero: d.hero, notes: d.notes,
+    })),
+  };
+}
+
+function getAllExportData() {
+  const all = {};
+  for (const key of Object.keys(pageDefs)) {
+    all[key] = getExportData(key);
+  }
+  return all;
+}
+
+function showExportModal(singlePage) {
+  const overlay = document.getElementById('exportOverlay');
+  const textarea = document.getElementById('exportText');
+  const tabs = document.getElementById('exportTabs');
+
+  let activeTab = singlePage || 'home';
+
+  function renderTabs() {
+    tabs.innerHTML = '';
+    if (singlePage) {
+      // Single page: just show the one tab
+      const btn = document.createElement('button');
+      btn.className = 'export-tab active';
+      btn.textContent = pageDefs[singlePage].title;
+      tabs.appendChild(btn);
+    } else {
+      // All pages: show tabs for each
+      for (const key of Object.keys(pageDefs)) {
+        const btn = document.createElement('button');
+        btn.className = 'export-tab' + (key === activeTab ? ' active' : '');
+        btn.textContent = pageDefs[key].title;
+        btn.addEventListener('click', () => {
+          activeTab = key;
+          textarea.value = JSON.stringify(getExportData(key), null, 2);
+          renderTabs();
+        });
+        tabs.appendChild(btn);
+      }
+    }
+  }
+
+  function updateText() {
+    if (singlePage) {
+      textarea.value = JSON.stringify(getExportData(singlePage), null, 2);
+    } else {
+      textarea.value = JSON.stringify(getExportData(activeTab), null, 2);
+    }
+  }
+
+  renderTabs();
+  updateText();
+
+  // Copy button
+  document.getElementById('btnCopy').onclick = () => {
+    const data = singlePage ? JSON.stringify(getExportData(singlePage), null, 2) : JSON.stringify(getAllExportData(), null, 2);
+    navigator.clipboard.writeText(data).then(() => {
+      toast('✅ 已复制到剪贴板！');
+    }).catch(() => {
+      textarea.select();
+      toast('⚠️ 请手动 Ctrl+C 复制');
+    });
+  };
+
+  // Download button
+  document.getElementById('btnDownload').onclick = () => {
+    let data, filename;
+    if (singlePage) {
+      data = JSON.stringify(getExportData(singlePage), null, 2);
+      filename = 'gut-garden_layout_' + singlePage + '.json';
+    } else {
+      data = JSON.stringify(getAllExportData(), null, 2);
+      filename = 'gut-garden_layout_all_pages.json';
+    }
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('✅ 已下载: ' + filename);
+  };
+
+  // Close button
+  document.getElementById('btnExportClose').onclick = () => {
+    overlay.classList.remove('show');
+  };
+
+  overlay.classList.add('show');
+}
+
+// Close overlay by clicking background
+document.getElementById('exportOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('exportOverlay')) {
+    document.getElementById('exportOverlay').classList.remove('show');
+  }
+});
+
+document.getElementById('btnSave').addEventListener('click', () => {
+  // Save current edits first
+  if (currentPage && workingPages[currentPage]) {
+    workingPages[currentPage].blocks = blocks.map(b => ({...b}));
+    workingPages[currentPage].dockTabs = dockTabs.map(d => ({...d}));
+  }
+  showExportModal(currentPage);
+});
+
+document.getElementById('btnExportAll').addEventListener('click', () => {
+  // Save current edits first
+  if (currentPage && workingPages[currentPage]) {
+    workingPages[currentPage].blocks = blocks.map(b => ({...b}));
+    workingPages[currentPage].dockTabs = dockTabs.map(d => ({...d}));
+  }
+  showExportModal(null);
+});
+
+document.getElementById('chkGrid').addEventListener('change', (e) => {
+  showGrid = e.target.checked;
+  canvas.style.backgroundImage = showGrid
+    ? 'linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)'
+    : 'none';
+  canvas.style.backgroundSize = showGrid ? '20px 20px' : '0';
+});
+
+// Click canvas to deselect
+canvas.addEventListener('mousedown', (e) => {
+  if (e.target === canvas || e.target.id === 'dock-area') {
+    selectedBlockId = null;
+    clearAllSelections();
+    hidePropPanel();
+  }
+});
+
+function toast(msg) {
+  const t = document.getElementById('prompt-toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+
+// ============ INIT ============
+canvas.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)';
+canvas.style.backgroundSize = '20px 20px';
+renderPage('home');
+
+console.log('🛠️ 布局编辑器 v3 已就绪');
+console.log('  💾 导出 → 弹出对话框，可切换页面Tab、下载JSON文件或复制到剪贴板');
+console.log('  🔄 切换页面自动保存，修改不会丢失');
+console.log('  ⭐ 页面下拉框中带 * 号的表示有未导出修改');
+console.log('  ➕ 点击 【添加模块】 按钮新增元素');
+console.log('  🔆 属性面板中 Z-Index 控制图层顺序');
+console.log('  🖱️ 拖拽模块 / 右下角缩放');
+console.log('  🏷️ 双击模块或导航Tab → 改名');
+console.log('  📝 选中后在右侧面板写备注');
+console.log('  🔀 导航栏 Tab 支持拖拽排序');
+</script>
+</body>
+</html>

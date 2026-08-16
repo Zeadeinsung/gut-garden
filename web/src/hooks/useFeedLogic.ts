@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
 import { useGardenStore } from '@/stores/gardenStore'
 import { toast } from '@/components/ui/Toast'
+import { api } from '@/lib/api'
+import { applyGardenState, isRegistered, getActiveChildId, type GardenApi } from '@/hooks/useApiSync'
 
 const FOOD_EFFECTS: Record<string, 'healthy' | 'high_sugar'> = {
   broccoli: 'healthy',
@@ -29,6 +31,21 @@ export function useFeedLogic() {
 
     const store = useGardenStore.getState()
     const foodLabel = FOOD_LABELS[foodId] || foodId
+
+    if (isRegistered()) {
+      const childId = getActiveChildId()
+      if (childId) {
+        api
+          .post<GardenApi & { xp_gained: number }>('/garden/log-action', { child_id: childId, action_type: 'feed', action_detail: { food_type: foodId } })
+          .then((data) => {
+            applyGardenState(data)
+            if (effect === 'high_sugar') toast(`吃了${foodLabel}...花园有点不舒服了`, 'error')
+            else toast(`${foodLabel}让花园更健康了！+${data.xp_gained}XP`, 'success')
+          })
+          .catch(() => {})
+      }
+      return
+    }
 
     if (effect === 'high_sugar') {
       store.setState('high_sugar')

@@ -1,30 +1,25 @@
 import { useGardenStore } from '@/stores/gardenStore'
 
-const CHARACTER_STATES: Record<string, string> = {
-  healthy: '😊',
-  high_sugar: '😣',
-  dry: '🥵',
-  recovering: '🤕',
+const STATE_SPRITES: Record<string, string> = {
+  healthy: '/assets/characters/lottie/char_xiaoyuan_idle.png',
+  high_sugar: '/assets/characters/lottie/char_xiaoyuan_worry.png',
+  dry: '/assets/characters/lottie/char_xiaoyuan_worry.png',
+  recovering: '/assets/characters/png/char_xiaoyuan.png',
 }
 
 export function Character() {
   const currentState = useGardenStore((s) => s.currentState)
-  const emoji = CHARACTER_STATES[currentState] || '😊'
+  const sprite = STATE_SPRITES[currentState] || STATE_SPRITES.healthy
 
   return (
     <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
       <div className="relative">
-        {/* Character sprite placeholder — will be replaced with actual art */}
         <div className="w-24 h-24 flex items-center justify-center">
           <img
-            src="/assets/characters/png/char_xiaoyuan.png"
+            src={sprite}
             alt="小圆"
             className="w-full h-full object-contain animate-float"
           />
-        </div>
-        {/* Reaction emoji bubble */}
-        <div className="absolute -top-2 -right-2 text-2xl animate-bounce">
-          {emoji}
         </div>
       </div>
     </div>
