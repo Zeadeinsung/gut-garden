@@ -9,10 +9,15 @@ function badRequest(reply: FastifyReply, message: string): FastifyReply {
 
 export default async function stoolRoutes(fastify: FastifyInstance): Promise<void> {
   fastify.post('/api/stool/select-icon', async (req, reply) => {
-    const body = req.body as { child_id?: number; stool_icon_type?: string; bristol_type?: number }
+    const body = req.body as { child_id?: number; stool_icon_type?: string; bristol_type?: number; description?: string }
     const childId = Number(body.child_id)
     if (!childId) return badRequest(reply, 'child_id 必填')
-    const data = await selectIcon({ child_id: childId, stool_icon_type: body.stool_icon_type, bristol_type: body.bristol_type })
+    const data = await selectIcon({
+      child_id: childId,
+      stool_icon_type: body.stool_icon_type,
+      bristol_type: body.bristol_type,
+      description: typeof body.description === 'string' ? body.description.slice(0, 200) : undefined,
+    })
     return { code: 0, data }
   })
 

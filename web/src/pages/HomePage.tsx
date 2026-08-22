@@ -9,15 +9,16 @@ import { DraggableBlock, type BlockPos } from '@/components/ui/DraggableBlock'
 import { useEditorPage } from '@/hooks/useEditorPage'
 import Header from '@/components/navigation/Header'
 import { UiIcon } from '@/lib/uiIcons'
+import { sfx } from '@/lib/sound'
 
 const STAGE_NAMES = ['幼苗期', '成长期', '繁荣期', '茂盛期', '丰收期', '守护期']
 const STAGE_ICONS = ['sprout', 'leaf', 'flower', 'tree', 'wheat', 'trophy']
 
 const KINGKONGS = [
-  { id: 'kingkong1', path: '/garden', label: '探索花园', icon: 'leaf', desc: '照顾小居民\n让花园更繁荣', borderColor: '#4CAF50', titleColor: '#2E7D32', fill: 'linear-gradient(180deg,#E8F5E8,#C8E6C9)', img: '/assets/ui/ui_kingkong_garden.png' },
-  { id: 'kingkong2', path: '/checkin', label: '每日打卡', icon: 'checkCircle', desc: '完成健康任务\n培养好习惯', borderColor: '#FF9800', titleColor: '#D84315', fill: 'linear-gradient(180deg,#FFF3E0,#FFE0B2)', img: '/assets/ui/ui_kingkong_checkin.png' },
-  { id: 'kingkong3', path: '/classroom', label: '知识课堂', icon: 'book', desc: '有趣的肠道知识\n边玩边学', borderColor: '#2196F3', titleColor: '#1976D2', fill: 'linear-gradient(180deg,#E3F2FD,#BBDEFB)', img: '/assets/ui/ui_kingkong_class.png' },
-  { id: 'kingkong4', path: '/badges', label: '成长徽章', icon: 'trophy', desc: '解锁成就徽章\n见证成长', borderColor: '#9B6AB3', titleColor: '#7B1FA2', fill: 'linear-gradient(180deg,#F3E5F5,#E1BEE7)', img: '/assets/ui/ui_kingkong_badges.png' },
+  { id: 'kingkong1', path: '/garden', label: '探索花园', icon: 'leaf', desc: '照顾小居民\n让花园更繁荣', borderColor: '#4CAF50', titleColor: '#2E7D32', borderAlpha: 0.55, fill: 'linear-gradient(180deg,#E8F5E8,#C8E6C9)', img: '/assets/ui/ui_kingkong_garden.webp' },
+  { id: 'kingkong2', path: '/checkin', label: '每日打卡', icon: 'checkCircle', desc: '完成健康任务\n培养好习惯', borderColor: '#FF9800', titleColor: '#D84315', borderAlpha: 0.55, fill: 'linear-gradient(180deg,#FFF3E0,#FFE0B2)', img: '/assets/ui/ui_kingkong_checkin.webp' },
+  { id: 'kingkong3', path: '/classroom', label: '知识课堂', icon: 'book', desc: '有趣的肠道知识\n边玩边学', borderColor: '#2196F3', titleColor: '#1976D2', borderAlpha: 0.55, fill: 'linear-gradient(180deg,#E3F2FD,#BBDEFB)', img: '/assets/ui/ui_kingkong_class.webp' },
+  { id: 'kingkong4', path: '/badges', label: '成长徽章', icon: 'trophy', desc: '解锁成就徽章\n见证成长', borderColor: '#9B6AB3', titleColor: '#7B1FA2', borderAlpha: 0.55, fill: 'linear-gradient(180deg,#F3E5F5,#E1BEE7)', img: '/assets/ui/ui_kingkong_badges.webp' },
 ]
 
 const AI_QUESTIONS = ['今天吃了什么？', '便便颜色正常吗？', '如何改善便秘？']
@@ -71,7 +72,7 @@ export default function HomePage() {
   const setAiChatOpen = useUIStore((s) => s.setAiChatOpen)
   const { user } = useAuthStore()
   const { today, streak } = useCheckinStore()
-  const { gardenLevel, moistureLevel, currentState, interactionCount } = useGardenStore()
+  const { gardenLevel, moistureLevel, currentState, interactionCount, stageLabel } = useGardenStore()
 
   const { editing, containerRef, pos, handleMove, handleResize, handleReset } = useEditorPage('home', HOME_DEFAULTS, {
     init: (merged) => {
@@ -103,28 +104,12 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col h-full relative gg-card-border-055">
 
       <Header
-        transparent
         leftSlot={
           <div className="flex items-center gap-2">
-            <img src="/assets/ui/ui_logo.png" alt="Gut Garden 肠道花园" className="h-[54px] object-contain -ml-[30px]" />
-          </div>
-        }
-        userSlot={
-          <div className="flex items-center gap-1.5">
-            <span className="w-9 h-9 rounded-full bg-garden-sky flex items-center justify-center overflow-hidden ring-2 ring-white/90 shadow-md shrink-0">
-              {childAvatar ? (
-                <img src={childAvatar} alt="" className="w-full h-full rounded-full object-cover" />
-              ) : (
-                <img src="/assets/ui/ui_avatar_default_child.png" alt="" className="w-full h-full rounded-full object-cover" />
-              )}
-            </span>
-            <span className="text-[10px] font-semibold text-white bg-[#4CAF50] px-2 py-1 rounded-full whitespace-nowrap inline-flex items-center gap-1 shadow-sm">
-              <UiIcon name="sprout" size={11} />
-              Lv.{gardenLevel}
-            </span>
+            <img src="/assets/ui/ui_logo.webp" alt="Gut Garden 肠道花园" className="h-[54px] object-contain -ml-[30px]" />
           </div>
         }
       />
@@ -154,7 +139,7 @@ export default function HomePage() {
               {childAvatar ? (
                 <img src={childAvatar} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
-                <img src="/assets/ui/ui_avatar_default_child.png" alt="" className="w-full h-full rounded-full object-cover" />
+                <img src="/assets/ui/ui_avatar_default_child.webp" alt="" className="w-full h-full rounded-full object-cover" />
               )}
             </span>
             <div
@@ -164,7 +149,7 @@ export default function HomePage() {
               <p className="font-bold text-[15px] text-gray-800 leading-tight truncate">{childName}</p>
               <p className="text-[11px] mt-1 leading-tight whitespace-nowrap">
                 <span className="font-bold text-amber-600">Lv.{gardenLevel}</span>
-                <span className="text-green-600 font-medium ml-1.5">{STAGE_NAMES[stageIndex].replace('期', '')}阶段</span>
+                <span className="text-green-600 font-medium ml-1.5">{stageLabel || STAGE_NAMES[stageIndex].replace('期', '')}阶段</span>
               </p>
             </div>
           </div>
@@ -261,7 +246,7 @@ export default function HomePage() {
               今天一起照顾<br/>小居民吧！
             </div>
             <img
-              src="/assets/characters/png/char_bighead_home.png"
+              src="/assets/characters/png/char_bighead_home.webp"
               alt="菌小园"
               className="h-[82%] object-contain drop-shadow-lg animate-bounce-slow"
             />
@@ -336,8 +321,8 @@ export default function HomePage() {
               />
               <button
                 className="w-full h-full p-1.5 relative"
-                style={{ clipPath: HOUSE_CLIP, background: softBorder(kk.borderColor, 0.55) }}
-                onClick={() => navigate(kk.path)}
+                style={{ clipPath: HOUSE_CLIP, background: softBorder(kk.borderColor, kk.borderAlpha) }}
+                onClick={() => { sfx.click(); navigate(kk.path) }}
               >
                 <div className="w-full h-full flex flex-col items-center justify-end pb-2 px-2 relative"
                      style={{ clipPath: HOUSE_CLIP, background: kk.fill }}>
@@ -423,7 +408,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="shrink-0 self-center flex flex-col items-center gap-1">
-              <img src="/assets/ui/ui_reward_house.png" alt="下一份惊喜" className="h-[42px] w-[42px] object-contain" />
+              <img src="/assets/ui/ui_reward_house.webp" alt="下一份惊喜" className="h-[42px] w-[42px] object-contain" />
               <span className="text-[12px] font-semibold text-[#FF9800] leading-none whitespace-nowrap">下一份惊喜</span>
             </div>
           </div>
@@ -439,7 +424,7 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <span className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center shadow-md overflow-hidden">
-                  <img src="/assets/characters/png/char_xiaoyuan.png" alt="菌小园助手" className="w-7 h-7 object-contain" />
+                  <img src="/assets/characters/png/char_xiaoyuan.webp" alt="菌小园助手" className="w-7 h-7 object-contain" />
                 </span>
                 <h3 className="font-bold text-sm text-green-700">菌小园助手</h3>
               </div>

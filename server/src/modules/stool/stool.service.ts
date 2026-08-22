@@ -6,6 +6,7 @@ import { db } from '../../db/index.js'
 import { stoolAnalyses } from '../../db/schema/index.js'
 import { BRISTOL_PRESETS, ICON_TO_BRISTOL } from './stool.presets'
 import { analyzeStoolPhoto } from './stool-analysis.client'
+import { generateStoolSuggestion, type StoolAiSuggestion } from './stool-ai'
 import { onStoolEvent } from '../badges/badge-hooks.js'
 import { throwError } from '../../config/errors'
 
@@ -25,6 +26,7 @@ export interface SelectIconInput {
   child_id: number
   stool_icon_type?: string
   bristol_type?: number
+  description?: string
 }
 
 export async function selectIcon(input: SelectIconInput) {
@@ -35,7 +37,7 @@ export async function selectIcon(input: SelectIconInput) {
   if (!bristol && input.stool_icon_type) bristol = ICON_TO_BRISTOL[input.stool_icon_type] ?? 0
   if (!bristol || bristol < 1 || bristol > 7) bristol = 4
 
-  const preset = BRISTOL_PRESETS[bristol]
+  const suggestion = await generateStoolSuggestion({ bristol_type: bristol, description: input.description })
   const now = new Date()
   const [row] = await db
     .insert(stoolAnalyses)
@@ -44,8 +46,9 @@ export async function selectIcon(input: SelectIconInput) {
       mode: 'icon_selection',
       stoolIconType: input.stool_icon_type || null,
       bristolType: bristol,
-      diagnosis: preset.diagnosis,
-      taskSuggestion: preset.task_suggestion,
+      diagnosis: suggestion.child_sentence.slice(0, 100),
+      taskSuggestion: suggestion.suggestion.slice(0, 100),
+      apiRawResponse: suggestion,
       uploadedAt: now,
       expiresAt: addDays(now, 3),
     })
@@ -56,9 +59,21 @@ export async function selectIcon(input: SelectIconInput) {
     analysis_id: row.id,
     mode: 'icon_selection',
     bristol_type: bristol,
-    diagnosis: preset.diagnosis,
-    task_suggestion: preset.task_suggestion,
+    diagnosis: suggestion.child_sentence,
+    task_suggestion: suggestion.suggestion,
+    ...suggestionView(suggestion),
     badges_awarded: badges,
+  }
+}
+
+function suggestionView(s: StoolAiSuggestion) {
+  return {
+    child_sentence: s.child_sentence,
+    suggestion: s.suggestion,
+    parent_note: s.parent_note,
+    red_flag: s.red_flag,
+    red_flag_text: s.red_flag_text,
+    ai_source: s.source,
   }
 }
 
@@ -81,6 +96,7 @@ export async function uploadPhoto(childId: number, file: UploadFile) {
   const result = await analyzeStoolPhoto(filePath)
   if (!result.is_valid) throwError('STOOL_001')
 
+  const suggestion = await generateStoolSuggestion({ bristol_type: result.bristol_type })
   const now = new Date()
   const [row] = await db
     .insert(stoolAnalyses)
@@ -89,8 +105,9 @@ export async function uploadPhoto(childId: number, file: UploadFile) {
       mode: 'photo_upload',
       imageUrl: `/uploads/${filename}`,
       bristolType: result.bristol_type,
-      diagnosis: result.diagnosis,
-      taskSuggestion: result.task_suggestion,
+      diagnosis: suggestion.child_sentence.slice(0, 100),
+      taskSuggestion: suggestion.suggestion.slice(0, 100),
+      apiRawResponse: suggestion,
       isValid: true,
       uploadedAt: now,
       expiresAt: addDays(now, 3),
@@ -102,8 +119,9 @@ export async function uploadPhoto(childId: number, file: UploadFile) {
     analysis_id: row.id,
     mode: 'photo_upload',
     bristol_type: result.bristol_type,
-    diagnosis: result.diagnosis,
-    task_suggestion: result.task_suggestion,
+    diagnosis: suggestion.child_sentence,
+    task_suggestion: suggestion.suggestion,
+    ...suggestionView(suggestion),
     is_valid: true,
     image_url: row.imageUrl,
     badges_awarded: badges,
@@ -111,12 +129,19 @@ export async function uploadPhoto(childId: number, file: UploadFile) {
 }
 
 function toDTO(row: typeof stoolAnalyses.$inferSelect) {
+  const ai = (row.apiRawResponse ?? null) as StoolAiSuggestion | null
   return {
     analysis_id: row.id,
     mode: row.mode,
     bristol_type: row.bristolType,
     diagnosis: row.diagnosis,
     task_suggestion: row.taskSuggestion,
+    child_sentence: ai?.child_sentence ?? row.diagnosis,
+    suggestion: ai?.suggestion ?? row.taskSuggestion,
+    parent_note: ai?.parent_note ?? '',
+    red_flag: ai?.red_flag ?? false,
+    red_flag_text: ai?.red_flag_text ?? '',
+    ai_source: ai?.source ?? 'preset',
     image_url: row.imageUrl,
     is_valid: row.isValid,
     uploaded_at: row.uploadedAt,

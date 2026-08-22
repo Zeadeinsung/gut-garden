@@ -1,0 +1,611 @@
+{
+  "generatedAt": "2026-08-16T08:30:31.676Z",
+  "totalBeforeKB": 56021,
+  "totalAfterKB": 1870,
+  "savedKB": 54151,
+  "files": [
+    {
+      "ref": "/assets/badges/frames/ui_badge_frame_bronze.png",
+      "newRef": "/assets/badges/frames/ui_badge_frame_bronze.webp",
+      "label": "badge-frame",
+      "targetW": 256,
+      "beforeKB": 196,
+      "afterKB": 13,
+      "pct": 93
+    },
+    {
+      "ref": "/assets/badges/frames/ui_badge_frame_gold.png",
+      "newRef": "/assets/badges/frames/ui_badge_frame_gold.webp",
+      "label": "badge-frame",
+      "targetW": 256,
+      "beforeKB": 137,
+      "afterKB": 18,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/badges/frames/ui_badge_frame_silver.png",
+      "newRef": "/assets/badges/frames/ui_badge_frame_silver.webp",
+      "label": "badge-frame",
+      "targetW": 256,
+      "beforeKB": 172,
+      "afterKB": 13,
+      "pct": 93
+    },
+    {
+      "ref": "/assets/badges/icons/badge_all_sub_7d_icon.png",
+      "newRef": "/assets/badges/icons/badge_all_sub_7d_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 328,
+      "afterKB": 9,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_birthday_icon.png",
+      "newRef": "/assets/badges/icons/badge_birthday_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 311,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_feed_50_icon.png",
+      "newRef": "/assets/badges/icons/badge_feed_50_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 306,
+      "afterKB": 8,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_first_checkin_icon.png",
+      "newRef": "/assets/badges/icons/badge_first_checkin_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 319,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_first_feed_icon.png",
+      "newRef": "/assets/badges/icons/badge_first_feed_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 324,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_first_magnifier_icon.png",
+      "newRef": "/assets/badges/icons/badge_first_magnifier_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 285,
+      "afterKB": 8,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_first_quiz_icon.png",
+      "newRef": "/assets/badges/icons/badge_first_quiz_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 331,
+      "afterKB": 11,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_first_stool_icon.png",
+      "newRef": "/assets/badges/icons/badge_first_stool_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 352,
+      "afterKB": 11,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_garden_doctor_icon.png",
+      "newRef": "/assets/badges/icons/badge_garden_doctor_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 327,
+      "afterKB": 9,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_magnifier_20_icon.png",
+      "newRef": "/assets/badges/icons/badge_magnifier_20_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 315,
+      "afterKB": 9,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_module_all_5_icon.png",
+      "newRef": "/assets/badges/icons/badge_module_all_5_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 338,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_module_fiber_icon.png",
+      "newRef": "/assets/badges/icons/badge_module_fiber_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 365,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_perfect_week_icon.png",
+      "newRef": "/assets/badges/icons/badge_perfect_week_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 329,
+      "afterKB": 11,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_persist_100d_icon.png",
+      "newRef": "/assets/badges/icons/badge_persist_100d_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 348,
+      "afterKB": 9,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_persist_30d_icon.png",
+      "newRef": "/assets/badges/icons/badge_persist_30d_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 339,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_persist_3d_icon.png",
+      "newRef": "/assets/badges/icons/badge_persist_3d_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 278,
+      "afterKB": 9,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_persist_7d_icon.png",
+      "newRef": "/assets/badges/icons/badge_persist_7d_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 335,
+      "afterKB": 11,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_quiz_10_icon.png",
+      "newRef": "/assets/badges/icons/badge_quiz_10_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 324,
+      "afterKB": 9,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_spring_festival_icon.png",
+      "newRef": "/assets/badges/icons/badge_spring_festival_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 316,
+      "afterKB": 11,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_stool_streak_7_icon.png",
+      "newRef": "/assets/badges/icons/badge_stool_streak_7_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 350,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/badges/icons/badge_type4_streak_5_icon.png",
+      "newRef": "/assets/badges/icons/badge_type4_streak_5_icon.webp",
+      "label": "badge-icon",
+      "targetW": 192,
+      "beforeKB": 310,
+      "afterKB": 10,
+      "pct": 97
+    },
+    {
+      "ref": "/assets/cards/card_barrier_wall.png",
+      "newRef": "/assets/cards/card_barrier_wall.webp",
+      "label": "card",
+      "targetW": 480,
+      "beforeKB": 314,
+      "afterKB": 40,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/cards/card_eco_station.png",
+      "newRef": "/assets/cards/card_eco_station.webp",
+      "label": "card",
+      "targetW": 480,
+      "beforeKB": 295,
+      "afterKB": 34,
+      "pct": 88
+    },
+    {
+      "ref": "/assets/cards/card_ferment_workshop.png",
+      "newRef": "/assets/cards/card_ferment_workshop.webp",
+      "label": "card",
+      "targetW": 480,
+      "beforeKB": 331,
+      "afterKB": 42,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/cards/card_fiber_square.png",
+      "newRef": "/assets/cards/card_fiber_square.webp",
+      "label": "card",
+      "targetW": 480,
+      "beforeKB": 406,
+      "afterKB": 53,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/cards/card_scfa_spring.png",
+      "newRef": "/assets/cards/card_scfa_spring.webp",
+      "label": "card",
+      "targetW": 480,
+      "beforeKB": 321,
+      "afterKB": 42,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/characters/lottie/char_xianxian_idle.png",
+      "newRef": "/assets/characters/lottie/char_xianxian_idle.webp",
+      "label": "character",
+      "targetW": 256,
+      "beforeKB": 219,
+      "afterKB": 13,
+      "pct": 94
+    },
+    {
+      "ref": "/assets/characters/lottie/char_xiaoyuan_idle.png",
+      "newRef": "/assets/characters/lottie/char_xiaoyuan_idle.webp",
+      "label": "character",
+      "targetW": 256,
+      "beforeKB": 280,
+      "afterKB": 14,
+      "pct": 95
+    },
+    {
+      "ref": "/assets/characters/lottie/char_xiaoyuan_worry.png",
+      "newRef": "/assets/characters/lottie/char_xiaoyuan_worry.webp",
+      "label": "character",
+      "targetW": 256,
+      "beforeKB": 273,
+      "afterKB": 14,
+      "pct": 95
+    },
+    {
+      "ref": "/assets/characters/png/char_bighead_home.png",
+      "newRef": "/assets/characters/png/char_bighead_home.webp",
+      "label": "character",
+      "targetW": 256,
+      "beforeKB": 197,
+      "afterKB": 13,
+      "pct": 93
+    },
+    {
+      "ref": "/assets/characters/png/char_xiaoyuan.png",
+      "newRef": "/assets/characters/png/char_xiaoyuan.webp",
+      "label": "character",
+      "targetW": 256,
+      "beforeKB": 308,
+      "afterKB": 12,
+      "pct": 96
+    },
+    {
+      "ref": "/assets/scenes/scene_badge_bg.jpg",
+      "newRef": "/assets/scenes/scene_badge_bg.webp",
+      "label": "scene-bg",
+      "targetW": 1400,
+      "beforeKB": 287,
+      "afterKB": 110,
+      "pct": 61
+    },
+    {
+      "ref": "/assets/scenes/scene_checkin_bg.png",
+      "newRef": "/assets/scenes/scene_checkin_bg.webp",
+      "label": "scene-bg",
+      "targetW": 1400,
+      "beforeKB": 2087,
+      "afterKB": 37,
+      "pct": 98
+    },
+    {
+      "ref": "/assets/scenes/scene_classroom_map.png",
+      "newRef": "/assets/scenes/scene_classroom_map.webp",
+      "label": "scene-bg",
+      "targetW": 1400,
+      "beforeKB": 4011,
+      "afterKB": 219,
+      "pct": 95
+    },
+    {
+      "ref": "/assets/scenes/scene_garden_bg.png",
+      "newRef": "/assets/scenes/scene_garden_bg.webp",
+      "label": "scene-bg",
+      "targetW": 1400,
+      "beforeKB": 2669,
+      "afterKB": 241,
+      "pct": 91
+    },
+    {
+      "ref": "/assets/scenes/scene_home_bg.png",
+      "newRef": "/assets/scenes/scene_home_bg.webp",
+      "label": "scene-bg",
+      "targetW": 1400,
+      "beforeKB": 3909,
+      "afterKB": 183,
+      "pct": 95
+    },
+    {
+      "ref": "/assets/scenes/scene_login_bg.png",
+      "newRef": "/assets/scenes/scene_login_bg.webp",
+      "label": "scene-bg",
+      "targetW": 1400,
+      "beforeKB": 1991,
+      "afterKB": 30,
+      "pct": 98
+    },
+    {
+      "ref": "/assets/stools/stool_type1_rabbit.png",
+      "newRef": "/assets/stools/stool_type1_rabbit.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 37,
+      "afterKB": 6,
+      "pct": 83
+    },
+    {
+      "ref": "/assets/stools/stool_type2_grape.png",
+      "newRef": "/assets/stools/stool_type2_grape.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 29,
+      "afterKB": 4,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/stools/stool_type3_corn.png",
+      "newRef": "/assets/stools/stool_type3_corn.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 23,
+      "afterKB": 4,
+      "pct": 84
+    },
+    {
+      "ref": "/assets/stools/stool_type4_banana.png",
+      "newRef": "/assets/stools/stool_type4_banana.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 23,
+      "afterKB": 3,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/stools/stool_type5_icecream.png",
+      "newRef": "/assets/stools/stool_type5_icecream.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 37,
+      "afterKB": 5,
+      "pct": 86
+    },
+    {
+      "ref": "/assets/stools/stool_type6_marshmallow.png",
+      "newRef": "/assets/stools/stool_type6_marshmallow.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 34,
+      "afterKB": 5,
+      "pct": 87
+    },
+    {
+      "ref": "/assets/stools/stool_type7_water.png",
+      "newRef": "/assets/stools/stool_type7_water.webp",
+      "label": "stool",
+      "targetW": 256,
+      "beforeKB": 18,
+      "afterKB": 3,
+      "pct": 86
+    },
+    {
+      "ref": "/assets/tasks/task_char_eat.png",
+      "newRef": "/assets/tasks/task_char_eat.webp",
+      "label": "task",
+      "targetW": 400,
+      "beforeKB": 314,
+      "afterKB": 32,
+      "pct": 90
+    },
+    {
+      "ref": "/assets/tasks/task_char_garden.png",
+      "newRef": "/assets/tasks/task_char_garden.webp",
+      "label": "task",
+      "targetW": 400,
+      "beforeKB": 293,
+      "afterKB": 25,
+      "pct": 92
+    },
+    {
+      "ref": "/assets/tasks/task_char_sleep.png",
+      "newRef": "/assets/tasks/task_char_sleep.webp",
+      "label": "task",
+      "targetW": 400,
+      "beforeKB": 276,
+      "afterKB": 25,
+      "pct": 91
+    },
+    {
+      "ref": "/assets/tasks/task_char_sport.png",
+      "newRef": "/assets/tasks/task_char_sport.webp",
+      "label": "task",
+      "targetW": 400,
+      "beforeKB": 304,
+      "afterKB": 27,
+      "pct": 91
+    },
+    {
+      "ref": "/assets/tasks/task_char_water.png",
+      "newRef": "/assets/tasks/task_char_water.webp",
+      "label": "task",
+      "targetW": 400,
+      "beforeKB": 272,
+      "afterKB": 24,
+      "pct": 91
+    },
+    {
+      "ref": "/assets/ui/chest_locked.png",
+      "newRef": "/assets/ui/chest_locked.webp",
+      "label": "chest",
+      "targetW": 320,
+      "beforeKB": 1207,
+      "afterKB": 12,
+      "pct": 99
+    },
+    {
+      "ref": "/assets/ui/ui_avatar_default_child.png",
+      "newRef": "/assets/ui/ui_avatar_default_child.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 26,
+      "afterKB": 4,
+      "pct": 86
+    },
+    {
+      "ref": "/assets/ui/ui_badge_cabinet.png",
+      "newRef": "/assets/ui/ui_badge_cabinet.webp",
+      "label": "badge-cabinet",
+      "targetW": 960,
+      "beforeKB": 1172,
+      "afterKB": 75,
+      "pct": 94
+    },
+    {
+      "ref": "/assets/ui/ui_empty_badge_slot.png",
+      "newRef": "/assets/ui/ui_empty_badge_slot.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 17,
+      "afterKB": 2,
+      "pct": 85
+    },
+    {
+      "ref": "/assets/ui/ui_kingkong_badges.png",
+      "newRef": "/assets/ui/ui_kingkong_badges.webp",
+      "label": "kingkong",
+      "targetW": 640,
+      "beforeKB": 7033,
+      "afterKB": 60,
+      "pct": 99
+    },
+    {
+      "ref": "/assets/ui/ui_kingkong_checkin.png",
+      "newRef": "/assets/ui/ui_kingkong_checkin.webp",
+      "label": "kingkong",
+      "targetW": 640,
+      "beforeKB": 7273,
+      "afterKB": 52,
+      "pct": 99
+    },
+    {
+      "ref": "/assets/ui/ui_kingkong_class.png",
+      "newRef": "/assets/ui/ui_kingkong_class.webp",
+      "label": "kingkong",
+      "targetW": 640,
+      "beforeKB": 5363,
+      "afterKB": 53,
+      "pct": 99
+    },
+    {
+      "ref": "/assets/ui/ui_kingkong_garden.png",
+      "newRef": "/assets/ui/ui_kingkong_garden.webp",
+      "label": "kingkong",
+      "targetW": 640,
+      "beforeKB": 6570,
+      "afterKB": 68,
+      "pct": 99
+    },
+    {
+      "ref": "/assets/ui/ui_logo.png",
+      "newRef": "/assets/ui/ui_logo.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 315,
+      "afterKB": 5,
+      "pct": 98
+    },
+    {
+      "ref": "/assets/ui/ui_reward_house.png",
+      "newRef": "/assets/ui/ui_reward_house.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 107,
+      "afterKB": 17,
+      "pct": 84
+    },
+    {
+      "ref": "/assets/ui/ui_task_eat.png",
+      "newRef": "/assets/ui/ui_task_eat.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 10,
+      "afterKB": 2,
+      "pct": 75
+    },
+    {
+      "ref": "/assets/ui/ui_task_explore.png",
+      "newRef": "/assets/ui/ui_task_explore.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 8,
+      "afterKB": 2,
+      "pct": 73
+    },
+    {
+      "ref": "/assets/ui/ui_task_sleep.png",
+      "newRef": "/assets/ui/ui_task_sleep.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 8,
+      "afterKB": 2,
+      "pct": 79
+    },
+    {
+      "ref": "/assets/ui/ui_task_sport.png",
+      "newRef": "/assets/ui/ui_task_sport.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 9,
+      "afterKB": 2,
+      "pct": 73
+    },
+    {
+      "ref": "/assets/ui/ui_task_water.png",
+      "newRef": "/assets/ui/ui_task_water.webp",
+      "label": "ui",
+      "targetW": 480,
+      "beforeKB": 9,
+      "afterKB": 2,
+      "pct": 74
+    }
+  ]
+}

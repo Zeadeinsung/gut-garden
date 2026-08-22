@@ -3,6 +3,7 @@ import { useAuth } from '@/providers/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { UiIcon } from '@/lib/uiIcons'
+import { appVersionLabel } from '@/lib/appInfo'
 
 type Tab = 'guest' | 'register'
 
@@ -52,27 +53,28 @@ export default function LoginPage() {
     } catch { /* toast handled globally */ }
   }
 
-  const tabs: { key: Tab; label: string; icon: string }[] = [
-    { key: 'guest', label: '游客体验', icon: 'gamepad' },
-    { key: 'register', label: '注册登录', icon: 'phone' },
+  const tabs: { key: Tab; label: string }[] = [
+    { key: 'guest', label: '游客体验' },
+    { key: 'register', label: '注册登录' },
   ]
 
   return (
     <div className="h-screen flex items-center justify-center bg-garden-mascot p-4">
-      <div className="relative overflow-hidden rounded-[2rem] shadow-2xl bg-garden-cream w-[min(calc(100vw-2rem),calc((100vh-2rem)*16/10))] h-[min(calc(100vh-2rem),calc((100vw-2rem)*10/16))] flex items-center justify-center px-4">
-      {/* Scene background */}
-      <img
-        src="/assets/scenes/scene_login_bg.png"
-        alt=""
-        draggable={false}
-        className="absolute inset-0 z-0 w-full h-full object-cover"
-      />
+      <div
+        className="relative overflow-hidden rounded-[2rem] shadow-2xl bg-garden-cream w-[min(calc(100vw-2rem),calc((100vh-2rem)*16/10))] h-[min(calc(100vh-2rem),calc((100vw-2rem)*10/16))] flex items-center justify-center px-4"
+        style={{
+          backgroundImage: 'url(/assets/scenes/scene_checkin_bg.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center bottom',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
 
-      <div className="relative z-10 glass-card p-8 w-full max-w-sm">
+      <div className="relative z-10 parchment-card p-8 w-full max-w-sm">
         {/* Brand logo */}
         <div className="text-center mb-4">
           <img
-            src="/assets/characters/lottie/char_xianxian_idle.png"
+            src="/assets/characters/lottie/char_xianxian_idle.webp"
             alt="仙仙"
             className="w-20 h-20 object-contain mx-auto"
           />
@@ -87,7 +89,7 @@ export default function LoginPage() {
 
         {/* Tab switcher */}
         <div className="flex gap-1 bg-garden-cream rounded-xl p-1 mb-6">
-          {tabs.map(({ key, label, icon }) => (
+          {tabs.map(({ key, label }) => (
             <button
               key={key}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors inline-flex items-center justify-center gap-1.5 ${
@@ -97,7 +99,6 @@ export default function LoginPage() {
               }`}
               onClick={() => setTab(key)}
             >
-              <UiIcon name={icon} size={15} />
               {label}
             </button>
           ))}
@@ -122,13 +123,13 @@ export default function LoginPage() {
               className="text-center text-sm text-garden-forest/60 hover:text-garden-forest transition-colors inline-flex items-center justify-center gap-1"
               onClick={handleGuestBrowse}
             >
-              <UiIcon name="eye" size={15} /> 先看看 →（以游客身份浏览）
+              先看看（以游客身份浏览）
             </button>
           </div>
         ) : (
           <div className="flex flex-col gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1 inline-flex items-center gap-1.5"><UiIcon name="phone" size={14} /> 手机号</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">手机号</label>
               <input
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-garden-forest transition-colors"
                 placeholder="输入11位手机号"
@@ -138,10 +139,10 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1 inline-flex items-center gap-1.5"><UiIcon name="hash" size={14} /> 验证码</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">验证码</label>
               <div className="flex gap-2">
                 <input
-                  className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-garden-forest transition-colors"
+                  className="w-[216px] border border-gray-200 rounded-xl px-4 py-3 text-gray-700 focus:outline-none focus:border-garden-forest transition-colors"
                   placeholder="输入验证码"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
@@ -161,23 +162,24 @@ export default function LoginPage() {
               </div>
             </div>
             <Button variant="primary" size="lg" className="w-full bg-garden-mascot hover:bg-[#7A9538]" onClick={handleLogin} disabled={!phone || !code}>
-              <span className="inline-flex items-center gap-1.5"><UiIcon name="key" size={16} /> 登录/注册</span>
+              <span>登录/注册</span>
             </Button>
             <button
               className="text-center text-sm text-garden-forest/60 hover:text-garden-forest transition-colors inline-flex items-center justify-center gap-1"
               onClick={handleGuestBrowse}
             >
-              <UiIcon name="eye" size={15} /> 先看看 →（以游客身份浏览）
+              先看看（以游客身份浏览）
             </button>
           </div>
         )}
 
         {/* Disclaimer */}
-        <p className="text-xs text-gray-400 text-center mt-6 leading-relaxed inline-flex items-start gap-1 justify-center">
-          <UiIcon name="clipboard" size={13} className="shrink-0 mt-0.5" /> 本项目用于健康科普，不构成医疗建议。基于国产开源大模型。
+        <p className="text-xs text-gray-400 text-center mt-6 leading-relaxed inline-flex items-center gap-1 justify-center">
+          <UiIcon name="shield" size={12} className="shrink-0" />
+          非医疗工具 · 健康科普 · 不构成医疗建议 · 基于国产开源大模型
         </p>
-        <p className="text-[10px] text-gray-300 text-center mt-1">
-          数据仅存本地 · 不构成医疗建议 · 出现持续症状请就医
+        <p className="text-[10px] text-gray-400 text-center mt-1">
+          数据仅存本地 · 出现持续症状请及时就医 · {appVersionLabel}
         </p>
       </div>
       </div>

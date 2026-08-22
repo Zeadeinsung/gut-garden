@@ -1,10 +1,10 @@
 import { useGardenStore } from '@/stores/gardenStore'
 
 const STATE_SPRITES: Record<string, string> = {
-  healthy: '/assets/characters/lottie/char_xiaoyuan_idle.png',
-  high_sugar: '/assets/characters/lottie/char_xiaoyuan_worry.png',
-  dry: '/assets/characters/lottie/char_xiaoyuan_worry.png',
-  recovering: '/assets/characters/png/char_xiaoyuan.png',
+  healthy: '/assets/characters/lottie/char_xiaoyuan_idle.webp',
+  high_sugar: '/assets/characters/lottie/char_xiaoyuan_worry.webp',
+  dry: '/assets/characters/lottie/char_xiaoyuan_worry.webp',
+  recovering: '/assets/characters/png/char_xiaoyuan.webp',
 }
 
 export function Character() {

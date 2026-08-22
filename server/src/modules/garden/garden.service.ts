@@ -43,7 +43,24 @@ async function computeAndSyncStage(childId: number, currentStage: number): Promi
   return stage
 }
 
+/** 子账号缺花园状态时自动补建默认行，避免旧数据/迁移导致 GARDEN_001 */
+export async function ensureGardenState(childId: number): Promise<void> {
+  await db
+    .insert(gardenStates)
+    .values({
+      childId,
+      currentState: 'healthy',
+      moistureLevel: 50,
+      growthStage: 1,
+      gardenXp: 0,
+      unlockedFeatures: [],
+    })
+    .onConflictDoNothing()
+}
+
 export async function getGardenState(childId: number) {
+  await ensureChildExists(childId)
+  await ensureGardenState(childId)
   const row = (await db.select().from(gardenStates).where(eq(gardenStates.childId, childId)))[0]
   if (!row) throwError('GARDEN_001')
 
@@ -91,6 +108,7 @@ function applyFoodEffect(state: string, moisture: number, foodType: string): { c
 }
 
 export async function logAction(input: LogActionInput) {
+  await ensureGardenState(input.childId)
   const existing = (await db.select().from(gardenStates).where(eq(gardenStates.childId, input.childId)))[0]
   if (!existing) throwError('GARDEN_001')
 

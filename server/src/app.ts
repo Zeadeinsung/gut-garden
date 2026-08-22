@@ -16,6 +16,7 @@ import badgeRoutes from './modules/badges/badges.routes.js'
 import reportRoutes from './modules/report/report.routes.js'
 import aiRoutes from './modules/ai/ai.routes.js'
 import adminRoutes from './modules/admin/admin.routes.js'
+import friendsRoutes from './modules/friends/friends.routes.js'
 import cron from 'node-cron'
 import { runDailyReset } from './cron/daily-reset.js'
 
@@ -39,6 +40,7 @@ await server.register(badgeRoutes)
 await server.register(reportRoutes)
 await server.register(aiRoutes)
 await server.register(adminRoutes)
+await server.register(friendsRoutes)
 
 cron.schedule('0 0 * * *', () => {
   runDailyReset().catch((err) => server.log.error(err))

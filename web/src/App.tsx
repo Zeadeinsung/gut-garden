@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './providers/AuthProvider'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
+import DemoCodeLog from './components/DemoCodeLog'
 import { Spinner } from '@/components/ui/Spinner'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
@@ -28,6 +29,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <DemoCodeLog />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />

@@ -27,7 +27,7 @@ export interface BlockPos {
 }
 
 const STORAGE_KEY = 'gg-block-positions'
-const LAYOUT_VERSION = 6
+const LAYOUT_VERSION = 7
 
 export interface LoadedPositions {
   blocks: Record<string, BlockPos>

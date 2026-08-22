@@ -7,6 +7,7 @@ import { onQuizEvent } from '../badges/badge-hooks.js'
 import { throwError } from '../../config/errors'
 
 const QUIZ_XP = 3
+const WATCH_XP = 5
 
 export async function listModules(childId: number) {
   if (!childId) throwError('CHILD_001')
@@ -28,6 +29,39 @@ export async function listModules(childId: number) {
       completed: Boolean(p?.completedAt),
     }
   })
+}
+
+export async function recordVideoWatched(childId: number, moduleCode: string) {
+  if (!childId) throwError('CHILD_001')
+  const def = MODULE_DEFS[moduleCode as ModuleCode]
+  if (!def) throwError('CLASSROOM_001')
+
+  const progress = await getOrCreateProgress(childId, moduleCode as ModuleCode)
+
+  let xpGained = 0
+  if (!progress.animationWatched) {
+    const cardsUnlocked = Math.max(progress.cardsUnlocked, 1)
+    await db
+      .update(knowledgeModuleProgress)
+      .set({ animationWatched: true, cardsUnlocked })
+      .where(eq(knowledgeModuleProgress.id, progress.id))
+    xpGained = WATCH_XP
+    await addGardenXp(childId, WATCH_XP)
+  }
+
+  const [updated] = await db
+    .select()
+    .from(knowledgeModuleProgress)
+    .where(eq(knowledgeModuleProgress.id, progress.id))
+
+  return {
+    module_code: moduleCode,
+    animation_watched: updated.animationWatched,
+    cards_unlocked: updated.cardsUnlocked,
+    cards_total: def.cards.length,
+    quizzes_passed: updated.quizzesPassed,
+    xp_gained: xpGained,
+  }
 }
 
 export async function getCards(moduleCode: string) {

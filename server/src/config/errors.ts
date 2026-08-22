@@ -21,6 +21,7 @@ export const ERROR_DEFS = {
   BADGE_001: { message: '徽章定义不存在', status: 404 },
   GARDEN_001: { message: '花园状态不存在', status: 404 },
   MIGRATE_001: { message: '游客数据迁移冲突', status: 409 },
+  FRIENDS_001: { message: '好友参数无效', status: 400 },
 } as const
 
 export type ErrorCode = keyof typeof ERROR_DEFS

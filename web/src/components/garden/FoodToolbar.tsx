@@ -1,4 +1,5 @@
 import { useDraggable } from '@dnd-kit/core'
+import { sfx } from '@/lib/sound'
 
 const FOODS = [
   { name: 'broccoli', label: '西兰花', effect: 'healthy' },
@@ -21,6 +22,7 @@ function DraggableFood({ name, label }: { name: string; label: string }) {
       {...attributes}
       style={style}
       className="w-12 h-12 rounded-full bg-white/80 shadow flex items-center justify-center hover:scale-110 transition-transform cursor-grab active:cursor-grabbing"
+      onPointerDown={() => sfx.pop()}
     >
       <img src={`/assets/foods/food_${name}.png`} alt={label} className="w-8 h-8" />
     </button>

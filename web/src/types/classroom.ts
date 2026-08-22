@@ -9,6 +9,8 @@ export interface KnowledgeModule {
   progress: number
   unlocked: boolean
   stars: number
+  animationWatched?: boolean
+  cardsUnlocked?: number
 }
 
 export interface KnowledgeCard {

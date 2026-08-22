@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { useGardenStore } from '@/stores/gardenStore'
 import { toast } from '@/components/ui/Toast'
 import { api } from '@/lib/api'
+import { sfx } from '@/lib/sound'
 import { applyGardenState, isRegistered, getActiveChildId, type GardenApi } from '@/hooks/useApiSync'
 
 const FOOD_EFFECTS: Record<string, 'healthy' | 'high_sugar'> = {
@@ -39,8 +40,13 @@ export function useFeedLogic() {
           .post<GardenApi & { xp_gained: number }>('/garden/log-action', { child_id: childId, action_type: 'feed', action_detail: { food_type: foodId } })
           .then((data) => {
             applyGardenState(data)
-            if (effect === 'high_sugar') toast(`吃了${foodLabel}...花园有点不舒服了`, 'error')
-            else toast(`${foodLabel}让花园更健康了！+${data.xp_gained}XP`, 'success')
+            if (effect === 'high_sugar') {
+              sfx.error()
+              toast(`吃了${foodLabel}...花园有点不舒服了`, 'error')
+            } else {
+              sfx.pop()
+              toast(`${foodLabel}让花园更健康了！+${data.xp_gained}XP`, 'success')
+            }
           })
           .catch(() => {})
       }
@@ -48,6 +54,7 @@ export function useFeedLogic() {
     }
 
     if (effect === 'high_sugar') {
+      sfx.error()
       store.setState('high_sugar')
       toast(`吃了${foodLabel}...花园有点不舒服了`, 'error')
       return
@@ -62,6 +69,7 @@ export function useFeedLogic() {
       gardenXp: newXp,
       interactionCount: newInteractions,
     })
+    sfx.pop()
 
     if (store.currentState !== 'healthy') {
       if (newMoisture >= 60) {

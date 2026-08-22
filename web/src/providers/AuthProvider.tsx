@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, type ReactNode } from 'react'
 import { useAuthStore } from '@/stores/authStore'
+import { useDemoStore } from '@/stores/demoStore'
 import { api } from '@/lib/api'
 import type { UserData } from '@/types/user'
 
@@ -29,6 +30,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  // 启动时若已是注册态，刷新 /auth/me 校正 active_child_id
+  // （种子重跑或数据重置后，本地持久化的 child_id 可能已失效）
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (store.mode !== 'registered' || !token) return
+    let cancelled = false
+    api
+      .get<UserData>('/auth/me')
+      .then((user) => {
+        if (!cancelled) store.setUser(user)
+      })
+      .catch(() => {
+        // token 失效由 api 统一跳转登录页
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [store.mode])
+
   const guestLogin = (childName: string) => {
     store.setUser({
       parent_id: 0,
@@ -40,7 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const sendCode = async (phone: string) => {
-    await api.post('/auth/send-code', { phone })
+    const data = await api.post<{ sent: boolean; code?: string }>('/auth/send-code', { phone })
+    if (data.code) useDemoStore.getState().addCode(phone, data.code)
   }
 
   const verifyCode = async (phone: string, code: string) => {

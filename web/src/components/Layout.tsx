@@ -4,6 +4,8 @@ import { ReadingLevelProvider } from '@/providers/ReadingLevelProvider'
 import { ToastContainer } from '@/components/ui/Toast'
 import { useUIStore } from '@/stores/uiStore'
 import { useApiSync } from '@/hooks/useApiSync'
+import { appVersionLabel } from '@/lib/appInfo'
+import { UiIcon } from '@/lib/uiIcons'
 import BottomDock from '@/components/navigation/BottomDock'
 
 const StoolModal = lazy(() => import('@/components/modals/StoolModal'))
@@ -13,11 +15,12 @@ const OnboardingOverlay = lazy(() => import('@/components/onboarding/OnboardingO
 export default function Layout() {
   const location = useLocation()
   const sceneWallpapers: Record<string, string> = {
-    '/': '/assets/scenes/scene_home_bg.png',
-    '/checkin': '/assets/scenes/scene_checkin_bg.png',
-    '/badges': '/assets/scenes/scene_badge_bg.jpg',
-    '/garden': '/assets/scenes/scene_garden_bg.png',
-    '/classroom': '/assets/scenes/scene_classroom_map.png',
+    '/': '/assets/scenes/scene_home_bg.webp',
+    '/checkin': '/assets/scenes/scene_checkin_bg.webp',
+    '/profile': '/assets/scenes/scene_checkin_bg.webp',
+    '/badges': '/assets/scenes/scene_badge_bg.webp',
+    '/garden': '/assets/scenes/scene_garden_bg.webp',
+    '/classroom': '/assets/scenes/scene_classroom_map.webp',
   }
   const wallpaper = sceneWallpapers[location.pathname]
   const stoolModalOpen = useUIStore((s) => s.stoolModalOpen)
@@ -61,6 +64,16 @@ export default function Layout() {
               <Outlet />
             </div>
             <BottomDock />
+            <div
+              className="shrink-0 text-center leading-none py-1 text-[9px] text-[#9a9483] bg-[#fbfaf3]/75 backdrop-blur-sm border-t border-[#e5dfc8]/50 select-none"
+              title="免责声明：本应用为科普工具，不构成医疗建议"
+            >
+              <span className="inline-flex items-center gap-1">
+                <UiIcon name="shield" size={9} className="text-[#b5ae95]" />
+                非医疗工具 · 科普参考 · 不构成医疗建议 · 数据仅存本地
+                <span className="text-[#b5ae95]">· {appVersionLabel}</span>
+              </span>
+            </div>
           </div>
 
           <ToastContainer />
@@ -77,7 +90,7 @@ export default function Layout() {
             </Suspense>
           )}
 
-          {!onboardingComplete && (
+          {!onboardingComplete && location.pathname === '/' && (
             <Suspense fallback={null}>
               <OnboardingOverlay />
             </Suspense>

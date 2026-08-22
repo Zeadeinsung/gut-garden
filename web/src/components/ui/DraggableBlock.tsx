@@ -18,6 +18,8 @@ interface Props {
   containerRef: React.RefObject<HTMLDivElement | null>
   onMove?: (id: string, x: number, y: number) => void
   onResize?: (id: string, w: number, h: number) => void
+  /** REF 参考画布尺寸。提供后，位置/大小以百分比渲染并与普通模式一致（坐标仍存 REF 单位） */
+  refSize?: { w: number; h: number }
   children: ReactNode
   className?: string
 }
@@ -38,6 +40,7 @@ export function DraggableBlock({
   containerRef,
   onMove,
   onResize,
+  refSize,
   children,
   className,
 }: Props) {
@@ -46,6 +49,40 @@ export function DraggableBlock({
   const dragging = useRef(false)
   const resizing_ = useRef(false)
   const offset = useRef({ x: 0, y: 0 })
+
+  // 容器 px → REF 单位（refSize 未提供时原样返回，保持旧行为）
+  const pxToRefX = useCallback(
+    (px: number) => {
+      if (!refSize || !containerRef.current) return Math.round(px)
+      const w = containerRef.current.getBoundingClientRect().width || 1
+      return Math.round((px / w) * refSize.w)
+    },
+    [refSize, containerRef],
+  )
+  const pxToRefY = useCallback(
+    (px: number) => {
+      if (!refSize || !containerRef.current) return Math.round(px)
+      const h = containerRef.current.getBoundingClientRect().height || 1
+      return Math.round((px / h) * refSize.h)
+    },
+    [refSize, containerRef],
+  )
+  const refToPxX = useCallback(
+    (rx: number) => {
+      if (!refSize || !containerRef.current) return rx
+      const w = containerRef.current.getBoundingClientRect().width || 1
+      return (rx / refSize.w) * w
+    },
+    [refSize, containerRef],
+  )
+  const refToPxY = useCallback(
+    (ry: number) => {
+      if (!refSize || !containerRef.current) return ry
+      const h = containerRef.current.getBoundingClientRect().height || 1
+      return (ry / refSize.h) * h
+    },
+    [refSize, containerRef],
+  )
 
   const posRef = useRef(pos)
   const sizeRef = useRef(size)
@@ -65,15 +102,15 @@ export function DraggableBlock({
 
       const rect = containerRef.current.getBoundingClientRect()
       offset.current = {
-        x: e.clientX - rect.left - posRef.current.x,
-        y: e.clientY - rect.top - posRef.current.y,
+        x: e.clientX - rect.left - refToPxX(posRef.current.x),
+        y: e.clientY - rect.top - refToPxY(posRef.current.y),
       }
 
       const onMove_ = (ev: MouseEvent) => {
         if (!dragging.current || !containerRef.current) return
         const r = containerRef.current.getBoundingClientRect()
-        const newX = Math.round(ev.clientX - r.left - offset.current.x)
-        const newY = Math.round(ev.clientY - r.top - offset.current.y)
+        const newX = pxToRefX(ev.clientX - r.left - offset.current.x)
+        const newY = pxToRefY(ev.clientY - r.top - offset.current.y)
         setPos({ x: newX, y: newY })
         onMove?.(blockId, newX, newY)
       }
@@ -87,7 +124,7 @@ export function DraggableBlock({
       document.addEventListener('mousemove', onMove_)
       document.addEventListener('mouseup', onUp)
     },
-    [canDrag, containerRef, blockId, onMove],
+    [canDrag, containerRef, blockId, onMove, pxToRefX, pxToRefY, refToPxX, refToPxY],
   )
 
   const handleResizeStart = useCallback(
@@ -104,8 +141,8 @@ export function DraggableBlock({
 
       const onMove_ = (ev: MouseEvent) => {
         if (!resizing_.current) return
-        const dx = Math.round(ev.clientX - startX)
-        const dy = Math.round(ev.clientY - startY)
+        const dx = pxToRefX(ev.clientX - startX)
+        const dy = pxToRefY(ev.clientY - startY)
 
         let nx = startP.x
         let ny = startP.y
@@ -142,7 +179,7 @@ export function DraggableBlock({
       document.addEventListener('mousemove', onMove_)
       document.addEventListener('mouseup', onUp)
     },
-    [canResize, blockId, containerRef, onMove, onResize],
+    [canResize, blockId, containerRef, onMove, onResize, pxToRefX, pxToRefY],
   )
 
   const isActive = dragging.current || resizing_.current
@@ -169,10 +206,10 @@ export function DraggableBlock({
       {...(parallaxSpeed !== undefined ? { 'data-parallax': parallaxSpeed } : {})}
       style={{
         position: 'absolute',
-        left: pos.x,
-        top: pos.y,
-        width: size.w,
-        height: size.h,
+        left: refSize ? `${((pos.x / refSize.w) * 100).toFixed(3)}%` : pos.x,
+        top: refSize ? `${((pos.y / refSize.h) * 100).toFixed(3)}%` : pos.y,
+        width: refSize ? `${((size.w / refSize.w) * 100).toFixed(3)}%` : size.w,
+        height: refSize ? `${((size.h / refSize.h) * 100).toFixed(3)}%` : size.h,
         zIndex: isActive ? Math.max(50, zIndex) : zIndex,
       }}
     >

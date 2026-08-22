@@ -1,0 +1,292 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/lib/uiIcons.tsx");const _jsxDEV = __vite__cjsImport101_react_jsxDevRuntime["jsxDEV"];import { default as __vite_glob_0_0 } from "/src/assets/icons/2 User.svg?import&raw";import { default as __vite_glob_0_1 } from "/src/assets/icons/3 User.svg?import&raw";import { default as __vite_glob_0_2 } from "/src/assets/icons/Activity.svg?import&raw";import { default as __vite_glob_0_3 } from "/src/assets/icons/Add User.svg?import&raw";import { default as __vite_glob_0_4 } from "/src/assets/icons/Arrow - Down 2.svg?import&raw";import { default as __vite_glob_0_5 } from "/src/assets/icons/Arrow - Down 3.svg?import&raw";import { default as __vite_glob_0_6 } from "/src/assets/icons/Arrow - Down Circle.svg?import&raw";import { default as __vite_glob_0_7 } from "/src/assets/icons/Arrow - Down Square.svg?import&raw";import { default as __vite_glob_0_8 } from "/src/assets/icons/Arrow - Down.svg?import&raw";import { default as __vite_glob_0_9 } from "/src/assets/icons/Arrow - Left 2.svg?import&raw";import { default as __vite_glob_0_10 } from "/src/assets/icons/Arrow - Left 3.svg?import&raw";import { default as __vite_glob_0_11 } from "/src/assets/icons/Arrow - Left Circle.svg?import&raw";import { default as __vite_glob_0_12 } from "/src/assets/icons/Arrow - Left Square.svg?import&raw";import { default as __vite_glob_0_13 } from "/src/assets/icons/Arrow - Left.svg?import&raw";import { default as __vite_glob_0_14 } from "/src/assets/icons/Arrow - Right 2.svg?import&raw";import { default as __vite_glob_0_15 } from "/src/assets/icons/Arrow - Right 3.svg?import&raw";import { default as __vite_glob_0_16 } from "/src/assets/icons/Arrow - Right Circle.svg?import&raw";import { default as __vite_glob_0_17 } from "/src/assets/icons/Arrow - Right Square.svg?import&raw";import { default as __vite_glob_0_18 } from "/src/assets/icons/Arrow - Right.svg?import&raw";import { default as __vite_glob_0_19 } from "/src/assets/icons/Arrow - Up 2.svg?import&raw";import { default as __vite_glob_0_20 } from "/src/assets/icons/Arrow - Up 3.svg?import&raw";import { default as __vite_glob_0_21 } from "/src/assets/icons/Arrow - Up Circle.svg?import&raw";import { default as __vite_glob_0_22 } from "/src/assets/icons/Arrow - Up Square.svg?import&raw";import { default as __vite_glob_0_23 } from "/src/assets/icons/Arrow - Up.svg?import&raw";import { default as __vite_glob_0_24 } from "/src/assets/icons/Bag 2.svg?import&raw";import { default as __vite_glob_0_25 } from "/src/assets/icons/Bag.svg?import&raw";import { default as __vite_glob_0_26 } from "/src/assets/icons/Bookmark.svg?import&raw";import { default as __vite_glob_0_27 } from "/src/assets/icons/Buy.svg?import&raw";import { default as __vite_glob_0_28 } from "/src/assets/icons/Calendar.svg?import&raw";import { default as __vite_glob_0_29 } from "/src/assets/icons/Call Missed.svg?import&raw";import { default as __vite_glob_0_30 } from "/src/assets/icons/Call Silent.svg?import&raw";import { default as __vite_glob_0_31 } from "/src/assets/icons/Call.svg?import&raw";import { default as __vite_glob_0_32 } from "/src/assets/icons/Calling.svg?import&raw";import { default as __vite_glob_0_33 } from "/src/assets/icons/Camera.svg?import&raw";import { default as __vite_glob_0_34 } from "/src/assets/icons/Category.svg?import&raw";import { default as __vite_glob_0_35 } from "/src/assets/icons/Chart.svg?import&raw";import { default as __vite_glob_0_36 } from "/src/assets/icons/Chat.svg?import&raw";import { default as __vite_glob_0_37 } from "/src/assets/icons/Close Square.svg?import&raw";import { default as __vite_glob_0_38 } from "/src/assets/icons/Danger.svg?import&raw";import { default as __vite_glob_0_39 } from "/src/assets/icons/Delete.svg?import&raw";import { default as __vite_glob_0_40 } from "/src/assets/icons/Discount.svg?import&raw";import { default as __vite_glob_0_41 } from "/src/assets/icons/Discovery.svg?import&raw";import { default as __vite_glob_0_42 } from "/src/assets/icons/Document.svg?import&raw";import { default as __vite_glob_0_43 } from "/src/assets/icons/Download.svg?import&raw";import { default as __vite_glob_0_44 } from "/src/assets/icons/Edit Square.svg?import&raw";import { default as __vite_glob_0_45 } from "/src/assets/icons/Edit.svg?import&raw";import { default as __vite_glob_0_46 } from "/src/assets/icons/Filter 2.svg?import&raw";import { default as __vite_glob_0_47 } from "/src/assets/icons/Filter.svg?import&raw";import { default as __vite_glob_0_48 } from "/src/assets/icons/Folder.svg?import&raw";import { default as __vite_glob_0_49 } from "/src/assets/icons/Game.svg?import&raw";import { default as __vite_glob_0_50 } from "/src/assets/icons/Graph.svg?import&raw";import { default as __vite_glob_0_51 } from "/src/assets/icons/Heart.svg?import&raw";import { default as __vite_glob_0_52 } from "/src/assets/icons/Hide.svg?import&raw";import { default as __vite_glob_0_53 } from "/src/assets/icons/Home.svg?import&raw";import { default as __vite_glob_0_54 } from "/src/assets/icons/Image 2.svg?import&raw";import { default as __vite_glob_0_55 } from "/src/assets/icons/Image.svg?import&raw";import { default as __vite_glob_0_56 } from "/src/assets/icons/Info Circle.svg?import&raw";import { default as __vite_glob_0_57 } from "/src/assets/icons/Info Square.svg?import&raw";import { default as __vite_glob_0_58 } from "/src/assets/icons/Location.svg?import&raw";import { default as __vite_glob_0_59 } from "/src/assets/icons/Lock.svg?import&raw";import { default as __vite_glob_0_60 } from "/src/assets/icons/Login.svg?import&raw";import { default as __vite_glob_0_61 } from "/src/assets/icons/Logout.svg?import&raw";import { default as __vite_glob_0_62 } from "/src/assets/icons/Message.svg?import&raw";import { default as __vite_glob_0_63 } from "/src/assets/icons/More Circle.svg?import&raw";import { default as __vite_glob_0_64 } from "/src/assets/icons/More Square.svg?import&raw";import { default as __vite_glob_0_65 } from "/src/assets/icons/Notification.svg?import&raw";import { default as __vite_glob_0_66 } from "/src/assets/icons/Paper Download.svg?import&raw";import { default as __vite_glob_0_67 } from "/src/assets/icons/Paper Fail.svg?import&raw";import { default as __vite_glob_0_68 } from "/src/assets/icons/Paper Negative.svg?import&raw";import { default as __vite_glob_0_69 } from "/src/assets/icons/Paper Plus.svg?import&raw";import { default as __vite_glob_0_70 } from "/src/assets/icons/Paper Upload.svg?import&raw";import { default as __vite_glob_0_71 } from "/src/assets/icons/Paper.svg?import&raw";import { default as __vite_glob_0_72 } from "/src/assets/icons/Password.svg?import&raw";import { default as __vite_glob_0_73 } from "/src/assets/icons/Play.svg?import&raw";import { default as __vite_glob_0_74 } from "/src/assets/icons/Plus.svg?import&raw";import { default as __vite_glob_0_75 } from "/src/assets/icons/Profile.svg?import&raw";import { default as __vite_glob_0_76 } from "/src/assets/icons/Scan.svg?import&raw";import { default as __vite_glob_0_77 } from "/src/assets/icons/Search.svg?import&raw";import { default as __vite_glob_0_78 } from "/src/assets/icons/Send.svg?import&raw";import { default as __vite_glob_0_79 } from "/src/assets/icons/Setting.svg?import&raw";import { default as __vite_glob_0_80 } from "/src/assets/icons/Shield Done.svg?import&raw";import { default as __vite_glob_0_81 } from "/src/assets/icons/Shield Fail.svg?import&raw";import { default as __vite_glob_0_82 } from "/src/assets/icons/Show.svg?import&raw";import { default as __vite_glob_0_83 } from "/src/assets/icons/Star.svg?import&raw";import { default as __vite_glob_0_84 } from "/src/assets/icons/Swap.svg?import&raw";import { default as __vite_glob_0_85 } from "/src/assets/icons/Tick Square.svg?import&raw";import { default as __vite_glob_0_86 } from "/src/assets/icons/Ticket Star.svg?import&raw";import { default as __vite_glob_0_87 } from "/src/assets/icons/Ticket.svg?import&raw";import { default as __vite_glob_0_88 } from "/src/assets/icons/Time Circle.svg?import&raw";import { default as __vite_glob_0_89 } from "/src/assets/icons/Time Square.svg?import&raw";import { default as __vite_glob_0_90 } from "/src/assets/icons/Unlock.svg?import&raw";import { default as __vite_glob_0_91 } from "/src/assets/icons/Upload.svg?import&raw";import { default as __vite_glob_0_92 } from "/src/assets/icons/Video.svg?import&raw";import { default as __vite_glob_0_93 } from "/src/assets/icons/Voice 2.svg?import&raw";import { default as __vite_glob_0_94 } from "/src/assets/icons/Voice.svg?import&raw";import { default as __vite_glob_0_95 } from "/src/assets/icons/Volume Down.svg?import&raw";import { default as __vite_glob_0_96 } from "/src/assets/icons/Volume Off.svg?import&raw";import { default as __vite_glob_0_97 } from "/src/assets/icons/Volume Up.svg?import&raw";import { default as __vite_glob_0_98 } from "/src/assets/icons/Wallet.svg?import&raw";import { default as __vite_glob_0_99 } from "/src/assets/icons/Work.svg?import&raw";import { Square, CircleCheck, Droplet, Salad, Heart, Candy, Moon, Footprints, Leaf, Lightbulb, Handshake, TreePine, Settings, Volume2, VolumeX } from "/node_modules/.vite/deps/lucide-react.js?v=ec4523ad";
+var _jsxFileName = "D:/GutGardenBeta/web/src/lib/uiIcons.tsx";
+import __vite__cjsImport101_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=ec4523ad";
+/* ------------------------------------------------------------------ */
+/*  Triple-tier icon system:                                           */
+/*    1. CUSTOM — inline SVG from icon library (tintable, currentColor) */
+/*    2. CUTE   — colored cartoon SVG (OpenMoji, self-hosted)           */
+/*    3. LINE   — Lucide stroke icons (fallback for missing shapes)     */
+/* ------------------------------------------------------------------ */
+// All custom SVG icons loaded as raw strings (inline rendering for currentColor support)
+const svgModules = /* #__PURE__ */ Object.assign({"../assets/icons/2 User.svg": __vite_glob_0_0,"../assets/icons/3 User.svg": __vite_glob_0_1,"../assets/icons/Activity.svg": __vite_glob_0_2,"../assets/icons/Add User.svg": __vite_glob_0_3,"../assets/icons/Arrow - Down 2.svg": __vite_glob_0_4,"../assets/icons/Arrow - Down 3.svg": __vite_glob_0_5,"../assets/icons/Arrow - Down Circle.svg": __vite_glob_0_6,"../assets/icons/Arrow - Down Square.svg": __vite_glob_0_7,"../assets/icons/Arrow - Down.svg": __vite_glob_0_8,"../assets/icons/Arrow - Left 2.svg": __vite_glob_0_9,"../assets/icons/Arrow - Left 3.svg": __vite_glob_0_10,"../assets/icons/Arrow - Left Circle.svg": __vite_glob_0_11,"../assets/icons/Arrow - Left Square.svg": __vite_glob_0_12,"../assets/icons/Arrow - Left.svg": __vite_glob_0_13,"../assets/icons/Arrow - Right 2.svg": __vite_glob_0_14,"../assets/icons/Arrow - Right 3.svg": __vite_glob_0_15,"../assets/icons/Arrow - Right Circle.svg": __vite_glob_0_16,"../assets/icons/Arrow - Right Square.svg": __vite_glob_0_17,"../assets/icons/Arrow - Right.svg": __vite_glob_0_18,"../assets/icons/Arrow - Up 2.svg": __vite_glob_0_19,"../assets/icons/Arrow - Up 3.svg": __vite_glob_0_20,"../assets/icons/Arrow - Up Circle.svg": __vite_glob_0_21,"../assets/icons/Arrow - Up Square.svg": __vite_glob_0_22,"../assets/icons/Arrow - Up.svg": __vite_glob_0_23,"../assets/icons/Bag 2.svg": __vite_glob_0_24,"../assets/icons/Bag.svg": __vite_glob_0_25,"../assets/icons/Bookmark.svg": __vite_glob_0_26,"../assets/icons/Buy.svg": __vite_glob_0_27,"../assets/icons/Calendar.svg": __vite_glob_0_28,"../assets/icons/Call Missed.svg": __vite_glob_0_29,"../assets/icons/Call Silent.svg": __vite_glob_0_30,"../assets/icons/Call.svg": __vite_glob_0_31,"../assets/icons/Calling.svg": __vite_glob_0_32,"../assets/icons/Camera.svg": __vite_glob_0_33,"../assets/icons/Category.svg": __vite_glob_0_34,"../assets/icons/Chart.svg": __vite_glob_0_35,"../assets/icons/Chat.svg": __vite_glob_0_36,"../assets/icons/Close Square.svg": __vite_glob_0_37,"../assets/icons/Danger.svg": __vite_glob_0_38,"../assets/icons/Delete.svg": __vite_glob_0_39,"../assets/icons/Discount.svg": __vite_glob_0_40,"../assets/icons/Discovery.svg": __vite_glob_0_41,"../assets/icons/Document.svg": __vite_glob_0_42,"../assets/icons/Download.svg": __vite_glob_0_43,"../assets/icons/Edit Square.svg": __vite_glob_0_44,"../assets/icons/Edit.svg": __vite_glob_0_45,"../assets/icons/Filter 2.svg": __vite_glob_0_46,"../assets/icons/Filter.svg": __vite_glob_0_47,"../assets/icons/Folder.svg": __vite_glob_0_48,"../assets/icons/Game.svg": __vite_glob_0_49,"../assets/icons/Graph.svg": __vite_glob_0_50,"../assets/icons/Heart.svg": __vite_glob_0_51,"../assets/icons/Hide.svg": __vite_glob_0_52,"../assets/icons/Home.svg": __vite_glob_0_53,"../assets/icons/Image 2.svg": __vite_glob_0_54,"../assets/icons/Image.svg": __vite_glob_0_55,"../assets/icons/Info Circle.svg": __vite_glob_0_56,"../assets/icons/Info Square.svg": __vite_glob_0_57,"../assets/icons/Location.svg": __vite_glob_0_58,"../assets/icons/Lock.svg": __vite_glob_0_59,"../assets/icons/Login.svg": __vite_glob_0_60,"../assets/icons/Logout.svg": __vite_glob_0_61,"../assets/icons/Message.svg": __vite_glob_0_62,"../assets/icons/More Circle.svg": __vite_glob_0_63,"../assets/icons/More Square.svg": __vite_glob_0_64,"../assets/icons/Notification.svg": __vite_glob_0_65,"../assets/icons/Paper Download.svg": __vite_glob_0_66,"../assets/icons/Paper Fail.svg": __vite_glob_0_67,"../assets/icons/Paper Negative.svg": __vite_glob_0_68,"../assets/icons/Paper Plus.svg": __vite_glob_0_69,"../assets/icons/Paper Upload.svg": __vite_glob_0_70,"../assets/icons/Paper.svg": __vite_glob_0_71,"../assets/icons/Password.svg": __vite_glob_0_72,"../assets/icons/Play.svg": __vite_glob_0_73,"../assets/icons/Plus.svg": __vite_glob_0_74,"../assets/icons/Profile.svg": __vite_glob_0_75,"../assets/icons/Scan.svg": __vite_glob_0_76,"../assets/icons/Search.svg": __vite_glob_0_77,"../assets/icons/Send.svg": __vite_glob_0_78,"../assets/icons/Setting.svg": __vite_glob_0_79,"../assets/icons/Shield Done.svg": __vite_glob_0_80,"../assets/icons/Shield Fail.svg": __vite_glob_0_81,"../assets/icons/Show.svg": __vite_glob_0_82,"../assets/icons/Star.svg": __vite_glob_0_83,"../assets/icons/Swap.svg": __vite_glob_0_84,"../assets/icons/Tick Square.svg": __vite_glob_0_85,"../assets/icons/Ticket Star.svg": __vite_glob_0_86,"../assets/icons/Ticket.svg": __vite_glob_0_87,"../assets/icons/Time Circle.svg": __vite_glob_0_88,"../assets/icons/Time Square.svg": __vite_glob_0_89,"../assets/icons/Unlock.svg": __vite_glob_0_90,"../assets/icons/Upload.svg": __vite_glob_0_91,"../assets/icons/Video.svg": __vite_glob_0_92,"../assets/icons/Voice 2.svg": __vite_glob_0_93,"../assets/icons/Voice.svg": __vite_glob_0_94,"../assets/icons/Volume Down.svg": __vite_glob_0_95,"../assets/icons/Volume Off.svg": __vite_glob_0_96,"../assets/icons/Volume Up.svg": __vite_glob_0_97,"../assets/icons/Wallet.svg": __vite_glob_0_98,"../assets/icons/Work.svg": __vite_glob_0_99
+
+
+
+});
+function svgPath(name) {
+	return `../assets/icons/${name}`;
+}
+function svgStr(name) {
+	return svgModules[svgPath(name)];
+}
+// Semantic key → custom SVG filename (from icon library)
+const CUSTOM = {
+	// Navigation & chrome
+	home: "Home.svg",
+	settings: "Setting.svg",
+	search: "Search.svg",
+	calendar: "Calendar.svg",
+	camera: "Camera.svg",
+	lock: "Lock.svg",
+	unlock: "Unlock.svg",
+	star: "Star.svg",
+	delete: "Delete.svg",
+	edit: "Edit.svg",
+	plus: "Plus.svg",
+	download: "Download.svg",
+	upload: "Upload.svg",
+	video: "Video.svg",
+	play: "Play.svg",
+	// Communication
+	message: "Message.svg",
+	chat: "Chat.svg",
+	notification: "Notification.svg",
+	send: "Send.svg",
+	voice: "Voice.svg",
+	voice2: "Voice 2.svg",
+	// Users
+	user: "2 User.svg",
+	users: "3 User.svg",
+	addUser: "Add User.svg",
+	profile: "Profile.svg",
+	// Security & status
+	shield: "Shield Done.svg",
+	shieldFail: "Shield Fail.svg",
+	danger: "Danger.svg",
+	info: "Info Circle.svg",
+	password: "Password.svg",
+	login: "Login.svg",
+	logout: "Logout.svg",
+	hide: "Hide.svg",
+	show: "Show.svg",
+	// Files & media
+	document: "Document.svg",
+	folder: "Folder.svg",
+	image: "Image.svg",
+	paper: "Paper.svg",
+	// Commerce
+	bag: "Bag.svg",
+	buy: "Buy.svg",
+	wallet: "Wallet.svg",
+	discount: "Discount.svg",
+	ticket: "Ticket.svg",
+	ticketStar: "Ticket Star.svg",
+	bookmark: "Bookmark.svg",
+	// UI
+	close: "Close Square.svg",
+	check: "Tick Square.svg",
+	checkSquare: "Tick Square.svg",
+	trash: "Delete.svg",
+	chevronLeft: "Arrow - Left 2.svg",
+	chevronRight: "Arrow - Right 2.svg",
+	filter: "Filter.svg",
+	filter2: "Filter 2.svg",
+	swap: "Swap.svg",
+	location: "Location.svg",
+	discovery: "Discovery.svg",
+	category: "Category.svg",
+	activity: "Activity.svg",
+	time: "Time Circle.svg",
+	timer: "Time Square.svg",
+	game: "Game.svg",
+	chart: "Chart.svg",
+	graph: "Graph.svg",
+	scan: "Scan.svg",
+	work: "Work.svg",
+	call: "Call.svg",
+	// Arrows
+	arrowLeft: "Arrow - Left.svg",
+	arrowRight: "Arrow - Right.svg",
+	arrowUp: "Arrow - Up.svg",
+	arrowDown: "Arrow - Down.svg",
+	arrowLeft2: "Arrow - Left 2.svg",
+	arrowRight2: "Arrow - Right 2.svg",
+	arrowUp2: "Arrow - Up 2.svg",
+	arrowDown2: "Arrow - Down 2.svg",
+	// Volume
+	volume: "Volume Up.svg",
+	volumeMute: "Volume Off.svg",
+	volumeDown: "Volume Down.svg"
+};
+const CUTE = {
+	// nature & food
+	sprout: "1F331",
+	leaf: "1F33F",
+	flower: "1F33C",
+	tree: "1F332",
+	wheat: "1F33E",
+	salad: "1F957",
+	apple: "1F34E",
+	candy: "1F36C",
+	carrot: "1F955",
+	droplet: "1F4A7",
+	droplets: "26F2",
+	sun: "2600",
+	moon: "1F319",
+	footprints: "1F3C3",
+	handshake: "1F91D",
+	// places & modules
+	landmark: "1F3DB",
+	factory: "1F3ED",
+	brick: "1F9F1",
+	telescope: "1F52D",
+	castle: "1F3F0",
+	house: "1F3E0",
+	// content objects
+	rabbit: "1F430",
+	brain: "1F9E0",
+	gamepad: "1F3AE",
+	clapperboard: "1F3AC",
+	utensils: "1F37D",
+	globe: "1F30D",
+	gift: "1F381",
+	party: "1F389",
+	dice: "1F3B2",
+	music: "1F3B5",
+	trophy: "1F3C6",
+	book: "1F4DA",
+	printer: "1F5A8",
+	baby: "1F476",
+	megaphone: "1F4E2",
+	flame: "1F525",
+	sparkles: "2728",
+	newspaper: "1F4F0",
+	tag: "1F3F7",
+	// colored UI-ish
+	zap: "26A1",
+	trendingUp: "1F4C8",
+	clipboard: "1F4CB",
+	notebookPen: "1F4DD",
+	lightbulb: "1F4A1",
+	mapPin: "1F4CD",
+	target: "1F3AF",
+	bot: "1F916",
+	phone: "1F4F1",
+	hash: "1F522",
+	key: "1F511",
+	eye: "1F440",
+	monitorPlay: "1F4FA",
+	wrench: "1F527",
+	pin: "1F4CC",
+	share: "1F4E4",
+	pen: "270F",
+	construction: "1F6A7",
+	alert: "26A0",
+	lockKeyhole: "1F510",
+	starGold: "2B50",
+	heart: "2764"
+};
+const ASSET = (code) => `/assets/fluent/${code}.svg`;
+_c = ASSET;
+/* Custom SVG renderer — renders the icon library SVG inline as a span so currentColor works */
+function CustomIcon({ name, size = 16, className }) {
+	const fname = CUSTOM[name];
+	if (!fname) return null;
+	const raw = svgStr(fname);
+	if (!raw) return null;
+	const html = raw.replace(/stroke-width="1\.5"/g, "stroke-width=\"3.5\"");
+	// Wrap in a span that sets width/height + inherits color; SVG has 24×24 viewBox
+	return /* @__PURE__ */ _jsxDEV("span", {
+		className,
+		style: {
+			width: size,
+			height: size,
+			display: "inline-flex",
+			alignItems: "center",
+			justifyContent: "center"
+		},
+		dangerouslySetInnerHTML: { __html: html }
+	}, void 0, false, {
+		fileName: _jsxFileName,
+		lineNumber: 191,
+		columnNumber: 5
+	}, this);
+}
+_c2 = CustomIcon;
+export function UiIcon({ name, size = 16, className, strokeWidth = 1.8 }) {
+	// 1. Custom SVG (icon library)
+	if (CUSTOM[name]) return /* @__PURE__ */ _jsxDEV(CustomIcon, {
+		name,
+		size,
+		className
+	}, void 0, false, {
+		fileName: _jsxFileName,
+		lineNumber: 206,
+		columnNumber: 28
+	}, this);
+	// 2. Cute OpenMoji
+	const code = CUTE[name];
+	if (code) {
+		return /* @__PURE__ */ _jsxDEV("img", {
+			src: ASSET(code),
+			width: size,
+			height: size,
+			alt: "",
+			draggable: false,
+			className
+		}, void 0, false, {
+			fileName: _jsxFileName,
+			lineNumber: 212,
+			columnNumber: 7
+		}, this);
+	}
+	// 3. Lucide line icons (fallback)
+	const L = LINE[name];
+	if (L) return /* @__PURE__ */ _jsxDEV(L, {
+		size,
+		className,
+		strokeWidth,
+		"aria-hidden": "true"
+	}, void 0, false, {
+		fileName: _jsxFileName,
+		lineNumber: 225,
+		columnNumber: 17
+	}, this);
+	return null;
+}
+_c3 = UiIcon;
+const LINE = {
+	square: Square,
+	checkCircle: CircleCheck,
+	dropletLine: Droplet,
+	saladLine: Salad,
+	heartLine: Heart,
+	candyLine: Candy,
+	moonLine: Moon,
+	footprintsLine: Footprints,
+	leafLine: Leaf,
+	lightbulbLine: Lightbulb,
+	treeLine: TreePine,
+	handshakeLine: Handshake,
+	settingsLine: Settings,
+	volumeLine: Volume2,
+	volumeMuteLine: VolumeX
+};
+var _c, _c2, _c3;
+$RefreshReg$(_c, "ASSET");
+$RefreshReg$(_c2, "CustomIcon");
+$RefreshReg$(_c3, "UiIcon");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+import * as __vite_react_currentExports from "/src/lib/uiIcons.tsx";
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+
+  const currentExports = __vite_react_currentExports;
+  queueMicrotask(() => {
+    RefreshRuntime.registerExportsForReactRefresh("D:/GutGardenBeta/web/src/lib/uiIcons.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("D:/GutGardenBeta/web/src/lib/uiIcons.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) { return RefreshRuntime.register(type, "D:/GutGardenBeta/web/src/lib/uiIcons.tsx" + ' ' + id); }
+function $RefreshSig$() { return RefreshRuntime.createSignatureFunctionForTransform(); }
+
+//# sourceMappingURL=data:application/json;base64,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QUksYUFBa0U7Q0FDdkcsTUFBTSxRQUFRLE9BQU87Q0FDckIsSUFBSSxDQUFDLE9BQU8sT0FBTztDQUNuQixNQUFNLE1BQU0sT0FBTyxLQUFLO0NBQ3hCLElBQUksQ0FBQyxLQUFLLE9BQU87Q0FDakIsTUFBTSxPQUFPLElBQUksUUFBUSx3QkFBd0Isc0JBQW9COztDQUVyRSxPQUNFLHdCQUFDLFFBQUQ7RUFDYTtFQUNYLE9BQU87R0FBRSxPQUFPO0dBQU0sUUFBUTtHQUFNLFNBQVM7R0FBZSxZQUFZO0dBQVUsZ0JBQWdCO0VBQVM7RUFDM0cseUJBQXlCLEVBQUUsUUFBUSxLQUFLO0NBQ3pDOzs7OztBQUVMOztBQUVBLE9BQU8sU0FBUyxPQUFPLEVBQUUsTUFBTSxPQUFPLElBQUksV0FBVyxjQUFjLE9BS2hFOztDQUVELElBQUksT0FBTyxPQUFPLE9BQU8sd0JBQUMsWUFBRDtFQUFrQjtFQUFZO0VBQWlCO0NBQVk7Ozs7OztDQUdwRixNQUFNLE9BQU8sS0FBSztDQUNsQixJQUFJLE1BQU07RUFDUixPQUNFLHdCQUFDLE9BQUQ7R0FDRSxLQUFLLE1BQU0sSUFBSTtHQUNmLE9BQU87R0FDUCxRQUFRO0dBQ1IsS0FBSTtHQUNKLFdBQVc7R0FDQTtFQUNaOzs7OztDQUVMOztDQUdBLE1BQU0sSUFBSSxLQUFLO0NBQ2YsSUFBSSxHQUFHLE9BQU8sd0JBQUMsR0FBRDtFQUFTO0VBQWlCO0VBQXdCO0VBQWEsZUFBWTtDQUFROzs7OztDQUVqRyxPQUFPO0FBQ1Q7O0FBRUEsTUFBTSxPQUFtQztDQUN2QyxRQUFRO0NBQ1IsYUFBYTtDQUNiLGFBQWE7Q0FDYixXQUFXO0NBQ1gsV0FBVztDQUNYLFdBQVc7Q0FDWCxVQUFVO0NBQ1YsZ0JBQWdCO0NBQ2hCLFVBQVU7Q0FDVixlQUFlO0NBQ2YsVUFBVTtDQUNWLGVBQWU7Q0FDZixjQUFjO0NBQ2QsWUFBWTtDQUNaLGdCQUFnQjtBQUNsQiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJ1aUljb25zLnRzeCJdLCJ2ZXJzaW9uIjozLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyB0eXBlIEx1Y2lkZUljb24sIFNxdWFyZSwgQ2lyY2xlQ2hlY2ssIERyb3BsZXQsIFNhbGFkLCBIZWFydCwgQ2FuZHksIE1vb24sIEZvb3RwcmludHMsIExlYWYsIExpZ2h0YnVsYiwgSGFuZHNoYWtlLCBUcmVlUGluZSwgU2V0dGluZ3MsIFZvbHVtZTIsIFZvbHVtZVggfSBmcm9tICdsdWNpZGUtcmVhY3QnXG5cbi8qIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSAqL1xuLyogIFRyaXBsZS10aWVyIGljb24gc3lzdGVtOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqL1xuLyogICAgMS4gQ1VTVE9NIOKAlCBpbmxpbmUgU1ZHIGZyb20gaWNvbiBsaWJyYXJ5ICh0aW50YWJsZSwgY3VycmVudENvbG9yKSAqL1xuLyogICAgMi4gQ1VURSAgIOKAlCBjb2xvcmVkIGNhcnRvb24gU1ZHIChPcGVuTW9qaSwgc2VsZi1ob3N0ZWQpICAgICAgICAgICAqL1xuLyogICAgMy4gTElORSAgIOKAlCBMdWNpZGUgc3Ryb2tlIGljb25zIChmYWxsYmFjayBmb3IgbWlzc2luZyBzaGFwZXMpICAgICAqL1xuLyogLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tICovXG5cbi8vIEFsbCBjdXN0b20gU1ZHIGljb25zIGxvYWRlZCBhcyByYXcgc3RyaW5ncyAoaW5saW5lIHJlbmRlcmluZyBmb3IgY3VycmVudENvbG9yIHN1cHBvcnQpXG5jb25zdCBzdmdNb2R1bGVzID0gaW1wb3J0Lm1ldGEuZ2xvYjxzdHJpbmc+KCcuLi9hc3NldHMvaWNvbnMvKi5zdmcnLCB7IHF1ZXJ5OiAnP3JhdycsIGVhZ2VyOiB0cnVlLCBpbXBvcnQ6ICdkZWZhdWx0JyB9KVxuXG5mdW5jdGlvbiBzdmdQYXRoKG5hbWU6IHN0cmluZykge1xuICByZXR1cm4gYC4uL2Fzc2V0cy9pY29ucy8ke25hbWV9YFxufVxuXG5mdW5jdGlvbiBzdmdTdHIobmFtZTogc3RyaW5nKTogc3RyaW5nIHwgdW5kZWZpbmVkIHtcbiAgcmV0dXJuIHN2Z01vZHVsZXNbc3ZnUGF0aChuYW1lKV1cbn1cblxuLy8gU2VtYW50aWMga2V5IOKGkiBjdXN0b20gU1ZHIGZpbGVuYW1lIChmcm9tIGljb24gbGlicmFyeSlcbmNvbnN0IENVU1RPTTogUmVjb3JkPHN0cmluZywgc3RyaW5nPiA9IHtcbiAgLy8gTmF2aWdhdGlvbiAmIGNocm9tZVxuICBob21lOiAnSG9tZS5zdmcnLFxuICBzZXR0aW5nczogJ1NldHRpbmcuc3ZnJyxcbiAgc2VhcmNoOiAnU2VhcmNoLnN2ZycsXG4gIGNhbGVuZGFyOiAnQ2FsZW5kYXIuc3ZnJyxcbiAgY2FtZXJhOiAnQ2FtZXJhLnN2ZycsXG4gIGxvY2s6ICdMb2NrLnN2ZycsXG4gIHVubG9jazogJ1VubG9jay5zdmcnLFxuICBzdGFyOiAnU3Rhci5zdmcnLFxuICBkZWxldGU6ICdEZWxldGUuc3ZnJyxcbiAgZWRpdDogJ0VkaXQuc3ZnJyxcbiAgcGx1czogJ1BsdXMuc3ZnJyxcbiAgZG93bmxvYWQ6ICdEb3dubG9hZC5zdmcnLFxuICB1cGxvYWQ6ICdVcGxvYWQuc3ZnJyxcbiAgdmlkZW86ICdWaWRlby5zdmcnLFxuICBwbGF5OiAnUGxheS5zdmcnLFxuICAvLyBDb21tdW5pY2F0aW9uXG4gIG1lc3NhZ2U6ICdNZXNzYWdlLnN2ZycsXG4gIGNoYXQ6ICdDaGF0LnN2ZycsXG4gIG5vdGlmaWNhdGlvbjogJ05vdGlmaWNhdGlvbi5zdmcnLFxuICBzZW5kOiAnU2VuZC5zdmcnLFxuICB2b2ljZTogJ1ZvaWNlLnN2ZycsXG4gIHZvaWNlMjogJ1ZvaWNlIDIuc3ZnJyxcbiAgLy8gVXNlcnNcbiAgdXNlcjogJzIgVXNlci5zdmcnLFxuICB1c2VyczogJzMgVXNlci5zdmcnLFxuICBhZGRVc2VyOiAnQWRkIFVzZXIuc3ZnJyxcbiAgcHJvZmlsZTogJ1Byb2ZpbGUuc3ZnJyxcbiAgLy8gU2VjdXJpdHkgJiBzdGF0dXNcbiAgc2hpZWxkOiAnU2hpZWxkIERvbmUuc3ZnJyxcbiAgc2hpZWxkRmFpbDogJ1NoaWVsZCBGYWlsLnN2ZycsXG4gIGRhbmdlcjogJ0Rhbmdlci5zdmcnLFxuICBpbmZvOiAnSW5mbyBDaXJjbGUuc3ZnJyxcbiAgcGFzc3dvcmQ6ICdQYXNzd29yZC5zdmcnLFxuICBsb2dpbjogJ0xvZ2luLnN2ZycsXG4gIGxvZ291dDogJ0xvZ291dC5zdmcnLFxuICBoaWRlOiAnSGlkZS5zdmcnLFxuICBzaG93OiAnU2hvdy5zdmcnLFxuICAvLyBGaWxlcyAmIG1lZGlhXG4gIGRvY3VtZW50OiAnRG9jdW1lbnQuc3ZnJyxcbiAgZm9sZGVyOiAnRm9sZGVyLnN2ZycsXG4gIGltYWdlOiAnSW1hZ2Uuc3ZnJyxcbiAgcGFwZXI6ICdQYXBlci5zdmcnLFxuICAvLyBDb21tZXJjZVxuICBiYWc6ICdCYWcuc3ZnJyxcbiAgYnV5OiAnQnV5LnN2ZycsXG4gIHdhbGxldDogJ1dhbGxldC5zdmcnLFxuICBkaXNjb3VudDogJ0Rpc2NvdW50LnN2ZycsXG4gIHRpY2tldDogJ1RpY2tldC5zdmcnLFxuICB0aWNrZXRTdGFyOiAnVGlja2V0IFN0YXIuc3ZnJyxcbiAgYm9va21hcms6ICdCb29rbWFyay5zdmcnLFxuICAvLyBVSVxuICBjbG9zZTogJ0Nsb3NlIFNxdWFyZS5zdmcnLFxuICBjaGVjazogJ1RpY2sgU3F1YXJlLnN2ZycsXG4gIGNoZWNrU3F1YXJlOiAnVGljayBTcXVhcmUuc3ZnJyxcbiAgdHJhc2g6ICdEZWxldGUuc3ZnJyxcbiAgY2hldnJvbkxlZnQ6ICdBcnJvdyAtIExlZnQgMi5zdmcnLFxuICBjaGV2cm9uUmlnaHQ6ICdBcnJvdyAtIFJpZ2h0IDIuc3ZnJyxcbiAgZmlsdGVyOiAnRmlsdGVyLnN2ZycsXG4gIGZpbHRlcjI6ICdGaWx0ZXIgMi5zdmcnLFxuICBzd2FwOiAnU3dhcC5zdmcnLFxuICBsb2NhdGlvbjogJ0xvY2F0aW9uLnN2ZycsXG4gIGRpc2NvdmVyeTogJ0Rpc2NvdmVyeS5zdmcnLFxuICBjYXRlZ29yeTogJ0NhdGVnb3J5LnN2ZycsXG4gIGFjdGl2aXR5OiAnQWN0aXZpdHkuc3ZnJyxcbiAgdGltZTogJ1RpbWUgQ2lyY2xlLnN2ZycsXG4gIHRpbWVyOiAnVGltZSBTcXVhcmUuc3ZnJyxcbiAgZ2FtZTogJ0dhbWUuc3ZnJyxcbiAgY2hhcnQ6ICdDaGFydC5zdmcnLFxuICBncmFwaDogJ0dyYXBoLnN2ZycsXG4gIHNjYW46ICdTY2FuLnN2ZycsXG4gIHdvcms6ICdXb3JrLnN2ZycsXG4gIGNhbGw6ICdDYWxsLnN2ZycsXG4gIC8vIEFycm93c1xuICBhcnJvd0xlZnQ6ICdBcnJvdyAtIExlZnQuc3ZnJyxcbiAgYXJyb3dSaWdodDogJ0Fycm93IC0gUmlnaHQuc3ZnJyxcbiAgYXJyb3dVcDogJ0Fycm93IC0gVXAuc3ZnJyxcbiAgYXJyb3dEb3duOiAnQXJyb3cgLSBEb3duLnN2ZycsXG4gIGFycm93TGVmdDI6ICdBcnJvdyAtIExlZnQgMi5zdmcnLFxuICBhcnJvd1JpZ2h0MjogJ0Fycm93IC0gUmlnaHQgMi5zdmcnLFxuICBhcnJvd1VwMjogJ0Fycm93IC0gVXAgMi5zdmcnLFxuICBhcnJvd0Rvd24yOiAnQXJyb3cgLSBEb3duIDIuc3ZnJyxcbiAgLy8gVm9sdW1lXG4gIHZvbHVtZTogJ1ZvbHVtZSBVcC5zdmcnLFxuICB2b2x1bWVNdXRlOiAnVm9sdW1lIE9mZi5zdmcnLFxuICB2b2x1bWVEb3duOiAnVm9sdW1lIERvd24uc3ZnJyxcbn1cblxuY29uc3QgQ1VURTogUmVjb3JkPHN0cmluZywgc3RyaW5nPiA9IHtcbiAgLy8gbmF0dXJlICYgZm9vZFxuICBzcHJvdXQ6ICcxRjMzMScsXG4gIGxlYWY6ICcxRjMzRicsXG4gIGZsb3dlcjogJzFGMzNDJyxcbiAgdHJlZTogJzFGMzMyJyxcbiAgd2hlYXQ6ICcxRjMzRScsXG4gIHNhbGFkOiAnMUY5NTcnLFxuICBhcHBsZTogJzFGMzRFJyxcbiAgY2FuZHk6ICcxRjM2QycsXG4gIGNhcnJvdDogJzFGOTU1JyxcbiAgZHJvcGxldDogJzFGNEE3JyxcbiAgZHJvcGxldHM6ICcyNkYyJyxcbiAgc3VuOiAnMjYwMCcsXG4gIG1vb246ICcxRjMxOScsXG4gIGZvb3RwcmludHM6ICcxRjNDMycsXG4gIGhhbmRzaGFrZTogJzFGOTFEJyxcbiAgLy8gcGxhY2VzICYgbW9kdWxlc1xuICBsYW5kbWFyazogJzFGM0RCJyxcbiAgZmFjdG9yeTogJzFGM0VEJyxcbiAgYnJpY2s6ICcxRjlGMScsXG4gIHRlbGVzY29wZTogJzFGNTJEJyxcbiAgY2FzdGxlOiAnMUYzRjAnLFxuICBob3VzZTogJzFGM0UwJyxcbiAgLy8gY29udGVudCBvYmplY3RzXG4gIHJhYmJpdDogJzFGNDMwJyxcbiAgYnJhaW46ICcxRjlFMCcsXG4gIGdhbWVwYWQ6ICcxRjNBRScsXG4gIGNsYXBwZXJib2FyZDogJzFGM0FDJyxcbiAgdXRlbnNpbHM6ICcxRjM3RCcsXG4gIGdsb2JlOiAnMUYzMEQnLFxuICBnaWZ0OiAnMUYzODEnLFxuICBwYXJ0eTogJzFGMzg5JyxcbiAgZGljZTogJzFGM0IyJyxcbiAgbXVzaWM6ICcxRjNCNScsXG4gIHRyb3BoeTogJzFGM0M2JyxcbiAgYm9vazogJzFGNERBJyxcbiAgcHJpbnRlcjogJzFGNUE4JyxcbiAgYmFieTogJzFGNDc2JyxcbiAgbWVnYXBob25lOiAnMUY0RTInLFxuICBmbGFtZTogJzFGNTI1JyxcbiAgc3BhcmtsZXM6ICcyNzI4JyxcbiAgbmV3c3BhcGVyOiAnMUY0RjAnLFxuICB0YWc6ICcxRjNGNycsXG4gIC8vIGNvbG9yZWQgVUktaXNoXG4gIHphcDogJzI2QTEnLFxuICB0cmVuZGluZ1VwOiAnMUY0QzgnLFxuICBjbGlwYm9hcmQ6ICcxRjRDQicsXG4gIG5vdGVib29rUGVuOiAnMUY0REQnLFxuICBsaWdodGJ1bGI6ICcxRjRBMScsXG4gIG1hcFBpbjogJzFGNENEJyxcbiAgdGFyZ2V0OiAnMUYzQUYnLFxuICBib3Q6ICcxRjkxNicsXG4gIHBob25lOiAnMUY0RjEnLFxuICBoYXNoOiAnMUY1MjInLFxuICBrZXk6ICcxRjUxMScsXG4gIGV5ZTogJzFGNDQwJyxcbiAgbW9uaXRvclBsYXk6ICcxRjRGQScsXG4gIHdyZW5jaDogJzFGNTI3JyxcbiAgcGluOiAnMUY0Q0MnLFxuICBzaGFyZTogJzFGNEU0JyxcbiAgcGVuOiAnMjcwRicsXG4gIGNvbnN0cnVjdGlvbjogJzFGNkE3JyxcbiAgYWxlcnQ6ICcyNkEwJyxcbiAgbG9ja0tleWhvbGU6ICcxRjUxMCcsXG4gIHN0YXJHb2xkOiAnMkI1MCcsXG4gIGhlYXJ0OiAnMjc2NCcsXG59XG5cbmNvbnN0IEFTU0VUID0gKGNvZGU6IHN0cmluZykgPT4gYC9hc3NldHMvZmx1ZW50LyR7Y29kZX0uc3ZnYFxuXG4vKiBDdXN0b20gU1ZHIHJlbmRlcmVyIOKAlCByZW5kZXJzIHRoZSBpY29uIGxpYnJhcnkgU1ZHIGlubGluZSBhcyBhIHNwYW4gc28gY3VycmVudENvbG9yIHdvcmtzICovXG5mdW5jdGlvbiBDdXN0b21JY29uKHsgbmFtZSwgc2l6ZSA9IDE2LCBjbGFzc05hbWUgfTogeyBuYW1lOiBzdHJpbmc7IHNpemU/OiBudW1iZXI7IGNsYXNzTmFtZT86IHN0cmluZyB9KSB7XG4gIGNvbnN0IGZuYW1lID0gQ1VTVE9NW25hbWVdXG4gIGlmICghZm5hbWUpIHJldHVybiBudWxsXG4gIGNvbnN0IHJhdyA9IHN2Z1N0cihmbmFtZSlcbiAgaWYgKCFyYXcpIHJldHVybiBudWxsXG4gIGNvbnN0IGh0bWwgPSByYXcucmVwbGFjZSgvc3Ryb2tlLXdpZHRoPVwiMVxcLjVcIi9nLCAnc3Ryb2tlLXdpZHRoPVwiMy41XCInKVxuICAvLyBXcmFwIGluIGEgc3BhbiB0aGF0IHNldHMgd2lkdGgvaGVpZ2h0ICsgaW5oZXJpdHMgY29sb3I7IFNWRyBoYXMgMjTDlzI0IHZpZXdCb3hcbiAgcmV0dXJuIChcbiAgICA8c3BhblxuICAgICAgY2xhc3NOYW1lPXtjbGFzc05hbWV9XG4gICAgICBzdHlsZT17eyB3aWR0aDogc2l6ZSwgaGVpZ2h0OiBzaXplLCBkaXNwbGF5OiAnaW5saW5lLWZsZXgnLCBhbGlnbkl0ZW1zOiAnY2VudGVyJywganVzdGlmeUNvbnRlbnQ6ICdjZW50ZXInIH19XG4gICAgICBkYW5nZXJvdXNseVNldElubmVySFRNTD17eyBfX2h0bWw6IGh0bWwgfX1cbiAgICAvPlxuICApXG59XG5cbmV4cG9ydCBmdW5jdGlvbiBVaUljb24oeyBuYW1lLCBzaXplID0gMTYsIGNsYXNzTmFtZSwgc3Ryb2tlV2lkdGggPSAxLjggfToge1xuICBuYW1lOiBzdHJpbmdcbiAgc2l6ZT86IG51bWJlclxuICBjbGFzc05hbWU/OiBzdHJpbmdcbiAgc3Ryb2tlV2lkdGg/OiBudW1iZXJcbn0pIHtcbiAgLy8gMS4gQ3VzdG9tIFNWRyAoaWNvbiBsaWJyYXJ5KVxuICBpZiAoQ1VTVE9NW25hbWVdKSByZXR1cm4gPEN1c3RvbUljb24gbmFtZT17bmFtZX0gc2l6ZT17c2l6ZX0gY2xhc3NOYW1lPXtjbGFzc05hbWV9IC8+XG5cbiAgLy8gMi4gQ3V0ZSBPcGVuTW9qaVxuICBjb25zdCBjb2RlID0gQ1VURVtuYW1lXVxuICBpZiAoY29kZSkge1xuICAgIHJldHVybiAoXG4gICAgICA8aW1nXG4gICAgICAgIHNyYz17QVNTRVQoY29kZSl9XG4gICAgICAgIHdpZHRoPXtzaXplfVxuICAgICAgICBoZWlnaHQ9e3NpemV9XG4gICAgICAgIGFsdD1cIlwiXG4gICAgICAgIGRyYWdnYWJsZT17ZmFsc2V9XG4gICAgICAgIGNsYXNzTmFtZT17Y2xhc3NOYW1lfVxuICAgICAgLz5cbiAgICApXG4gIH1cblxuICAvLyAzLiBMdWNpZGUgbGluZSBpY29ucyAoZmFsbGJhY2spXG4gIGNvbnN0IEwgPSBMSU5FW25hbWVdXG4gIGlmIChMKSByZXR1cm4gPEwgc2l6ZT17c2l6ZX0gY2xhc3NOYW1lPXtjbGFzc05hbWV9IHN0cm9rZVdpZHRoPXtzdHJva2VXaWR0aH0gYXJpYS1oaWRkZW49XCJ0cnVlXCIgLz5cblxuICByZXR1cm4gbnVsbFxufVxuXG5jb25zdCBMSU5FOiBSZWNvcmQ8c3RyaW5nLCBMdWNpZGVJY29uPiA9IHtcbiAgc3F1YXJlOiBTcXVhcmUsXG4gIGNoZWNrQ2lyY2xlOiBDaXJjbGVDaGVjayxcbiAgZHJvcGxldExpbmU6IERyb3BsZXQsXG4gIHNhbGFkTGluZTogU2FsYWQsXG4gIGhlYXJ0TGluZTogSGVhcnQsXG4gIGNhbmR5TGluZTogQ2FuZHksXG4gIG1vb25MaW5lOiBNb29uLFxuICBmb290cHJpbnRzTGluZTogRm9vdHByaW50cyxcbiAgbGVhZkxpbmU6IExlYWYsXG4gIGxpZ2h0YnVsYkxpbmU6IExpZ2h0YnVsYixcbiAgdHJlZUxpbmU6IFRyZWVQaW5lLFxuICBoYW5kc2hha2VMaW5lOiBIYW5kc2hha2UsXG4gIHNldHRpbmdzTGluZTogU2V0dGluZ3MsXG4gIHZvbHVtZUxpbmU6IFZvbHVtZTIsXG4gIHZvbHVtZU11dGVMaW5lOiBWb2x1bWVYLFxufVxuIl19

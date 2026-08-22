@@ -4,7 +4,7 @@ const CODES = new Map<string, { code: string; sentAt: number }>()
 const THROTTLE_MS = 60_000
 const EXPIRE_MS = 5 * 60_000
 
-export function sendLoginCode(phone: string): void {
+export function sendLoginCode(phone: string): string {
   const existing = CODES.get(phone)
   if (existing && Date.now() - existing.sentAt < THROTTLE_MS) {
     throwError('AUTH_002')
@@ -12,6 +12,7 @@ export function sendLoginCode(phone: string): void {
   const code = String(Math.floor(100000 + Math.random() * 900000))
   CODES.set(phone, { code, sentAt: Date.now() })
   console.log(`[sms-mock] 验证码 ${phone} → ${code}`)
+  return code
 }
 
 export function verifyLoginCode(phone: string, code: string): void {

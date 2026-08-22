@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { Home, Sprout, CalendarCheck, BookOpen, Award, User, Camera } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
+import { sfx } from '@/lib/sound'
 
 /* ------------------------------------------------------------------ */
 /*  Tab definitions                                                    */
@@ -85,7 +86,10 @@ export default function BottomDock() {
                   borderRadius: '28px 28px 16px 16px',
                   boxShadow: '0 4px 12px rgba(184, 118, 200, 0.35)',
                 }}
-                onClick={() => setStoolModalOpen(true)}
+                onClick={() => {
+                  sfx.click()
+                  setStoolModalOpen(true)
+                }}
               >
                 <Camera size={22} className="text-white" strokeWidth={2.2} />
                 <span
@@ -106,6 +110,7 @@ export default function BottomDock() {
               end={tab.route === '/'}
               className="flex flex-col items-center gap-0.5 shrink-0"
               style={{ minWidth: 0 }}
+              onClick={() => sfx.click()}
             >
               {({ isActive: navActive }) => {
                 const showActive = navActive || active

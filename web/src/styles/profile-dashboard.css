@@ -1,0 +1,99 @@
+/* ─────────────────────────────────────────────────────────────
+   我的主页 Garden Profile Dashboard 专用样式
+   视觉语言：3D 黏土 + 奶油玻璃 + 儿童花园游戏 + 轻度数据可视化
+   卡片允许背景森林透进来，避免大面积纯白
+   ───────────────────────────────────────────────────────────── */
+
+.gdp-card {
+  border-radius: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 10px 28px rgba(66, 95, 42, 0.16),
+    inset 0 2px 5px rgba(255, 255, 255, 0.75);
+  background: linear-gradient(180deg, rgba(255, 250, 232, 0.90), rgba(255, 240, 205, 0.88));
+  backdrop-filter: blur(12px);
+}
+
+.gdp-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #3f3b2d;
+  letter-spacing: 0.3px;
+}
+
+.gdp-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #858875;
+}
+
+.gdp-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #5e973c;
+  line-height: 1.05;
+}
+.gdp-num small {
+  font-size: 13px;
+  font-weight: 700;
+  color: #8a927d;
+  margin-left: 2px;
+}
+
+/* 迷你进度条 */
+.gdp-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(130, 110, 70, 0.13);
+  overflow: hidden;
+}
+.gdp-progress > div {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fc84f, #5e973c);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* 便便记录迷你趋势柱 */
+.gdp-trend {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+  margin-top: 6px;
+}
+.gdp-trend i {
+  display: block;
+  width: 5px;
+  border-radius: 2px 2px 1px 1px;
+  background: linear-gradient(180deg, #a4d96a, #6caf3f);
+}
+
+/* 好友头像（黏土圆片） */
+.gdp-friend-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 3px 8px rgba(70, 100, 40, 0.18),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+/* 图表浮动提示 */
+.gdp-chart-tip {
+  position: absolute;
+  background: #fffdf3;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(62, 91, 42, 0.18);
+  padding: 6px 11px;
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+}

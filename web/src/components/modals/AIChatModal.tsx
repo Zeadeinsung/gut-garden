@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useUIStore } from '@/stores/uiStore'
 import { apiStream } from '@/lib/api'
+import { sfx } from '@/lib/sound'
 import { toast } from '@/components/ui/Toast'
 import { UiIcon } from '@/lib/uiIcons'
 
@@ -42,6 +43,7 @@ export default function AIChatModal() {
   const send = async (text: string) => {
     const content = text.trim()
     if (!content || loading) return
+    sfx.notification()
     setInput('')
     setMessages((prev) => [...prev, { role: 'user', content }])
     setLoading(true)
@@ -77,7 +79,7 @@ export default function AIChatModal() {
       <div className="relative bg-white/95 backdrop-blur rounded-2xl shadow-2xl w-full max-w-[420px] max-h-[80vh] mx-4 flex flex-col overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-gray-100 shrink-0">
           <div className="flex items-center gap-2">
-            <img src="/assets/characters/png/char_xiaoyuan.png" alt="菌小园" className="w-10 h-10 object-contain" />
+            <img src="/assets/characters/png/char_xiaoyuan.webp" alt="菌小园" className="w-10 h-10 object-contain" />
             <div>
               <h2 className="font-bold text-garden-forest text-sm">菌小园</h2>
               <p className="text-[10px] text-gray-400">你的肠道小导游</p>

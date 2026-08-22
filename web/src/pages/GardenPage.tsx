@@ -171,9 +171,8 @@ export default function GardenPage() {
   const stoolDone = hasStoolToday()
 
   return (
-    <div className="flex flex-col min-h-full">
+    <div className="flex flex-col min-h-full gg-card-border-055">
       <Header
-        transparent
         leftSlot={
           <div className="flex items-center gap-2">
             <button
@@ -192,8 +191,6 @@ export default function GardenPage() {
           </div>
         }
         centerSlot={null}
-        userSlot={null}
-        controlsSlot={null}
       />
 
       {editing && (
@@ -347,14 +344,14 @@ export default function GardenPage() {
           <div className="glass-card card-module p-4 h-full flex flex-col">
             <div className="flex items-center justify-between mb-3 shrink-0">
               <div className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center shadow-inner overflow-hidden"><img src="/assets/characters/png/char_xiaoyuan.png" alt="菌小园助手" className="w-7 h-7 object-contain" /></span>
+                <span className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center shadow-inner overflow-hidden"><img src="/assets/characters/png/char_xiaoyuan.webp" alt="菌小园助手" className="w-7 h-7 object-contain" /></span>
                 <h3 className="font-bold text-sm text-garden-forest">菌小园助手</h3>
               </div>
               <span className="text-gray-400 text-sm"><UiIcon name="megaphone" size={15} /></span>
             </div>
 
             <div className="flex items-center gap-2.5 mb-3 shrink-0">
-              <img src="/assets/characters/png/char_xiaoyuan.png" alt="菌小园" className="w-12 h-12 object-contain shrink-0" />
+              <img src="/assets/characters/png/char_xiaoyuan.webp" alt="菌小园" className="w-12 h-12 object-contain shrink-0" />
               <div className="bg-garden-cream rounded-xl rounded-bl-sm p-3 flex-1">
                 <p className="text-xs text-gray-500">嗨，小主人！今天的花园看起来生机勃勃呢！</p>
               </div>

@@ -99,6 +99,7 @@ export function applyGardenState(data: GardenApi): void {
     gardenLevel: data.growth_stage,
     gardenXp: data.garden_xp,
     interactionCount: data.interaction_count,
+    stageLabel: data.stage_label,
   })
 }
 
@@ -145,6 +146,8 @@ async function syncAll(childId: number) {
       progress: m.quizzes_total ? Math.round((m.quizzes_passed / m.quizzes_total) * 100) : 0,
       unlocked: m.cards_unlocked > 0 || m.completed,
       stars: m.quizzes_passed,
+      animationWatched: m.animation_watched,
+      cardsUnlocked: m.cards_unlocked,
     })),
   })
 }

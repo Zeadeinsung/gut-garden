@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes } from 'react'
+import type { ButtonHTMLAttributes, MouseEvent } from 'react'
+import { sfx } from '@/lib/sound'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost'
@@ -17,10 +18,15 @@ const sizes = {
   lg: 'px-8 py-3.5 text-lg rounded-2xl',
 }
 
-export function Button({ variant = 'primary', size = 'md', className = '', ...props }: ButtonProps) {
+export function Button({ variant = 'primary', size = 'md', className = '', onClick, ...props }: ButtonProps) {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    if (!props.disabled) sfx.click()
+    onClick?.(e)
+  }
   return (
     <button
       className={`font-semibold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${variants[variant]} ${sizes[size]} ${className}`}
+      onClick={handleClick}
       {...props}
     />
   )

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { UiIcon } from '@/lib/uiIcons'
+import { sfx } from '@/lib/sound'
 import type { BadgeDef, BadgeRarity } from '@/types/badges'
 
 const BADGE_FRAMES: Record<BadgeRarity, string> = {
-  bronze: '/assets/badges/frames/ui_badge_frame_bronze.png',
-  silver: '/assets/badges/frames/ui_badge_frame_silver.png',
-  gold: '/assets/badges/frames/ui_badge_frame_gold.png',
+  bronze: '/assets/badges/frames/ui_badge_frame_bronze.webp',
+  silver: '/assets/badges/frames/ui_badge_frame_silver.webp',
+  gold: '/assets/badges/frames/ui_badge_frame_gold.webp',
 }
 
 const PAGE_W = 300
@@ -156,10 +157,12 @@ export default function BadgeBook({ defs, awardedCodes, awardedRarities }: Badge
 
   const goNext = () => {
     if (page >= maxPage) return
+    sfx.pop()
     flipTo(page + 1)
   }
   const goPrev = () => {
     if (page <= 0) return
+    sfx.pop()
     flipTo(page - 1)
   }
 

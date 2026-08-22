@@ -4,8 +4,10 @@ import { useBadgeStore } from '@/stores/badgeStore'
 import { useGardenStore } from '@/stores/gardenStore'
 import { useAuthStore } from '@/stores/authStore'
 import Header from '@/components/navigation/Header'
+import TopRightControls from '@/components/navigation/TopRightControls'
 import type { BadgeDef, BadgeRarity } from '@/types/badges'
 import { badgeIconUrl } from '@/lib/badgeIcons'
+import { sfx } from '@/lib/sound'
 import { UiIcon } from '@/lib/uiIcons'
 import { DraggableBlock, type BlockPos } from '@/components/ui/DraggableBlock'
 import { useEditorPage } from '@/hooks/useEditorPage'
@@ -52,9 +54,9 @@ const CAT_GRADIENTS: Record<string, string> = {
 const RARITY_RANK: Record<BadgeRarity, number> = { bronze: 1, silver: 2, gold: 3 }
 
 const BADGE_FRAMES: Record<BadgeRarity, string> = {
-  bronze: '/assets/badges/frames/ui_badge_frame_bronze.png',
-  silver: '/assets/badges/frames/ui_badge_frame_silver.png',
-  gold: '/assets/badges/frames/ui_badge_frame_gold.png',
+  bronze: '/assets/badges/frames/ui_badge_frame_bronze.webp',
+  silver: '/assets/badges/frames/ui_badge_frame_silver.webp',
+  gold: '/assets/badges/frames/ui_badge_frame_gold.webp',
 }
 
 const LEVELS = [
@@ -78,7 +80,7 @@ const BADGE_DEFAULTS: Record<string, BlockPos> = {
   assistantChar: { x: 113, y: 250, w: 72,  h: 72  },
   cabinet:       { x: 290, y: 20,  w: 672, h: 620 },
   growthCard:    { x: 978, y: 20,  w: 278, h: 248 },
-  unlockCard:    { x: 978, y: 284, w: 278, h: 248 },
+  unlockCard:    { x: 978, y: 284, w: 278, h: 348 },
   recentCard:    { x: 140, y: 540, w: 250, h: 96 },
   badgeBook:     { x: 290, y: 660, w: 700, h: 232 },
 }
@@ -103,6 +105,13 @@ export default function BadgePage() {
           cabinet: { ...merged.cabinet, h: 620 },
           badgeBook: { ...merged.badgeBook, y: 660 },
           recentCard: { ...merged.recentCard, y: 540 },
+        }
+      }
+      // v7 起“即将解锁”卡片加高（新增进度条 + 目标预览图）
+      if (version > 0 && version < 7) {
+        merged = {
+          ...merged,
+          unlockCard: { ...merged.unlockCard, h: Math.max(merged.unlockCard.h, 348) },
         }
       }
       return merged
@@ -131,6 +140,13 @@ export default function BadgePage() {
   const earnedCount = awarded.length
   const totalCount = allDefs.length
 
+  // 本会话中新获得徽章 → 播放庆祝音效
+  const prevAwardCount = useRef(earnedCount)
+  useEffect(() => {
+    if (earnedCount > prevAwardCount.current) sfx.celebrate()
+    prevAwardCount.current = earnedCount
+  }, [earnedCount])
+
   const grouped = useMemo(() => {
     const map: Record<string, BadgeDef[]> = {}
     allDefs.forEach((d) => {
@@ -140,18 +156,27 @@ export default function BadgePage() {
     return map
   }, [allDefs])
 
-  const shelves = Object.entries(grouped)
-  const remainNext = Math.max(0, 3 - (earnedCount % 3))
+  // 注意：shelves 必须是稳定引用，不能直接 Object.entries(grouped)，
+  // 否则每次渲染都是新数组，下方 useEffect 依赖 [shelves] 会每帧重跑 → setState → 无限渲染循环
+  const shelves = useMemo(() => Object.entries(grouped), [grouped])
+  // “神秘花园区域”解锁目标：集齐 5 枚徽章后开启
+  const UNLOCK_TARGET = 5
+  const unlockRemain = Math.max(0, UNLOCK_TARGET - earnedCount)
+  const unlockPct = Math.min(100, Math.round((earnedCount / UNLOCK_TARGET) * 100))
 
   // 各层架是否横向溢出（决定是否显示 "❯" 滑动箭头）
   const [scrollableRows, setScrollableRows] = useState<boolean[]>([])
   const [scrolledRows, setScrolledRows] = useState<boolean[]>([])
   useEffect(() => {
-    const measure = () =>
-      setScrollableRows(shelves.map((_, i) => {
+    const measure = () => {
+      const next = shelves.map((_, i) => {
         const el = shelfRefs.current[i]
         return !!el && el.scrollWidth > el.clientWidth
-      }))
+      })
+      setScrollableRows((prev) =>
+        prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next
+      )
+    }
     measure()
     const obs = new ResizeObserver(measure)
     shelfRefs.current.forEach((el) => { if (el) obs.observe(el) })
@@ -172,7 +197,6 @@ export default function BadgePage() {
   return (
     <div className="flex flex-col min-h-full">
       <Header
-        transparent
         leftSlot={
           <button
             className="w-9 h-9 rounded-full bg-[rgba(92,64,43,0.7)] text-white flex items-center justify-center shadow-sm hover:scale-105 active:scale-95 transition-all"
@@ -183,16 +207,16 @@ export default function BadgePage() {
           </button>
         }
         centerSlot={
-          <div className="text-center w-full translate-x-[45px] translate-y-[70px]">
+          <div className="text-center w-full translate-x-[57px] translate-y-[70px]">
             <h1 className="text-[29px] font-black text-[#3D2B1F] flex items-center justify-center gap-2 tracking-wide leading-none">
               成长徽章馆
             </h1>
             <p className="text-[10px] text-[#7C6A59] mt-1">每一枚徽章，都是你照顾花园的证明</p>
           </div>
         }
-        userSlot={null}
-        controlsSlot={
+        rightSlot={
           <div className="flex items-center gap-2">
+            <TopRightControls />
             {editing && (
               <button
                 className="bg-garden-coral/90 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-sm hover:bg-garden-coral transition-colors"
@@ -218,7 +242,7 @@ export default function BadgePage() {
               {/* 破框头像：层级高于底板，向左/向上溢出卡片边缘 */}
               <div className="absolute left-[-20px] top-[calc(50%+10px)] -translate-y-[40%] z-[2] w-[88px] h-[88px] rounded-full bg-[radial-gradient(circle_at_center,#FFFDF7_30%,#E5D9C5_100%)] border-[3px] border-[#D4B872] shadow-[0_0_0_2px_#FFFFFF,inset_0_3px_8px_rgba(90,65,40,0.3),0_3px_6px_rgba(90,65,40,0.2)] flex items-center justify-center overflow-hidden">
                 <img
-                  src={childAvatar || '/assets/ui/ui_avatar_default_child.png'}
+                  src={childAvatar || '/assets/ui/ui_avatar_default_child.webp'}
                   alt="用户头像"
                   className="w-[72px] h-[72px] rounded-full object-cover"
                 />
@@ -265,7 +289,7 @@ export default function BadgePage() {
           {/* 独立助手形象：无圆框，可直接拖动/缩放 */}
           <DraggableBlock blockId="assistantChar" defaultPos={pos('assistantChar')} editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize} zIndex={15}>
             <img
-              src="/assets/characters/png/char_xiaoyuan.png"
+              src="/assets/characters/png/char_xiaoyuan.webp"
               alt="菌小园助手"
               draggable={false}
               className="w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_4px_8px_rgba(90,65,40,0.35)]"
@@ -275,7 +299,7 @@ export default function BadgePage() {
           {/* 中央木质展柜 */}
           <DraggableBlock blockId="cabinet" defaultPos={pos('cabinet')} editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}>
             <div
-              className="relative w-full h-full rounded-[20px] overflow-hidden bg-[url('/assets/ui/ui_badge_cabinet.png')] bg-[length:100%_100%] shadow-[0_6px_16px_rgba(85,60,35,0.12)]"
+              className="relative w-full h-full rounded-[20px] overflow-hidden bg-[url('/assets/ui/ui_badge_cabinet.webp')] bg-[length:100%_100%] shadow-[0_6px_16px_rgba(85,60,35,0.12)]"
             >
             {shelves.map(([cat, items], idx) => {
               return (
@@ -412,16 +436,57 @@ export default function BadgePage() {
 
           <DraggableBlock blockId="unlockCard" defaultPos={pos('unlockCard')} editing={editing} containerRef={containerRef} onMove={handleMove} onResize={handleResize}>
             <div className={`rounded-[22px] border-[5px] border-[#C07858]/50 bg-[radial-gradient(ellipse_at_center,#FFF8E7_30%,#DCC59A_100%)] p-3.5 w-full h-full flex flex-col items-center justify-between text-center ${CARD_SHADOW}`}>
-              <div className="text-[14px] font-extrabold text-[#5D4037]">即将解锁</div>
-              <div className="w-[70px] h-[70px] rounded-full bg-[radial-gradient(circle_at_center,#FFFDF7_30%,#E5D9C5_100%)] border-4 border-[#6B9A4A] shadow-[inset_0_3px_8px_rgba(90,65,40,0.3),inset_0_0_4px_rgba(90,65,40,0.2)] flex items-center justify-center overflow-hidden">
-                <img src="/assets/ui/ui_empty_badge_slot.png" alt="" className="w-full h-full object-contain" />
+              {/* A. 模块标题 */}
+              <div className="w-full text-left">
+                <div className="text-[14px] font-extrabold text-[#3D2B1F]">即将解锁</div>
               </div>
-              <p className="text-[11px] text-[#5D4037] font-semibold">还差 {remainNext} 枚徽章</p>
+
+              {/* B. 未知徽章图标：藤蔓木质外环 + 深灰星空底 + 白色问号 */}
+              <div className="relative w-[62px] h-[62px] shrink-0">
+                <div className="absolute inset-0 rounded-full p-[3px] bg-[conic-gradient(from_40deg,#5E8C34,#8A6B3F,#4C7A28,#6B8F3E,#A07840,#5E8C34)] shadow-[0_3px_8px_rgba(50,35,20,0.3),inset_0_1px_2px_rgba(255,255,255,0.35)]">
+                  <div className="relative w-full h-full rounded-full overflow-hidden bg-[radial-gradient(circle_at_35%_28%,#5C5C5C_0%,#2E2E2E_55%,#171717_100%)] shadow-[inset_0_3px_6px_rgba(0,0,0,0.65),inset_0_-1px_2px_rgba(255,255,255,0.06)] flex items-center justify-center">
+                    {/* 星空颗粒纹理 */}
+                    <div className="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.5)_0%,transparent_10%),radial-gradient(circle_at_68%_30%,rgba(255,255,255,0.35)_0%,transparent_9%),radial-gradient(circle_at_40%_72%,rgba(255,255,255,0.4)_0%,transparent_10%),radial-gradient(circle_at_82%_66%,rgba(255,255,255,0.3)_0%,transparent_8%),radial-gradient(circle_at_52%_48%,rgba(255,255,255,0.25)_0%,transparent_7%)]" />
+                    {/* 大问号 */}
+                    <span className="relative text-white text-[30px] font-black leading-none [text-shadow:0_2px_4px_rgba(0,0,0,0.6)]">?</span>
+                  </div>
+                </div>
+                {/* 外环点缀绿叶 */}
+                <UiIcon name="leaf" size={15} className="absolute -top-[4px] -left-[6px] rotate-[-25deg] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+                <UiIcon name="leaf" size={12} className="absolute -top-[2px] -right-[5px] rotate-[35deg] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+                <UiIcon name="leaf" size={12} className="absolute -bottom-[3px] -left-[2px] rotate-[20deg] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+              </div>
+
+              {/* C. 进度提示区 */}
+              <div className="w-full">
+                <p className="text-[11px] text-[#5D4037] font-semibold">还差 <strong className="text-[#2C6B25]">{unlockRemain}</strong> 枚徽章</p>
+                <div className="mt-1.5 h-[8px] rounded-full bg-[#E7EFD9]/90 shadow-[inset_0_1px_2px_rgba(0,0,0,0.08)] overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#9BE64B] to-[#3FBE2E] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] transition-all duration-500"
+                    style={{ width: `${unlockPct}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* D. 解锁目标描述 */}
               <p className="text-[11px] text-[#5D4037] font-bold leading-snug">
-                即可解锁 <strong className="text-[#4A7B3C]">神秘花园区域</strong>
+                即可解锁 <strong className="text-[#E0395E]">神秘花园区域</strong>
               </p>
+
+              {/* E. 目标预览图 */}
+              <div className="relative flex items-center justify-center">
+                {/* 后方天蓝色晕开光晕：明显大于蘑菇屋，向四周柔柔散开 */}
+                <div className="absolute w-[128px] h-[128px] rounded-full bg-[radial-gradient(circle,rgba(135,206,235,0.62)_0%,rgba(135,206,235,0.3)_45%,transparent_76%)]" />
+                <img
+                  src="/assets/ui/ui_reward_house.webp"
+                  alt="神秘花园区域预览"
+                  className="relative w-[80px] h-[80px] object-contain drop-shadow-[0_5px_10px_rgba(90,60,40,0.28)]"
+                />
+              </div>
+
+              {/* F. 行动按钮 */}
               <button
-                className="w-full py-3 bg-gradient-to-b from-[#81E44F] via-[#4EB72B] to-[#399C1A] text-white rounded-[20px] text-[14px] font-black shadow-[0_4px_0_#2A7813,0_6px_12px_rgba(42,120,19,0.35),inset_0_1px_0_rgba(255,255,255,0.6)] [text-shadow:0_1px_2px_rgba(0,0,0,0.3)] tracking-wide hover:brightness-105 active:translate-y-[3px] active:shadow-[0_1px_0_#2A7813,0_2px_4px_rgba(42,120,19,0.3)] transition-all"
+                className="w-full py-2.5 rounded-full bg-gradient-to-b from-[#81E44F] via-[#4EB72B] to-[#399C1A] text-white text-[14px] font-black shadow-[0_4px_0_#2A7813,0_6px_12px_rgba(42,120,19,0.35),inset_0_1px_0_rgba(255,255,255,0.6)] [text-shadow:0_1px_2px_rgba(0,0,0,0.3)] tracking-wide hover:brightness-105 active:translate-y-[3px] active:shadow-[0_1px_0_#2A7813,0_2px_4px_rgba(42,120,19,0.3)] transition-all"
                 onClick={() => navigate('/garden')}
               >
                 去探索

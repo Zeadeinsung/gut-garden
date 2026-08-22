@@ -12,13 +12,13 @@ interface BristolType {
 }
 
 const STOOL_PNG: Record<number, string> = {
-  1: '/assets/stools/stool_type1_rabbit.png',
-  2: '/assets/stools/stool_type2_grape.png',
-  3: '/assets/stools/stool_type3_corn.png',
-  4: '/assets/stools/stool_type4_banana.png',
-  5: '/assets/stools/stool_type5_icecream.png',
-  6: '/assets/stools/stool_type6_marshmallow.png',
-  7: '/assets/stools/stool_type7_water.png',
+  1: '/assets/stools/stool_type1_rabbit.webp',
+  2: '/assets/stools/stool_type2_grape.webp',
+  3: '/assets/stools/stool_type3_corn.webp',
+  4: '/assets/stools/stool_type4_banana.webp',
+  5: '/assets/stools/stool_type5_icecream.webp',
+  6: '/assets/stools/stool_type6_marshmallow.webp',
+  7: '/assets/stools/stool_type7_water.webp',
 }
 
 const BRISTOL_TYPES: BristolType[] = [
@@ -71,12 +71,12 @@ export default function StoolPage() {
     <div className="flex flex-col h-full pb-4 px-4 overflow-auto">
       <div className="text-center py-6">
         <h1 className="text-2xl font-bold text-garden-forest">便便日记</h1>
-        <p className="text-sm text-gray-400 mt-1">根据布里斯托便便分类法记录</p>
+        <p className="text-sm text-gray-600 mt-1">根据布里斯托便便分类法记录</p>
       </div>
 
       {/* Bristol chart */}
-      <div className="max-w-sm mx-auto w-full">
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">布里斯托便便分类</h2>
+      <div className="parchment-card p-4 max-w-sm mx-auto w-full">
+        <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">布里斯托便便分类</h2>
         <div className="flex flex-col gap-2">
           {BRISTOL_TYPES.map((b) => (
             <button
@@ -91,7 +91,7 @@ export default function StoolPage() {
               <img src={b.icon} alt={b.label} className="w-10 h-10 object-contain shrink-0" />
               <div className="flex-1">
                 <p className="font-bold text-sm text-gray-700">类型{b.id}：{b.label}</p>
-                <p className="text-xs text-gray-400">{b.desc}</p>
+                <p className="text-xs text-gray-600">{b.desc}</p>
               </div>
               <span className={`text-xs px-2 py-0.5 rounded-full ${
                 b.health === 'good' ? 'bg-green-100 text-green-700'
@@ -106,7 +106,7 @@ export default function StoolPage() {
       </div>
 
       {/* Log button */}
-      <div className="max-w-sm mx-auto w-full mt-4">
+      <div className="parchment-card p-4 max-w-sm mx-auto w-full mt-4">
         <Button
           variant="primary"
           className="w-full"
@@ -118,9 +118,9 @@ export default function StoolPage() {
       </div>
 
       {/* Recent logs */}
-      <div className="max-w-sm mx-auto w-full mt-6">
+      <div className="parchment-card p-4 max-w-sm mx-auto w-full mt-6">
         <button
-          className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-1"
+          className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3 flex items-center gap-1"
           onClick={() => setShowLog(!showLog)}
         >
           最近记录 {showLog ? '▲' : '▼'}
@@ -133,13 +133,13 @@ export default function StoolPage() {
                 <div key={i} className="flex items-center gap-2 bg-white/40 rounded-lg px-3 py-2 text-sm">
                   <img src={bristol?.icon} alt={bristol?.label} className="w-8 h-8 object-contain" />
                   <span className="text-gray-600">{entry.date}</span>
-                  <span className="text-gray-400">{entry.time}</span>
-                  <span className="text-gray-500 ml-auto">{bristol?.label}</span>
+                  <span className="text-gray-500">{entry.time}</span>
+                  <span className="text-gray-600 ml-auto">{bristol?.label}</span>
                 </div>
               )
             })}
             {logs.length === 0 && (
-              <p className="text-center text-gray-300 text-sm py-4">暂无记录</p>
+              <p className="text-center text-gray-500 text-sm py-4">暂无记录</p>
             )}
           </div>
         )}

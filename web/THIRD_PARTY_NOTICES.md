@@ -21,3 +21,15 @@ The cartoon vector icons in `public/assets/openmoji/` are from **OpenMoji** – 
 > All emojis designed by OpenMoji – the open-source emoji and icon project. License: CC BY-SA 4.0
 
 Any modifications to these assets must be shared under the same CC BY-SA 4.0 license.
+
+## UI 音效（Sound Effects）
+
+音效文件位于 `public/audio/`，供「菌小园」各页面交互反馈使用。
+
+- `click.mp3` / `pop.mp3` / `success.mp3` / `error.mp3` / `notification.mp3`
+  - 来源: [Sfx Elements](https://tryelements.dev/)（tryelements.dev/sfx/）
+  - 授权: CC0（公共领域，可自由商用，无需署名）
+- `celebrate.wav` / `coin.wav`
+  - 来源: 本项目原创，由 `web/scripts/generate-sfx.mjs` 程序化合成（纯正弦/谐波，无外部采样）
+  - 授权: 原创作品，视同 CC0 / 公共领域，可自由商用
+

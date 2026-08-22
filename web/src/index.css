@@ -53,12 +53,34 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
+/* 羊皮纸卡片：暖黄旧纸质感，带轻微做旧描边与内阴影 */
+.parchment-card {
+  position: relative;
+  border-radius: 22px;
+  background:
+    radial-gradient(130% 100% at 15% 8%, rgba(255, 253, 238, 0.9) 0%, transparent 55%),
+    radial-gradient(130% 110% at 92% 100%, rgba(150, 105, 45, 0.18) 0%, transparent 55%),
+    linear-gradient(155deg, #F8EBC9 0%, #F0DFAE 45%, #EAD39A 100%);
+  border: 1px solid rgba(168, 128, 66, 0.55);
+  box-shadow:
+    0 6px 26px rgba(78, 60, 20, 0.16),
+    0 2px 6px rgba(78, 60, 20, 0.08),
+    inset 0 0 0 4px rgba(255, 250, 232, 0.6),
+    inset 0 0 36px rgba(150, 105, 45, 0.14);
+}
+
 /* 统一模块：低饱和暖白半透明底（压制背景插画）+ 加粗淡灰描边 + 高斯模糊 */
 .card-module {
   background: rgba(255, 251, 236, 0.95);
   backdrop-filter: blur(16px);
   border: 10px solid rgba(0, 0, 0, 0.05);
 }
+
+/* 首页 / 探索课堂 / 探索花园：卡片边框统一为很浅灰色，透明度 0.55 */
+.gg-card-border-055 .glass-card  { border-color: rgba(220, 220, 220, 0.55); }
+.gg-card-border-055 .solid-card  { border-color: rgba(220, 220, 220, 0.55); }
+.gg-card-border-055 .cream-card  { border-color: rgba(220, 220, 220, 0.55); }
+.gg-card-border-055 .card-module { border-color: rgba(220, 220, 220, 0.55); }
 
 /* 粗框：透明度从内向外渐变（内实外虚），适用于 rounded 卡片 */
 .gg-frame-fade {

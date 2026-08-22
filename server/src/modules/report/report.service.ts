@@ -186,3 +186,57 @@ export async function generateReport(childId: number, periodType: 'week' | 'mont
     garden_state_distribution: gardenStateDist,
   }
 }
+
+export async function getHistory(childId: number, days = 7) {
+  if (!childId) throwError('CHILD_001')
+
+  const end = new Date()
+  const start = new Date()
+  start.setDate(end.getDate() - (days - 1))
+  const startStr = fmtDate(start)
+  const endStr = fmtDate(end)
+
+  const [stools, quizzes, calRows] = await Promise.all([
+    db
+      .select({ uploadedAt: stoolAnalyses.uploadedAt })
+      .from(stoolAnalyses)
+      .where(and(eq(stoolAnalyses.childId, childId), sql`date(${stoolAnalyses.uploadedAt}) between ${startStr} and ${endStr}`)),
+    db
+      .select({ quizDate: quizRecords.quizDate })
+      .from(quizRecords)
+      .where(and(eq(quizRecords.childId, childId), gte(quizRecords.quizDate, startStr), lte(quizRecords.quizDate, endStr))),
+    db
+      .select({ calendarDate: checkinCalendar.calendarDate })
+      .from(checkinCalendar)
+      .where(and(eq(checkinCalendar.childId, childId), inArray(checkinCalendar.status, ['done', 'makeup']))),
+  ])
+
+  const stoolMap = new Map<string, number>()
+  for (const s of stools) {
+    const k = s.uploadedAt.toISOString().slice(0, 10)
+    stoolMap.set(k, (stoolMap.get(k) ?? 0) + 1)
+  }
+  const learnMap = new Map<string, number>()
+  for (const q of quizzes) {
+    const k = String(q.quizDate)
+    learnMap.set(k, (learnMap.get(k) ?? 0) + 1)
+  }
+
+  const stoolSeries: { label: string; value: number }[] = []
+  const learnSeries: { label: string; value: number }[] = []
+  for (let i = 0; i < days; i++) {
+    const d = new Date(start)
+    d.setDate(start.getDate() + i)
+    const k = fmtDate(d)
+    const label = `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`
+    stoolSeries.push({ label, value: stoolMap.get(k) ?? 0 })
+    learnSeries.push({ label, value: learnMap.get(k) ?? 0 })
+  }
+
+  return {
+    days,
+    history: { stool: stoolSeries, learn: learnSeries },
+    total_days: calRows.length,
+    longest_streak: longestRun(calRows.map((r) => r.calendarDate).sort()),
+  }
+}

@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUIStore } from '@/stores/uiStore'
 import { useClassroomStore } from '@/stores/classroomStore'
 import { useAuthStore } from '@/stores/authStore'
 import { useGardenStore } from '@/stores/gardenStore'
+import { api } from '@/lib/api'
+import { sfx } from '@/lib/sound'
+import { isRegistered, getActiveChildId } from '@/hooks/useApiSync'
 import { UiIcon } from '@/lib/uiIcons'
+import { MODULE_SOURCES, CARD_SOURCE_DISCLAIMER } from '@/lib/cardSources'
+import TopRightControls from '@/components/navigation/TopRightControls'
 import { DraggableBlock, type BlockPos } from '@/components/ui/DraggableBlock'
 import { useEditorPage } from '@/hooks/useEditorPage'
 import { savePositions } from '@/hooks/useEditMode'
@@ -19,6 +24,7 @@ interface PathNode {
   subtitle: string
   icon: string
   cardImage: string
+  video: string
   color: { circle: string; card: string; title: string; sub: string; text?: string }
   /** 标签锚点（圆圈中心）在场景画布中的百分比位置 —— 依据参考图实测 */
   pos: { left: number; top: number }
@@ -48,7 +54,8 @@ const NODES: PathNode[] = [
     title: '膳食纤维广场',
     subtitle: '认识纤维小能手',
     icon: 'landmark',
-    cardImage: '/assets/cards/card_fiber_square.png',
+    cardImage: '/assets/cards/card_fiber_square.webp',
+    video: '/assets/videos/fiber.mp4',
     color: NODE_COLORS.green,
     pos: { left: 17.8, top: 29.4 },
   },
@@ -57,7 +64,8 @@ const NODES: PathNode[] = [
     title: '菌菌发酵坊',
     subtitle: '菌群的神奇魔法',
     icon: 'factory',
-    cardImage: '/assets/cards/card_ferment_workshop.png',
+    cardImage: '/assets/cards/card_ferment_workshop.webp',
+    video: '/assets/videos/ferment.mp4',
     color: NODE_COLORS.purple,
     pos: { left: 52.3, top: 27.3 },
   },
@@ -66,7 +74,8 @@ const NODES: PathNode[] = [
     title: '短链脂肪酸泉',
     subtitle: '生命能量的源泉',
     icon: 'droplets',
-    cardImage: '/assets/cards/card_scfa_spring.png',
+    cardImage: '/assets/cards/card_scfa_spring.webp',
+    video: '/assets/videos/scfa.mp4',
     color: NODE_COLORS.sky,
     pos: { left: 35.3, top: 48.1 },
   },
@@ -75,7 +84,8 @@ const NODES: PathNode[] = [
     title: '肠道屏障城',
     subtitle: '守护肠道小卫士',
     icon: 'brick',
-    cardImage: '/assets/cards/card_barrier_wall.png',
+    cardImage: '/assets/cards/card_barrier_wall.webp',
+    video: '/assets/videos/barrier.mp4',
     color: NODE_COLORS.blue,
     pos: { left: 16.3, top: 75.3 },
   },
@@ -84,7 +94,8 @@ const NODES: PathNode[] = [
     title: '生态观察站',
     subtitle: '观察我的肠道生态',
     icon: 'telescope',
-    cardImage: '/assets/cards/card_eco_station.png',
+    cardImage: '/assets/cards/card_eco_station.webp',
+    video: '/assets/videos/eco.mp4',
     color: NODE_COLORS.yellow,
     pos: { left: 59.6, top: 76.3 },
   },
@@ -185,16 +196,89 @@ export default function ClassroomPage() {
   const navigate = useNavigate()
   const setAiChatOpen = useUIStore((s) => s.setAiChatOpen)
   const [selectedNode, setSelectedNode] = useState<PathNode | null>(null)
+  const [watchStage, setWatchStage] = useState<'video' | 'reward'>('video')
+  const [watchXp, setWatchXp] = useState(0)
+  const [videoStarted, setVideoStarted] = useState(false)
+  const [cardZoomed, setCardZoomed] = useState(false)
+  const [showSource, setShowSource] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const { user } = useAuthStore()
   const { gardenLevel } = useGardenStore()
 
   const modules = useClassroomStore((s) => s.modules)
   const nodes = NODES.map((node) => {
     const mod = modules.find((m) => m.code === MODULE_CODE_BY_NODE[node.id])
-    return { ...node, stars: mod?.stars ?? 0, maxStars: 6, unlocked: mod?.unlocked ?? false }
+    return { ...node, stars: mod?.stars ?? 0, maxStars: 6, unlocked: mod?.unlocked ?? false, watched: mod?.animationWatched ?? false }
   })
-  const totalStars = 5 // TEMP: 测试用，强制点亮前 3 个宝箱（1/3/5 知识点）
-  const treeProgress = 4 // TEMP: 测试用，点亮 4 颗树
+
+  const openNode = (node: PathNode) => {
+    sfx.click()
+    setSelectedNode(node)
+    setWatchStage('video')
+    setWatchXp(0)
+    setVideoStarted(false)
+    setCardZoomed(false)
+    setShowSource(false)
+  }
+
+  const closeNode = () => {
+    sfx.pop()
+    setSelectedNode(null)
+    setWatchStage('video')
+    setVideoStarted(false)
+    setCardZoomed(false)
+    setShowSource(false)
+  }
+
+  const handleStartLearn = () => {
+    sfx.click()
+    setVideoStarted(true)
+    videoRef.current?.play().catch(() => {})
+  }
+
+  const markModuleWatched = (moduleCode: string, node: PathNode) => {
+    const { modules } = useClassroomStore.getState()
+    const existing = modules.find((m) => m.code === moduleCode)
+    const patch = {
+      title: existing?.title ?? node.title,
+      description: existing?.description ?? node.subtitle,
+      card_count: existing?.card_count ?? 1,
+      quiz_count: existing?.quiz_count ?? 3,
+      progress: existing?.progress ?? 0,
+      stars: existing?.stars ?? 0,
+      unlocked: true,
+      animationWatched: true,
+      cardsUnlocked: Math.max(existing?.cardsUnlocked ?? 0, 1),
+    }
+    const next = existing
+      ? modules.map((m) => (m.code === moduleCode ? { ...m, ...patch } : m))
+      : [...modules, { ...patch, code: moduleCode }]
+    useClassroomStore.setState({ modules: next })
+  }
+
+  const handleVideoEnd = async () => {
+    const node = selectedNode
+    if (!node) return
+    const moduleCode = MODULE_CODE_BY_NODE[node.id]
+    let xp = 0
+    if (isRegistered()) {
+      const childId = getActiveChildId()
+      if (childId) {
+        try {
+          const res = await api.post<{ xp_gained: number }>(`/classroom/modules/${moduleCode}/watch`, { child_id: childId })
+          xp = res.xp_gained ?? 0
+        } catch { /* toast handled globally */ }
+      }
+    }
+    markModuleWatched(moduleCode, node)
+    setWatchXp(xp)
+    sfx.celebrate()
+    if (xp > 0) sfx.coin()
+    setWatchStage('reward')
+  }
+  // 真实数据：宝箱按已掌握知识点数（各模块 quiz 通过数之和）解锁；树按已观看动画的模块数点亮
+  const totalStars = modules.reduce((a, m) => a + (m.stars ?? 0), 0)
+  const treeProgress = nodes.filter((n) => n.watched).length
 
   const childName = user?.children.find((c) => c.id === user.active_child_id)?.name ?? '宝宝'
   const childAvatar = user?.children.find((c) => c.id === user.active_child_id)?.avatar_url
@@ -242,7 +326,7 @@ export default function ClassroomPage() {
         {childAvatar ? (
           <img src={childAvatar} alt="" className="w-full h-full rounded-full object-cover" />
         ) : (
-          <img src="/assets/ui/ui_avatar_default_child.png" alt="" className="w-full h-full rounded-full object-cover" />
+          <img src="/assets/ui/ui_avatar_default_child.webp" alt="" className="w-full h-full rounded-full object-cover" />
         )}
       </span>
       <div
@@ -261,7 +345,7 @@ export default function ClassroomPage() {
   const spriteContent = (
     <div className="relative w-full h-full">
       <img
-        src="/assets/characters/png/char_bighead_home.png"
+        src="/assets/characters/png/char_bighead_home.webp"
         alt="菌小园"
         className="absolute bottom-0 left-0 h-[82%] object-contain drop-shadow-lg animate-bounce-slow"
       />
@@ -293,24 +377,27 @@ export default function ClassroomPage() {
   const nodeBtnContent = (node: typeof nodes[0] & { id: string; title: string; subtitle: string; color: { circle: string; card: string; title: string; sub: string } }, idx: number) => (
     <button
       className="flex items-center gap-2.5 group cursor-pointer h-full"
-      onClick={() => setSelectedNode(node)}
+      onClick={() => openNode(node)}
     >
       <span
-        className="w-[50px] h-[50px] rounded-full text-xl font-bold flex items-center justify-center shrink-0 shadow-md transition-transform group-hover:scale-110"
+        className="relative w-[50px] h-[50px] rounded-full text-xl font-bold flex items-center justify-center shrink-0 shadow-md transition-transform group-hover:scale-110"
         style={{ background: node.color.circle, color: node.color.text ?? '#fff' }}
       >
-        {idx + 1}
+        {node.watched ? <UiIcon name="check" size={22} /> : idx + 1}
+        {node.watched && (
+          <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 text-white flex items-center justify-center ring-2 ring-white shadow text-[10px] leading-none">✓</span>
+        )}
       </span>
       <span
         className="rounded-xl px-6 py-1.5 text-left backdrop-blur transition-all group-hover:shadow-xl"
         style={{
           background: node.color.card,
-          border: `3px solid ${softBorder(node.color.circle, 0.9)}`,
+          border: `3px solid ${softBorder(node.color.circle, 0.55)}`,
           boxShadow: '0 3px 10px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,0.65)',
         }}
       >
-        <span className="block font-bold text-[20px] leading-tight whitespace-nowrap" style={{ color: node.color.title }}>{node.title}</span>
-        <span className="block text-[13px] leading-tight mt-1 whitespace-nowrap" style={{ color: node.color.sub }}>{node.subtitle}</span>
+        <span className="block font-bold text-[26px] leading-tight whitespace-nowrap" style={{ color: node.color.title }}>{node.title}</span>
+        <span className="block text-[17px] leading-tight mt-1 whitespace-nowrap" style={{ color: node.color.sub }}>{node.subtitle}</span>
       </span>
     </button>
   )
@@ -328,7 +415,7 @@ export default function ClassroomPage() {
         </div>
       </div>
       <div className="flex items-center gap-2 px-3 pt-1.5 pb-2 shrink-0">
-        <img src="/assets/characters/png/char_xiaoyuan.png" alt="菌小园老师" className="w-11 h-11 object-contain shrink-0 drop-shadow" />
+        <img src="/assets/characters/png/char_xiaoyuan.webp" alt="菌小园老师" className="w-11 h-11 object-contain shrink-0 drop-shadow" />
         <div className="bg-white/90 rounded-xl rounded-bl-sm px-2.5 py-1.5 shadow-sm border border-white flex-1 min-w-0">
           <p className="text-[11px] text-gray-600 leading-snug inline-flex items-start gap-1">
             <UiIcon name="message" size={12} className="mt-0.5 shrink-0 text-garden-mascot" />
@@ -475,7 +562,7 @@ export default function ClassroomPage() {
               <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(232,190,90,0.5)_0%,rgba(232,190,90,0.15)_55%,transparent_75%)] pointer-events-none" />
             )}
             <img
-              src={c.done ? `/assets/ui/chest_unlocked_${c.threshold}.png` : '/assets/ui/chest_locked.png'}
+              src={c.done ? `/assets/ui/chest_unlocked_${c.threshold}.png` : '/assets/ui/chest_locked.webp'}
               alt={c.label}
               className={`h-[45px] w-auto object-contain drop-shadow-md ${c.done ? '' : 'opacity-80'}`}
             />
@@ -499,43 +586,31 @@ export default function ClassroomPage() {
   )
 
   return (
-    <div className="relative flex flex-col min-h-full overflow-hidden bg-garden-cream">
+    <div className="relative flex flex-col min-h-full overflow-hidden bg-garden-cream gg-card-border-055">
       {/* ── 场景地图（全屏铺底，压住整个页面） ── */}
       <img
-        src="/assets/scenes/scene_classroom_map.png"
+        src="/assets/scenes/scene_classroom_map.webp"
         alt=""
         draggable={false}
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* ── 顶部 Header：品牌 + 标题 + 知识树（浮于场景之上） ── */}
+      {/* ── 顶部 Header：返回 + 右上控件（浮于场景之上） ── */}
       <header className={`absolute top-0 inset-x-0 z-30 ${editing ? 'pointer-events-none' : ''}`}>
-        {/* 顶层控件：左品牌 + 右知识树 */}
-        <div className="relative z-[10] flex items-start justify-between px-2.5 pt-2">
-          {/* 左：返回 + 品牌 Logo */}
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              className="w-9 h-9 rounded-full bg-garden-mascot text-white flex items-center justify-center shadow-md hover:bg-[#7A9538] active:scale-95 transition-all"
-              onClick={() => navigate('/')}
-              title="返回"
-            >
-              <UiIcon name="chevronLeft" size={18} />
-            </button>
-            <img
-              src="/assets/ui/ui_logo.png"
-              alt="Gut Garden 肠道花园"
-              className="h-[30px] object-contain -ml-1"
-            />
-          </div>
-
-          {/* 右：设置 */}
+        <div className="relative z-[10] flex items-start justify-between px-4 pt-6">
+          {/* 左：返回（与其它页面一致的圆形按钮） */}
           <button
-            className="w-11 h-11 rounded-full bg-garden-mascot text-white flex items-center justify-center shadow-md hover:bg-[#7A9538] active:scale-95 transition-all mt-[12px] shrink-0"
-            onClick={() => navigate('/settings')}
-            title="设置"
+            className="w-9 h-9 rounded-full bg-garden-mascot text-white flex items-center justify-center shadow-md hover:bg-[#7A9538] active:scale-95 transition-all"
+            onClick={() => navigate('/')}
+            title="返回首页"
           >
-            <UiIcon name="settingsLine" size={18} />
+            <UiIcon name="chevronLeft" size={20} />
           </button>
+
+          {/* 右：用户 + 声音 + 设置 */}
+          <div className="flex items-center gap-2 shrink-0 mt-[12px]">
+            <TopRightControls />
+          </div>
         </div>
       </header>
 
@@ -652,45 +727,142 @@ export default function ClassroomPage() {
       </div>
 
       {/* 节点详情弹窗 */}
-      {selectedNode && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setSelectedNode(null)}
-          />
-          <div className="relative bg-white rounded-2xl shadow-2xl w-[480px] max-w-[90vw] max-h-[85vh] overflow-auto animate-in">
-            <button
-              className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 text-lg transition-colors"
-              onClick={() => setSelectedNode(null)}
-            >
-              <UiIcon name="close" size={16} />
-            </button>
-            <img
-              src={selectedNode.cardImage}
-              alt={selectedNode.title}
-              className="w-full h-56 object-cover rounded-t-2xl"
+      {selectedNode && (() => {
+        const currentNode = nodes.find((n) => n.id === selectedNode.id)
+        const watched = currentNode?.watched ?? false
+        return (
+          <div className="absolute inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={closeNode}
             />
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl flex items-center"><UiIcon name={selectedNode.icon} size={24} className="text-garden-forest" /></span>
-                <h2 className="text-xl font-bold text-garden-forest">{selectedNode.title}</h2>
-              </div>
-              <div className="flex items-center gap-1 mb-4">
-                {Array.from({ length: 6 }).map((_, si) => (
-                  <span key={si} className={`text-lg flex items-center ${si < (nodes.find((n) => n.id === selectedNode.id)?.stars ?? 0) ? '' : 'opacity-20'}`}>
-                    <UiIcon name="star" size={18} className={si < (nodes.find((n) => n.id === selectedNode.id)?.stars ?? 0) ? '' : 'grayscale opacity-40'} />
-                  </span>
-                ))}
-                <span className="text-sm text-gray-400 ml-2">{nodes.find((n) => n.id === selectedNode.id)?.stars ?? 0}/6 星</span>
-              </div>
-              <p className="text-sm text-gray-600 mb-6 leading-relaxed">{selectedNode.subtitle}。</p>
-              <button className="w-full py-3 rounded-xl bg-garden-mascot text-white font-bold text-sm hover:bg-[#7A9538] active:scale-95 transition-all">
-                开始学习 →
+            <div className="relative bg-white rounded-2xl shadow-2xl w-[min(384px,82vw)] max-h-[90vh] overflow-auto animate-in">
+              <button
+                className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 text-lg transition-colors"
+                onClick={closeNode}
+              >
+                <UiIcon name="close" size={16} />
               </button>
+
+              {watchStage === 'video' ? (
+                /* ── 视频播放（占满 + 中央开始学习按钮） ── */
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-bold text-garden-forest inline-flex items-center gap-2">
+                      <UiIcon name={selectedNode.icon} size={18} className="text-garden-forest" />
+                      {selectedNode.title}
+                    </h2>
+                    {watched && (
+                      <span className="text-[11px] font-bold text-green-700 bg-green-100 rounded-full px-2 py-0.5 inline-flex items-center gap-1">
+                        <UiIcon name="check" size={12} /> 已获得
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative rounded-xl overflow-hidden bg-black aspect-[9/16]">
+                    <video
+                      key={selectedNode.id}
+                      ref={videoRef}
+                      src={selectedNode.video}
+                      poster={selectedNode.cardImage}
+                      controls
+                      playsInline
+                      className="w-full h-full object-cover"
+                      onEnded={handleVideoEnd}
+                    />
+                    {!videoStarted && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+                        <button
+                          className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl bg-white/95 hover:bg-white shadow-xl active:scale-95 transition-all"
+                          onClick={handleStartLearn}
+                        >
+                          <span className="w-14 h-14 rounded-full bg-garden-mascot text-white flex items-center justify-center shadow-md">
+                            <UiIcon name="play" size={26} />
+                          </span>
+                          <span className="font-bold text-garden-forest text-base">{watched ? '再看一次' : '开始学习'}</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-center text-xs text-gray-500 mt-3">观看完成即可获得知识卡片</p>
+                </div>
+              ) : (
+                /* ── 获得知识卡片 ── */
+                <div className="py-6 text-center">
+                  <p className="text-lg font-bold text-garden-forest mb-1 px-4">恭喜获得知识卡片！</p>
+                  {watchXp > 0 && <p className="text-xs text-amber-600 font-bold mb-3 px-4">能量 +{watchXp}</p>}
+                  <img
+                    src={selectedNode.cardImage}
+                    alt={selectedNode.title}
+                    onClick={() => setCardZoomed(true)}
+                    title="点击放大"
+                    className="block w-[336px] max-w-full mx-auto rounded-xl shadow-lg ring-4 ring-garden-gold/70 cursor-zoom-in transition-transform hover:scale-[1.02]"
+                  />
+                  <p className="text-sm font-bold text-gray-700 mt-3 px-4">{selectedNode.title}</p>
+                  <p className="text-xs text-gray-500 mt-1 px-4">{selectedNode.subtitle}</p>
+
+                  {/* ── 科学依据折叠层 ── */}
+                  {(() => {
+                    const sources = MODULE_SOURCES[MODULE_CODE_BY_NODE[selectedNode.id]] ?? []
+                    if (!sources.length) return null
+                    return (
+                      <div className="mt-3 mx-4 text-left">
+                        <button
+                          className="w-full flex items-center justify-between gap-2 bg-[#F4F1E4] hover:bg-[#eee9d5] rounded-xl px-3 py-2 text-[13px] font-bold text-[#6a6a50] transition-colors"
+                          onClick={() => setShowSource(!showSource)}
+                        >
+                          <span className="inline-flex items-center gap-1.5">
+                            <UiIcon name="book" size={14} className="text-[#8a8a5c]" />
+                            科学依据
+                          </span>
+                          <span className="text-[10px] text-[#a8a279]">{showSource ? '收起 ▲' : '展开 ▼'}</span>
+                        </button>
+                        {showSource && (
+                          <div className="mt-2 bg-white/80 rounded-xl border border-[#e5dfc8] p-3">
+                            <ul className="space-y-2">
+                              {sources.map((s) => (
+                                <li key={s.title} className="text-[12px] leading-relaxed">
+                                  <p className="font-bold text-[#5c5c45]">{s.title} <span className="font-medium text-[#9a9483]">— {s.org}</span></p>
+                                  <p className="text-[#8a8a72] mt-0.5">{s.note}</p>
+                                </li>
+                              ))}
+                            </ul>
+                            <p className="mt-2 pt-2 border-t border-[#ece7d2] text-[10px] text-[#b0ab93] flex items-start gap-1">
+                              <UiIcon name="shield" size={11} className="shrink-0 mt-0.5" />
+                              {CARD_SOURCE_DISCLAIMER}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
+
+                  <button
+                    className="mt-4 w-[calc(100%-2rem)] mx-auto block py-3 rounded-xl bg-garden-mascot text-white font-bold text-sm hover:bg-[#7A9538] active:scale-95 transition-all"
+                    onClick={closeNode}
+                  >
+                    完成
+                  </button>
+                </div>
+              )}
+
+              {/* ── 知识卡片放大预览 ── */}
+              {cardZoomed && (
+                <div
+                  className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+                  onClick={() => setCardZoomed(false)}
+                >
+                  <img
+                    src={selectedNode.cardImage}
+                    alt={selectedNode.title}
+                    className="w-[504px] max-w-[85vw] rounded-2xl shadow-2xl animate-in"
+                  />
+                  <p className="absolute bottom-6 inset-x-0 text-center text-white/80 text-sm">点击任意处关闭</p>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
     </div>
   )
 }

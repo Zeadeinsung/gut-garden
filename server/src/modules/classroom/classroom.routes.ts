@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyReply } from 'fastify'
-import { listModules, getCards, answerQuiz } from './classroom.service.js'
+import { listModules, getCards, answerQuiz, recordVideoWatched } from './classroom.service.js'
 
 function badRequest(reply: FastifyReply, message: string): FastifyReply {
   return reply.status(400).send({ code: 'VALIDATION', message })
@@ -16,6 +16,14 @@ export default async function classroomRoutes(fastify: FastifyInstance): Promise
   fastify.get('/api/classroom/modules/:code/cards', async (req) => {
     const { code } = req.params as { code: string }
     return { code: 0, data: await getCards(code) }
+  })
+
+  fastify.post('/api/classroom/modules/:code/watch', async (req, reply) => {
+    const { code } = req.params as { code: string }
+    const body = req.body as { child_id?: number }
+    const childId = Number(body.child_id)
+    if (!childId) return badRequest(reply, 'child_id 必填')
+    return { code: 0, data: await recordVideoWatched(childId, code) }
   })
 
   fastify.post('/api/classroom/quiz/answer', async (req, reply) => {

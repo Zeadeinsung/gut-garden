@@ -119,7 +119,7 @@ export default function SettingsPage() {
             <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4 inline-flex items-center gap-1.5"><UiIcon name="baby" size={15} /> 儿童档案</h2>
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-garden-sky overflow-hidden">
-                <img src="/assets/ui/ui_avatar_default_child.png" alt="" className="w-full h-full object-cover" />
+                <img src="/assets/ui/ui_avatar_default_child.webp" alt="" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
                 <p className="font-medium text-gray-700">

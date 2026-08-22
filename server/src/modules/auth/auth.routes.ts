@@ -22,8 +22,8 @@ export default async function authRoutes(fastify: FastifyInstance): Promise<void
   fastify.post('/api/auth/send-code', async (req, reply) => {
     const { phone } = req.body as { phone?: string }
     if (!phone || !/^\d{6,15}$/.test(phone)) return badRequest(reply, '手机号格式不正确')
-    sendLoginCode(phone)
-    return { code: 0, data: { sent: true } }
+    const code = sendLoginCode(phone)
+    return { code: 0, data: { sent: true, code } }
   })
 
   fastify.post('/api/auth/verify-code', async (req, reply) => loginAndRespond(fastify, reply, req.body as { phone?: string; code?: string }))
