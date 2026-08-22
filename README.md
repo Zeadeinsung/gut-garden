@@ -42,14 +42,36 @@ npm run dev
 
 > ⚠️ 注意：验证码 5 分钟内有效；同一手机号 **60 秒内**只能发送一次。新手机号会自动注册家长账号，但还没有宝宝档案——登录后到「个人中心」点「添加宝宝」建档即可。
 
-### ⚙️ 可选配置（`server/.env`，从 `.env.example` 复制）
+### ⚙️ 如何配置密钥（环境变量）
 
-| 变量 | 作用 | 不配置时的行为 |
-|------|------|----------------|
-| `DATABASE_URL` | 使用外部 PostgreSQL | 默认内置 PGlite，无需任何配置 |
-| `AI_API_KEY` | 菌小园 AI 问答（阿里云百炼 DashScope 通义千问 qwen-flash） | 自动降级为本地 FAQ 回答 |
-| `STOOL_API_KEY` | 便便拍照视觉分析（外部 API） | 使用本地规则（mock）分析 |
-| `ADMIN_PHONES` | 管理员手机号（逗号分隔） | 无管理员 |
+**不配置任何密钥也能完整跑通** —— 验证码是模拟的、AI 自动降级、便便分析走本地规则。密钥只在你需要接入「真实 AI 回答」或「外部数据库」时才有用。全部通过 `server/.env` 配置（系统环境变量优先于 `.env` 文件）。
+
+**第一步：创建 `.env` 文件**（后端启动时会自动读取）
+
+```bash
+cd server
+cp .env.example .env      # Windows CMD/PowerShell：copy .env.example .env
+```
+
+然后编辑 `server/.env`，把你需要的密钥填进去即可。
+
+**第二步：按需填入密钥**
+
+| 变量 | 用途 | 在哪里申请 / 怎么填 |
+|------|------|---------------------|
+| `AI_API_KEY` | 菌小园 AI 问答（通义千问 qwen-flash 流式回答） | ① 打开 [阿里云百炼控制台](https://dashscope.console.aliyun.com/) → 阿里云账号实名认证 → 开通「百炼」服务 → ② 右上角头像 → **API-KEY** → **创建 API-KEY**，复制 `sk-` 开头的字符串 → ③ 填入 `AI_API_KEY=sk-你的Key`。默认已配好 `AI_BASE_URL` 和 `AI_MODEL=qwen-flash`，一般不用改。填好重启 server，在 App 里问菌小园问题，能看到流式大模型回答即生效 |
+| `STOOL_API_KEY` + `STOOL_API_URL` | 便便拍照视觉分析（外部 API） | 可选，接入你自己的视觉分析服务（OpenAI 兼容风格响应，返回 `bristol_type`/`diagnosis` 等字段）。**不配置时**自动用本地规则模拟分析，开发体验不受影响 |
+| `DATABASE_URL` | 改用外部 PostgreSQL | 默认内置 PGlite 免安装。如要外接：建好库后填 `postgresql://用户:密码@主机:5432/库名`，再运行 `npm run db:migrate` 建表 |
+| `JWT_SECRET` | 登录令牌签名 | **生产环境必须改成随机长字符串**，否则令牌可被伪造。生成命令：`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `ADMIN_PHONES` | 管理员手机号（逗号分隔） | 如 `13800008888,13800009999`。填了的手机号登录后 JWT 带 `role=admin`，可调用 `/api/admin/*` 接口 |
+| `PORT` | 后端端口 | 默认 `3001`，一般不用改 |
+| `DASHSCOPE_API_KEY` | `AI_API_KEY` 的别名 | 填了会作为 AI_API_KEY 的兜底，二选一即可 |
+
+**如何验证配置生效**
+1. 改完 `.env` 后**重启** server（`npm run dev` 是监听热重启，通常自动生效）。
+2. AI：在 App 里打开菌小园对话 → 输入问题 → 出现逐字流式回答 = 大模型生效；只回固定的 FAQ 短句 = 未读到 Key（检查环境变量或网络）。
+3. 数据库：看启动日志或查 `server/.data/pglite`（默认）是否变为你的 Postgres 实例。
+4. 管理员：用填写的手机号登录后，看能否访问管理端入口。
 
 ---
 
