@@ -153,6 +153,14 @@ const RECOMMENDS = [
   { icon: 'leaf', title: '蔬菜的魔法', question: '蔬菜如何帮助菌居民？', reward: 10 },
 ]
 
+// 趣味科普卡：独立于知识地图之外的科普卡片集
+const FUN_CARDS = [
+  { id: 'balance', title: '怎么吃都不胖？', tag: '肠道吸收', img: '/assets/knowledge/fun_balance.jpg' },
+  { id: 'craving', title: '你馋的不是美食', tag: '肠脑轴', img: '/assets/knowledge/fun_craving.jpg' },
+  { id: 'fiber', title: '膳食纤维去哪了？', tag: '膳食纤维', img: '/assets/knowledge/fun_fiber.png' },
+  { id: 'water', title: '身体需要水分', tag: '喝水健康', img: '/assets/knowledge/fun_water.png' },
+]
+
 /* ── 知识树成长卡片：树图标（复刻参考图的圆冠小树） ── */
 function TreeIcon() {
   return (
@@ -201,6 +209,8 @@ export default function ClassroomPage() {
   const [videoStarted, setVideoStarted] = useState(false)
   const [cardZoomed, setCardZoomed] = useState(false)
   const [showSource, setShowSource] = useState(false)
+  const [showFunScience, setShowFunScience] = useState(false)
+  const [funZoomed, setFunZoomed] = useState<{ id: string; title: string; tag: string; img: string } | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const { user } = useAuthStore()
   const { gardenLevel } = useGardenStore()
@@ -396,8 +406,8 @@ export default function ClassroomPage() {
           boxShadow: '0 3px 10px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,0.65)',
         }}
       >
-        <span className="block font-bold text-[26px] leading-tight whitespace-nowrap" style={{ color: node.color.title }}>{node.title}</span>
-        <span className="block text-[17px] leading-tight mt-1 whitespace-nowrap" style={{ color: node.color.sub }}>{node.subtitle}</span>
+        <span className="block font-bold text-[20px] leading-tight whitespace-nowrap" style={{ color: node.color.title }}>{node.title}</span>
+        <span className="block text-[14px] leading-tight mt-0.5 whitespace-nowrap" style={{ color: node.color.sub }}>{node.subtitle}</span>
       </span>
     </button>
   )
@@ -598,14 +608,24 @@ export default function ClassroomPage() {
       {/* ── 顶部 Header：返回 + 右上控件（浮于场景之上） ── */}
       <header className={`absolute top-0 inset-x-0 z-30 ${editing ? 'pointer-events-none' : ''}`}>
         <div className="relative z-[10] flex items-start justify-between px-4 pt-6">
-          {/* 左：返回（与其它页面一致的圆形按钮） */}
-          <button
-            className="w-9 h-9 rounded-full bg-garden-mascot text-white flex items-center justify-center shadow-md hover:bg-[#7A9538] active:scale-95 transition-all"
-            onClick={() => navigate('/')}
-            title="返回首页"
-          >
-            <UiIcon name="chevronLeft" size={20} />
-          </button>
+          {/* 左：返回 + 趣味科普入口 */}
+          <div className="flex items-center gap-2">
+            <button
+              className="w-9 h-9 rounded-full bg-garden-mascot text-white flex items-center justify-center shadow-md hover:bg-[#7A9538] active:scale-95 transition-all"
+              onClick={() => navigate('/')}
+              title="返回首页"
+            >
+              <UiIcon name="chevronLeft" size={20} />
+            </button>
+            <button
+              className="h-9 px-3 rounded-full bg-white/90 text-garden-forest text-[12px] font-bold shadow-md flex items-center gap-1 hover:bg-white active:scale-95 transition-all border border-garden-mascot/40"
+              onClick={() => setShowFunScience(true)}
+              title="趣味科普卡片"
+            >
+              <UiIcon name="sparkles" size={14} className="text-garden-mascot" />
+              趣味科普
+            </button>
+          </div>
 
           {/* 右：用户 + 声音 + 设置 */}
           <div className="flex items-center gap-2 shrink-0 mt-[12px]">
@@ -863,6 +883,61 @@ export default function ClassroomPage() {
           </div>
         )
       })()}
+
+      {/* 趣味科普卡片集 */}
+      {showFunScience && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowFunScience(false)}
+          />
+          <div className="relative bg-white rounded-2xl shadow-2xl w-[min(400px,85vw)] max-h-[90vh] overflow-auto p-5 animate-in">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-garden-forest inline-flex items-center gap-2">
+                <UiIcon name="sparkles" size={18} className="text-garden-mascot" /> 趣味科普
+              </h2>
+              <button
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 text-lg transition-colors"
+                onClick={() => setShowFunScience(false)}
+              >
+                <UiIcon name="close" size={16} />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {FUN_CARDS.map((c) => (
+                <button
+                  key={c.id}
+                  className="group text-left cursor-pointer"
+                  onClick={() => setFunZoomed(c)}
+                >
+                  <img
+                    src={c.img}
+                    alt={c.title}
+                    className="w-full rounded-xl shadow-sm ring-1 ring-black/5 group-hover:ring-garden-mascot/70 group-hover:shadow-lg transition-all"
+                  />
+                  <p className="text-xs font-bold text-gray-700 mt-1.5 leading-tight">{c.title}</p>
+                  <p className="text-[10px] text-gray-400 mt-0.5">{c.tag}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 趣味科普卡片全屏预览 */}
+      {funZoomed && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={() => setFunZoomed(null)}
+        >
+          <img
+            src={funZoomed.img}
+            alt={funZoomed.title}
+            className="w-[504px] max-w-[85vw] rounded-2xl shadow-2xl animate-in"
+          />
+          <p className="absolute bottom-6 inset-x-0 text-center text-white/80 text-sm">点击任意处关闭</p>
+        </div>
+      )}
     </div>
   )
 }

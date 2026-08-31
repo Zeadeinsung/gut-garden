@@ -46,6 +46,7 @@ export default function StoolPage() {
     } catch { return [] }
   })
   const [showLog, setShowLog] = useState(false)
+  const [showStoolCode, setShowStoolCode] = useState(true)
 
   const handleLog = useCallback(() => {
     if (selected === null) return
@@ -74,8 +75,26 @@ export default function StoolPage() {
         <p className="text-sm text-gray-600 mt-1">根据布里斯托便便分类法记录</p>
       </div>
 
-      {/* Bristol chart */}
+      {/* 5种便便暗号 对照卡 */}
       <div className="parchment-card p-4 max-w-sm mx-auto w-full">
+        <button
+          className="w-full flex items-center justify-between text-sm font-semibold text-gray-600 uppercase tracking-wide"
+          onClick={() => setShowStoolCode(!showStoolCode)}
+        >
+          <span className="inline-flex items-center gap-1"><UiIcon name="book" size={15} /> 5种便便暗号 · 看一眼再冲</span>
+          <span>{showStoolCode ? '▲' : '▼'}</span>
+        </button>
+        {showStoolCode && (
+          <img
+            src="/assets/knowledge/fun_stool_code.jpg"
+            alt="5种便便暗号"
+            className="w-full rounded-xl shadow-sm mt-2"
+          />
+        )}
+      </div>
+
+      {/* Bristol chart */}
+      <div className="parchment-card p-4 max-w-sm mx-auto w-full mt-4">
         <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">布里斯托便便分类</h2>
         <div className="flex flex-col gap-2">
           {BRISTOL_TYPES.map((b) => (
