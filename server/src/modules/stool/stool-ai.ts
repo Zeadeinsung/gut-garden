@@ -58,7 +58,7 @@ export function presetSuggestion(bristol: number): StoolAiSuggestion {
   }
 }
 
-function extractJson(text: string): StoolAiSuggestion | null {
+export function extractJson(text: string): StoolAiSuggestion | null {
   const start = text.indexOf('{')
   const end = text.lastIndexOf('}')
   if (start === -1 || end === -1 || end <= start) return null

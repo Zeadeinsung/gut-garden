@@ -7,4 +7,6 @@ server/.data/
 server/uploads/
 server/.tmp_*
 .shots/chrome_profile*/
+scratch/shots/
+scratch/layouts/
 web/.preview_frames.png

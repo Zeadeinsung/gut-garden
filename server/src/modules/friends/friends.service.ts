@@ -1,4 +1,4 @@
-import { and, eq, inArray, count } from 'drizzle-orm'
+import { and, eq, ne, inArray, count } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { friendships, children, checkinCalendar, gardenActionLogs, badgeAwards, gardenStates } from '../../db/schema/index.js'
 import { evaluateStage } from '../garden/stage.service.js'
@@ -30,15 +30,10 @@ export interface FriendProfile {
 export async function listFriends(childId: number): Promise<FriendProfile[]> {
   if (!childId) throwError('CHILD_001')
 
-  const rows = await db
-    .select({ friendChildId: friendships.friendChildId })
-    .from(friendships)
-    .where(eq(friendships.childId, childId))
-
-  if (!rows.length) return []
-  const ids = rows.map((r) => r.friendChildId)
-
-  const kids = await db.select().from(children).where(inArray(children.id, ids))
+  // 所有用户互为好友：好友列表 = 除自己外的全部孩子（演示期社交简化，不依赖好友关系表）
+  const kids = await db.select().from(children).where(ne(children.id, childId))
+  if (!kids.length) return []
+  const ids = kids.map((k) => Number(k.id))
 
   const [calCounts, feedCounts, badgeCounts, states] = await Promise.all([
     db.select({ childId: checkinCalendar.childId, value: count() }).from(checkinCalendar).where(inArray(checkinCalendar.childId, ids)).groupBy(checkinCalendar.childId),

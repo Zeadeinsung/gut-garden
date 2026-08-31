@@ -13,10 +13,12 @@ CREATE TABLE IF NOT EXISTS parents (
     phone           VARCHAR(20)  NOT NULL UNIQUE,
     created_at      TIMESTAMP    NOT NULL DEFAULT NOW(),
     last_login_at   TIMESTAMP,
+    role            VARCHAR(10)  NOT NULL DEFAULT 'parent',
     status          VARCHAR(10)  NOT NULL DEFAULT 'active'
 );
 COMMENT ON TABLE parents IS '家长账号';
 COMMENT ON COLUMN parents.phone IS '手机号';
+COMMENT ON COLUMN parents.role IS 'parent/admin';
 COMMENT ON COLUMN parents.status IS 'active/disabled';
 
 -- ============================================
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS children (
     nickname            VARCHAR(30)  NOT NULL,
     age                 SMALLINT     NOT NULL CHECK (age BETWEEN 3 AND 6),
     daily_limit_minutes SMALLINT     NOT NULL DEFAULT 30,
+    avatar_url          VARCHAR(300),
     created_at          TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 COMMENT ON TABLE children IS '儿童档案';
@@ -50,6 +53,13 @@ CREATE TABLE IF NOT EXISTS checkin_records (
     task_eat_skipped    BOOLEAN      NOT NULL DEFAULT FALSE,
     task_eat_skip_reason VARCHAR(30),
     task_sleep          VARCHAR(10)  NOT NULL DEFAULT 'pending',
+    task_water          VARCHAR(10)  NOT NULL DEFAULT 'pending',
+    task_sport          VARCHAR(10)  NOT NULL DEFAULT 'pending',
+    sub_water           BOOLEAN      NOT NULL DEFAULT FALSE,
+    sub_vegetable       BOOLEAN      NOT NULL DEFAULT FALSE,
+    sub_fruit           BOOLEAN      NOT NULL DEFAULT FALSE,
+    sub_outdoor         BOOLEAN      NOT NULL DEFAULT FALSE,
+    sub_early_sleep     BOOLEAN      NOT NULL DEFAULT FALSE,
     completed_at        TIMESTAMP,
     is_makeup           BOOLEAN      NOT NULL DEFAULT FALSE,
     makeup_date         DATE,
@@ -73,7 +83,9 @@ CREATE TABLE IF NOT EXISTS stool_analyses (
     id                  BIGSERIAL PRIMARY KEY,
     child_id            BIGINT       NOT NULL,
     checkin_id          BIGINT,
-    image_url           VARCHAR(500) NOT NULL,
+    mode                VARCHAR(15)  NOT NULL DEFAULT 'icon_selection',
+    stool_icon_type     VARCHAR(20),
+    image_url           VARCHAR(500),
     bristol_type        SMALLINT     CHECK (bristol_type BETWEEN 1 AND 7),
     diagnosis           VARCHAR(100),
     task_suggestion     VARCHAR(100),
@@ -157,7 +169,7 @@ CREATE TABLE IF NOT EXISTS garden_states (
     child_id            BIGINT       NOT NULL UNIQUE,
     current_state       VARCHAR(20)  NOT NULL DEFAULT 'healthy',
     moisture_level      SMALLINT     NOT NULL DEFAULT 50 CHECK (moisture_level BETWEEN 0 AND 100),
-    garden_level        SMALLINT     NOT NULL DEFAULT 1,
+    growth_stage        SMALLINT     NOT NULL DEFAULT 1,
     garden_xp           INTEGER      NOT NULL DEFAULT 0,
     unlocked_features   JSONB        NOT NULL DEFAULT '[]',
     last_updated        TIMESTAMP    NOT NULL DEFAULT NOW()
@@ -165,15 +177,36 @@ CREATE TABLE IF NOT EXISTS garden_states (
 COMMENT ON TABLE garden_states IS '花园当前状态快照';
 COMMENT ON COLUMN garden_states.current_state IS 'healthy/high_sugar/dry/recovering';
 COMMENT ON COLUMN garden_states.moisture_level IS '水分值 (0-100)';
+COMMENT ON COLUMN garden_states.growth_stage IS '成长阶段 (1-6)';
 COMMENT ON COLUMN garden_states.unlocked_features IS '已解锁功能列表 JSON 数组';
 
 -- ============================================
--- 9. 每日问答记录
+-- 9. 知识模块学习进度
+-- ============================================
+CREATE TABLE IF NOT EXISTS knowledge_module_progress (
+    id                  BIGSERIAL PRIMARY KEY,
+    child_id            BIGINT       NOT NULL,
+    module_code         VARCHAR(30)  NOT NULL,
+    cards_unlocked      INTEGER      NOT NULL DEFAULT 0,
+    cards_total         INTEGER      NOT NULL DEFAULT 5,
+    quizzes_passed      INTEGER      NOT NULL DEFAULT 0,
+    animation_watched   BOOLEAN      NOT NULL DEFAULT FALSE,
+    completed_at        TIMESTAMP
+);
+COMMENT ON TABLE knowledge_module_progress IS '知识模块学习进度';
+COMMENT ON COLUMN knowledge_module_progress.module_code IS 'fiber_square/ferment_workshop/scfa_spring/barrier_wall/eco_station';
+
+CREATE UNIQUE INDEX uk_module_child ON knowledge_module_progress(child_id, module_code);
+
+-- ============================================
+-- 10. 每日问答记录
 -- ============================================
 CREATE TABLE IF NOT EXISTS quiz_records (
     id              BIGSERIAL PRIMARY KEY,
     child_id        BIGINT       NOT NULL,
     quiz_date       DATE         NOT NULL,
+    module_code     VARCHAR(30),
+    question_type   VARCHAR(20)  NOT NULL DEFAULT 'choice',
     question        VARCHAR(500) NOT NULL,
     answer_correct  BOOLEAN      NOT NULL,
     created_at      TIMESTAMP    NOT NULL DEFAULT NOW()
@@ -184,7 +217,7 @@ CREATE UNIQUE INDEX uk_quiz_child_date ON quiz_records(child_id, quiz_date);
 CREATE INDEX idx_quiz_child ON quiz_records(child_id);
 
 -- ============================================
--- 10. 成长报告快照
+-- 11. 成长报告快照
 -- ============================================
 CREATE TABLE IF NOT EXISTS growth_report_snapshots (
     id              BIGSERIAL PRIMARY KEY,
@@ -202,24 +235,26 @@ COMMENT ON COLUMN growth_report_snapshots.metrics IS '12项指标值 JSON 快照
 CREATE UNIQUE INDEX uk_report_child_period ON growth_report_snapshots(child_id, period_type, period_start);
 
 -- ============================================
--- 11. 打卡日历缓存
+-- 12. 打卡日历缓存
 -- ============================================
 CREATE TABLE IF NOT EXISTS checkin_calendar (
-    id              BIGSERIAL PRIMARY KEY,
-    child_id        BIGINT       NOT NULL,
-    calendar_date   DATE         NOT NULL,
-    status          VARCHAR(10)  NOT NULL DEFAULT 'miss',
-    garden_icon     VARCHAR(30),
-    updated_at      TIMESTAMP    NOT NULL DEFAULT NOW()
+    id                  BIGSERIAL PRIMARY KEY,
+    child_id            BIGINT       NOT NULL,
+    calendar_date       DATE         NOT NULL,
+    status              VARCHAR(10)  NOT NULL DEFAULT 'miss',
+    sub_items_completed SMALLINT     NOT NULL DEFAULT 0,
+    garden_icon         VARCHAR(30),
+    updated_at          TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 COMMENT ON TABLE checkin_calendar IS '打卡日历缓存（每日凌晨批量更新）';
 COMMENT ON COLUMN checkin_calendar.status IS 'done/miss/makeup';
+COMMENT ON COLUMN checkin_calendar.sub_items_completed IS '当日完成的子项数 (0-5)';
 COMMENT ON COLUMN checkin_calendar.garden_icon IS '当日花园状态小图标编码';
 
 CREATE UNIQUE INDEX uk_calendar_child_date ON checkin_calendar(child_id, calendar_date);
 
 -- ============================================
--- 12. 好友关系
+-- 13. 好友关系
 -- ============================================
 CREATE TABLE IF NOT EXISTS friendships (
     id              BIGSERIAL PRIMARY KEY,
