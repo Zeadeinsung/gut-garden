@@ -11,7 +11,7 @@ import {
   stoolAnalyses,
 } from '../../db/schema/index.js'
 import { toChildProfile, type ChildProfile } from '../../lib/mappers.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 export interface GuestMigratePayload {
   child: { nickname: string; age: number; avatar_url?: string }

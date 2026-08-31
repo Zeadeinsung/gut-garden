@@ -1,8 +1,8 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { sendLoginCode, loginWithCode, getUserData } from './auth.service.js'
 import { migrateGuest, type GuestMigratePayload } from './migrate.service.js'
-import { throwError } from '../../config/errors'
-import type { UserData } from '../../lib/mappers'
+import { throwError } from '../../config/errors.js'
+import type { UserData } from '../../lib/mappers.js'
 
 export function requireParentId(req: { user?: { parent_id?: number } | null }): number {
   const pid = req.user?.parent_id

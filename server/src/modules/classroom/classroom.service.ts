@@ -4,7 +4,7 @@ import { knowledgeModuleProgress, quizRecords } from '../../db/schema/index.js'
 import { MODULE_ORDER, MODULE_DEFS, findQuiz, type ModuleCode, type QuizContent } from './classroom.content.js'
 import { addGardenXp, todayLocal } from '../garden/garden.service.js'
 import { onQuizEvent } from '../badges/badge-hooks.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const QUIZ_XP = 3
 const WATCH_XP = 5

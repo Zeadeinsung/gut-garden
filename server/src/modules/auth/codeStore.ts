@@ -1,4 +1,4 @@
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const CODES = new Map<string, { code: string; sentAt: number }>()
 const THROTTLE_MS = 60_000

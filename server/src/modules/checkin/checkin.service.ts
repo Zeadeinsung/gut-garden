@@ -4,7 +4,7 @@ import { checkinRecords, checkinCalendar, gardenStates } from '../../db/schema/i
 import { todayInteractionCount, todayLocal } from '../garden/garden.service.js'
 import { getRecentStool } from '../stool/stool.service.js'
 import { onCheckinEvent } from '../badges/badge-hooks.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const TASK_DEFS: { code: string; name: string; column: 'taskGarden' | 'taskEat' | 'taskSleep' | 'taskWater' | 'taskSport' }[] = [
   { code: 'explore', name: '探索花园', column: 'taskGarden' },

@@ -2,7 +2,7 @@ import { eq, and } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { children, gardenStates } from '../../db/schema/index.js'
 import { toChildProfile, type ChildProfile } from '../../lib/mappers.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 export interface CreateChildInput {
   nickname: string

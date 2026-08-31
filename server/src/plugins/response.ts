@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin'
 import type { FastifyInstance } from 'fastify'
-import { AppError } from '../lib/appError'
+import { AppError } from '../lib/appError.js'
 
 export default fp(async (fastify: FastifyInstance) => {
   fastify.setErrorHandler((error, req, reply) => {

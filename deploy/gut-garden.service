@@ -1,0 +1,15 @@
+[Unit]
+Description=Gut Garden (肠道花园)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/gut-garden/server
+ExecStart=/usr/bin/node dist/app.js
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+Environment=PORT=3001
+
+[Install]
+WantedBy=multi-user.target

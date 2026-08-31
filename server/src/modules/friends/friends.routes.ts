@@ -4,7 +4,7 @@ import { listFriends, addFriendship } from './friends.service.js'
 import { eq } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { children } from '../../db/schema/index.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 export default async function friendsRoutes(fastify: FastifyInstance): Promise<void> {
   fastify.get('/api/friends', async (req) => {

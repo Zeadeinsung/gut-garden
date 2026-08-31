@@ -1,4 +1,4 @@
-import { AppError } from '../lib/appError'
+import { AppError } from '../lib/appError.js'
 
 export const ERROR_DEFS = {
   AUTH_001: { message: '验证码错误或已过期', status: 401 },

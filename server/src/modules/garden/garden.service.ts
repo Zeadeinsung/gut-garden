@@ -2,7 +2,7 @@ import { eq, and, sql } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { gardenStates, gardenActionLogs, children } from '../../db/schema/index.js'
 import { collectStats, evaluateStage } from './stage.service.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const HEALTHY_FOODS = new Set(['broccoli', 'carrot', 'yogurt', 'apple', 'corn'])
 const HIGH_SUGAR_FOODS = new Set(['candy', 'cake'])

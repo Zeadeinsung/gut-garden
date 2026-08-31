@@ -2,7 +2,7 @@ import { and, eq, ne, inArray, count } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { friendships, children, checkinCalendar, gardenActionLogs, badgeAwards, gardenStates } from '../../db/schema/index.js'
 import { evaluateStage } from '../garden/stage.service.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const EMOJIS = ['🐰', '🐼', '🐨', '🦊', '🐸', '🐥', '🦄', '🐯', '🐙', '🐝', '🐳', '🦔', '🐿️', '🐢']
 const COLORS = ['#F6C8CB', '#BCE3C7', '#FFE3AE', '#C7D8F5', '#E3C7F5', '#F5D7C7', '#C7F0E8', '#F0E0C7', '#D9F5C7', '#F5C7E0', '#C7DDF5', '#E8F5C7']

@@ -2,7 +2,7 @@ import { and, eq, inArray } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { badgeDefs, badgeAwards, checkinCalendar, gardenActionLogs, quizRecords, stoolAnalyses, knowledgeModuleProgress, checkinRecords, children } from '../../db/schema/index.js'
 import { addGardenXp, todayLocal } from '../garden/garden.service.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const RARITY_XP = { bronze: 20, silver: 50, gold: 100 } as const
 type Rarity = keyof typeof RARITY_XP

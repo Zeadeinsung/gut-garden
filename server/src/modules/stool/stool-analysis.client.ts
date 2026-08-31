@@ -1,7 +1,7 @@
 import fs from 'node:fs'
-import { env } from '../../config/env'
-import { throwError } from '../../config/errors'
-import { BRISTOL_PRESETS } from './stool.presets'
+import { env } from '../../config/env.js'
+import { throwError } from '../../config/errors.js'
+import { BRISTOL_PRESETS } from './stool.presets.js'
 
 export interface AnalysisResult {
   bristol_type: number

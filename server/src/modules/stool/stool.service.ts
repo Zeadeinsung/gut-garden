@@ -4,11 +4,11 @@ import { fileURLToPath } from 'node:url'
 import { eq, desc, and, sql } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { stoolAnalyses } from '../../db/schema/index.js'
-import { BRISTOL_PRESETS, ICON_TO_BRISTOL } from './stool.presets'
-import { analyzeStoolPhoto } from './stool-analysis.client'
-import { generateStoolSuggestion, type StoolAiSuggestion } from './stool-ai'
+import { BRISTOL_PRESETS, ICON_TO_BRISTOL } from './stool.presets.js'
+import { analyzeStoolPhoto } from './stool-analysis.client.js'
+import { generateStoolSuggestion, type StoolAiSuggestion } from './stool-ai.js'
 import { onStoolEvent } from '../badges/badge-hooks.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export const UPLOAD_DIR = path.resolve(__dirname, '../../../uploads')

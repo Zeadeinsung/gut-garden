@@ -1,5 +1,5 @@
-import { env } from '../../config/env'
-import { BRISTOL_PRESETS } from './stool.presets'
+import { env } from '../../config/env.js'
+import { BRISTOL_PRESETS } from './stool.presets.js'
 
 export interface StoolAiSuggestion {
   child_sentence: string

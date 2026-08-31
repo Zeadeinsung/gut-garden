@@ -10,7 +10,7 @@ import {
   knowledgeModuleProgress,
   checkinRecords,
 } from '../../db/schema/index.js'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 
 const SUB_COLUMNS = ['subWater', 'subVegetable', 'subFruit', 'subOutdoor', 'subEarlySleep'] as const
 const STAGE_LABELS = ['', '种子', '幼苗', '成长', '丰收', '大师', '终极']

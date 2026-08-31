@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyReply } from 'fastify'
-import { throwError } from '../../config/errors'
+import { throwError } from '../../config/errors.js'
 import { requireParentId } from '../auth/auth.routes.js'
 import { selectIcon, uploadPhoto, getAnalysis, getLatest, stoolFilePath, fileExists, createReadStream, mimeOf } from './stool.service.js'
 
