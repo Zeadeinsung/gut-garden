@@ -6,7 +6,7 @@
 
 <div align="center">
   <a href="video/promo.mp4">
-    <img src="video/promo_thumb.png" alt="肠道花园宣传片 · 点击播放" width="720">
+    <img src="video/promo_teaser.gif" alt="肠道花园宣传片（片段预览，点击下载完整版）" width="640">
   </a>
 </div>
 
