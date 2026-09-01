@@ -4,6 +4,12 @@
 >
 > **科学传播 · 多元艺术表达（AI 驱动）参赛作品**
 
+<div align="center">
+  <video src="video/promo.mp4" controls preload="metadata" style="max-width: 720px; width: 100%; border-radius: 12px;"></video>
+  <br/>
+  <sub>🎬 3 分钟宣传片：一个人 + AI = 一套完整科普作品（点击播放）</sub>
+</div>
+
 🔗 **在线演示站（评委可直接体验，无需安装/代理）：** http://124.223.182.140:3001
 
 ---

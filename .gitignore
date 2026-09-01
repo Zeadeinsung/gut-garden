@@ -9,6 +9,8 @@ server/.tmp_*
 .shots/chrome_profile*/
 scratch/shots/
 scratch/layouts/
+# 原始 4K 宣传视频（477MB，不入库）；README 展示的是压缩后的 web 版 video/promo.mp4
+视频/
 scratch/*.png
 scratch/diag-*.mjs
 scratch/verify-*.mjs
