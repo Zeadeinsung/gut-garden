@@ -27,11 +27,12 @@ export interface BlockPos {
 }
 
 const STORAGE_KEY = 'gg-block-positions'
-const LAYOUT_VERSION = 7
+// v8: 旧版本残留存档（v7 及更早）一律视为失效，加载时丢弃并改用烘焙种子布局
+export const LAYOUT_VERSION = 8
 
 export interface LoadedPositions {
   blocks: Record<string, BlockPos>
-  /** 已保存布局的版本：0=无存档, 1=旧版无版本标记, 5=当前版本 */
+  /** 已保存布局的版本：0=无存档, 1=旧版无版本标记, >=8=当前版本 */
   version: number
 }
 

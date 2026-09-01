@@ -27,7 +27,7 @@ r = req('/api/auth/verify-code', {'phone': phone, 'code': code})
 token = r['data']['token']
 user = r['data']['user']
 print('parent_id =', user['parent_id'])
-print('children =', [(c['id'], c['nickname']) for c in user['children']])
+print('children =', [(c['id'], c['name']) for c in user['children']])
 if not user['children']:
     print('!! 没有 children —— 说明数据库里没有这个账号的数据')
     raise SystemExit

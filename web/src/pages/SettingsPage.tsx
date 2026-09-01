@@ -62,7 +62,7 @@ const SETTINGS_DEFAULTS: Record<string, BlockPos> = {
   display:   { x: 16, y: 182, w: 600, h: 110 },
   timelimit: { x: 16, y: 308, w: 600, h: 110 },
   privacy:   { x: 16, y: 434, w: 600, h: 170 },
-  account:   { x: 16, y: 566, w: 600, h: 130 },
+  account:   { x: 16, y: 566, w: 600, h: 190 },
 }
 
 export default function SettingsPage() {
@@ -86,6 +86,12 @@ export default function SettingsPage() {
     useUIStore.getState().setOnboardingComplete(false)
     setResetOpen(false)
     navigate('/login')
+  }
+
+  const handleRestartGuide = () => {
+    localStorage.removeItem('gg-onboarding-done')
+    useUIStore.getState().setOnboardingComplete(false)
+    navigate('/')
   }
 
   return (
@@ -238,7 +244,10 @@ export default function SettingsPage() {
                 退出登录
               </Button>
             )}
-            <div className="mt-3 pt-3 border-t border-gray-100">
+            <div className="mt-3 pt-3 border-t border-gray-100 flex flex-col gap-2">
+              <Button variant="ghost" size="sm" className="w-full text-garden-forest hover:bg-garden-cream" onClick={handleRestartGuide}>
+                <span className="inline-flex items-center gap-1"><UiIcon name="sprout" size={14} /> 重新查看新手指南</span>
+              </Button>
               <Button variant="ghost" size="sm" className="w-full text-red-400 hover:bg-red-50" onClick={() => setResetOpen(true)}>
                 <span className="inline-flex items-center gap-1"><UiIcon name="alert" size={14} /> 重置所有数据</span>
               </Button>

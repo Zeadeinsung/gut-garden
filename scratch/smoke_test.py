@@ -25,7 +25,7 @@ paths = [
     ('GET /api/children',            '/api/children'),
     ('GET /api/garden/state',        '/api/garden/state?child_id=%d' % cid),
     ('GET /api/checkin/today',       '/api/checkin/today?child_id=%d' % cid),
-    ('GET /api/checkin/calendar',    '/api/checkin/calendar?child_id=%d' % cid),
+    ('GET /api/checkin/calendar',    '/api/checkin/calendar?child_id=%d&month=2026-08' % cid),
     ('GET /api/badges/awarded',      '/api/badges/awarded?child_id=%d' % cid),
     ('GET /api/badges/defs',         '/api/badges/defs'),
     ('GET /api/classroom/modules',   '/api/classroom/modules?child_id=%d' % cid),
