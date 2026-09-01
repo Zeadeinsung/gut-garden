@@ -9,4 +9,10 @@ server/.tmp_*
 .shots/chrome_profile*/
 scratch/shots/
 scratch/layouts/
+scratch/*.png
+scratch/diag-*.mjs
+scratch/verify-*.mjs
+scratch/read-localstorage.mjs
+scratch/smoke-live.mjs
+scratch/gen-seeds.mjs
 web/.preview_frames.png
